@@ -4,7 +4,7 @@ import Stats from "@/components/Stats";
 import Services from "@/components/Services";
 import Gallery from "@/components/Gallery";
 import WhyChooseUs from "@/components/WhyChooseUs";
-//import EventTypes from "@/components/EventTypes";
+import EventTypes from "@/components/EventTypes";
 //import Packs from "@/components/Packs";
 //import QuoteForm from "@/components/QuoteForm";
 //import TrustBar from "@/components/TrustBar";
@@ -24,6 +24,8 @@ export default function Home() {
       <Gallery />
 
       <WhyChooseUs />
+
+      <EventTypes />
 
       
 
