@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-//import Hero from "@/components/Hero";
+import Hero from "@/components/Hero";
 //import Stats from "@/components/Stats";
 //import Services from "@/components/Services";
 //import Gallery from "@/components/Gallery";
@@ -16,6 +16,7 @@ export default function Home() {
   return (
     <>
       <Header />
+      <Hero />
       
 
 
