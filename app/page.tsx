@@ -8,7 +8,7 @@ import EventTypes from "@/components/EventTypes";
 import Packs from "@/components/Packs";
 import QuoteForm from "@/components/QuoteForm";
 import TrustBar from "@/components/TrustBar";
-//import Testimonials from "@/components/Testimonials";
+import Testimonials from "@/components/Testimonials";
 
 
 
@@ -32,6 +32,8 @@ export default function Home() {
       <QuoteForm />
 
       <TrustBar />
+
+      <Testimonials />
 
       
 
