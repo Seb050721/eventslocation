@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
-//import Stats from "@/components/Stats";
+import Stats from "@/components/Stats";
 //import Services from "@/components/Services";
 //import Gallery from "@/components/Gallery";
 //import WhyChooseUs from "@/components/WhyChooseUs";
@@ -17,6 +17,8 @@ export default function Home() {
     <>
       <Header />
       <Hero />
+
+      <Stats />
       
 
 
