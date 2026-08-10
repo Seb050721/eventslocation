@@ -10,34 +10,38 @@ import QuoteForm from "@/components/QuoteForm";
 import TrustBar from "@/components/TrustBar";
 import Testimonials from "@/components/Testimonials";
 
-
-
 export default function Home() {
   return (
     <>
       <Header />
+
       <Hero />
 
-      <Stats />
-      <Services />
-
-      <Gallery />
+      <section id="services">
+        <Services />
+      </section>
 
       <WhyChooseUs />
 
-      <EventTypes />
+      <section id="packs">
+        <Packs />
+      </section>
 
-      <Packs />
+      <Stats />
 
-      <QuoteForm />
+      <section id="gallery">
+        <Gallery />
+      </section>
 
       <TrustBar />
 
+      <EventTypes />
+
       <Testimonials />
 
-      
-
-
+      <section id="contact">
+        <QuoteForm />
+      </section>
     </>
   );
 }

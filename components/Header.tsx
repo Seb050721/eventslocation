@@ -1,142 +1,144 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
-import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
-
-const navigation = [
-  { name: "Accueil", href: "/" },
-  { name: "Prestations", href: "#prestations" },
-  { name: "Galerie", href: "#galerie" },
-  { name: "Avis", href: "#avis" },
-  { name: "Contact", href: "#contact" },
-];
+import Link from "next/link";
+import { Menu, X, Phone, FileText } from "lucide-react";
 
 export default function Header() {
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
-    };
-
-    const handleResize = () => {
-      if (window.innerWidth >= 1024) {
-        setMobileOpen(false);
-      }
+      setScrolled(window.scrollY > 20);
     };
 
     window.addEventListener("scroll", handleScroll);
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <header
-      className={`fixed left-1/2 top-4 z-50 w-[95%] max-w-7xl -translate-x-1/2 rounded-2xl transition-all duration-500 ${
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? "border border-white/80 bg-white/97 shadow-2xl backdrop-blur-2xl py-0"
-            : "border border-white/60 bg-white/90 shadow-xl backdrop-blur-xl py-1"
-        }`}
-    >
-      <div className="flex h-20 items-center justify-between px-5 md:px-8">
-        {/* Logo */}
-
-        <Link href="/" className="flex items-center gap-4">
-          <Image
-            src="/Logo/Logo.png"
-            alt="Event'S Location"
-            width={58}
-            height={58}
-            priority
-            className="rounded-full"
-          />
-
-          <div className="hidden sm:block">
-            <h1 className="text-xl font-bold tracking-tight text-slate-900">
-              Event'S Location
-            </h1>
-
-            <p className="text-sm text-gray-500">
-              Location de matériel événementiel
-            </p>
-          </div>
-        </Link>
-
-        {/* Navigation Desktop */}
-
-        <nav className="hidden items-center gap-10 lg:flex">
-          {navigation.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className="relative font-medium text-gray-700 transition-colors duration-300 hover:text-green-600 after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-green-600 after:transition-all after:duration-300 hover:after:w-full"
-            >
-              {item.name}
-            </Link>
-          ))}
-        </nav>
-
-        {/* Actions */}
-
-        <div className="flex items-center gap-3">
-          <Link
-            href="#contact"
-            className="hidden rounded-full bg-green-600 px-6 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-green-700 active:scale-95 lg:inline-flex"
-          >
-            Demander un devis
-          </Link>
-
-          <button
-            aria-label="Menu"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="rounded-xl p-2 transition hover:bg-black/5 lg:hidden"
-          >
-            {mobileOpen ? (
-              <X className="h-7 w-7" />
-            ) : (
-              <Menu className="h-7 w-7" />
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* Menu Mobile */}
-
-      <div
-        className={`overflow-hidden transition-all duration-300 lg:hidden ${
-          mobileOpen ? "max-h-[500px]" : "max-h-0"
+            ? "bg-white shadow-lg py-3"
+            : "bg-white/90 backdrop-blur py-4"
         }`}
       >
-        <nav className="border-t border-gray-200 bg-white/95 backdrop-blur-xl">
-          <div className="flex flex-col p-6">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                onClick={() => setMobileOpen(false)}
-                className="rounded-xl px-4 py-4 text-lg font-medium text-slate-800 transition hover:bg-green-50 hover:text-green-500"
-              >
-                {item.name}
-              </Link>
-            ))}
+        <div className="max-w-7xl mx-auto px-5 flex items-center justify-between">
+
+          {/* Logo */}
+          <Link
+            href="/"
+            className="text-2xl font-bold text-green-700 tracking-tight"
+          >
+            Event'S Location
+          </Link>
+
+          {/* Menu PC */}
+          <nav className="hidden lg:flex items-center gap-8 text-gray-700 font-medium">
+
+            <Link href="/">Accueil</Link>
+
+            <Link href="#services">Prestations</Link>
+
+            <Link href="#gallery">Galerie</Link>
+
+            <Link href="#packs">Tarifs</Link>
+
+            <Link href="#testimonials">Avis</Link>
+
+            <Link href="#contact">Contact</Link>
+
+          </nav>
+
+          {/* Bouton devis PC */}
+          <div className="hidden lg:flex items-center gap-4">
+
+            <a
+              href="tel:0643894570"
+              className="flex items-center gap-2 text-green-700 font-semibold"
+            >
+              <Phone size={18} />
+              06 43 89 45 70
+            </a>
 
             <Link
               href="#contact"
-              onClick={() => setMobileOpen(false)}
-              className="mt-6 flex justify-center rounded-full bg-green-600 px-6 py-4 text-lg font-semibold text-white shadow-lg transition hover:bg-green-700"
+              className="bg-green-600 hover:bg-green-700 transition text-white px-5 py-3 rounded-xl font-semibold"
             >
               Demander un devis
             </Link>
+
           </div>
-        </nav>
+
+          {/* Hamburger */}
+          <button
+            onClick={() => setOpen(!open)}
+            className="lg:hidden"
+          >
+            {open ? <X size={32} /> : <Menu size={32} />}
+          </button>
+
+        </div>
+      </header>
+
+      {/* MENU MOBILE */}
+
+      <div
+        className={`fixed top-16 left-0 right-0 bg-white shadow-xl transition-all duration-300 overflow-hidden lg:hidden z-40 ${
+          open ? "max-h-screen py-6" : "max-h-0"
+        }`}
+      >
+        <div className="flex flex-col px-6 gap-6 text-lg font-medium">
+
+          <Link href="/" onClick={() => setOpen(false)}>
+            Accueil
+          </Link>
+
+          <Link href="#services" onClick={() => setOpen(false)}>
+            Prestations
+          </Link>
+
+          <Link href="#gallery" onClick={() => setOpen(false)}>
+            Galerie
+          </Link>
+
+          <Link href="#packs" onClick={() => setOpen(false)}>
+            Tarifs
+          </Link>
+
+          <Link href="#testimonials" onClick={() => setOpen(false)}>
+            Avis
+          </Link>
+
+          <Link href="#contact" onClick={() => setOpen(false)}>
+            Contact
+          </Link>
+
+          <a
+            href="tel:0643894570"
+            className="flex items-center gap-3 text-green-700 font-semibold"
+          >
+            <Phone size={20} />
+            06 43 89 45 70
+          </a>
+
+          <Link
+            href="#contact"
+            onClick={() => setOpen(false)}
+            className="bg-green-600 text-white text-center py-4 rounded-xl font-bold flex items-center justify-center gap-2"
+          >
+            <FileText size={20} />
+            Demander un devis
+          </Link>
+
+        </div>
       </div>
-    </header>
+
+      {/* Décalage pour le header fixe */}
+      <div className="h-20"></div>
+    </>
   );
 }
