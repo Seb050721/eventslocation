@@ -16,7 +16,6 @@ export const metadata: Metadata = {
   },
   description:
     "Location de photobooth, barnums, sonorisation, mobilier, vidéoprojecteur et matériel événementiel dans la Nièvre, l'Yonne et le Cher.",
-
   keywords: [
     "photobooth",
     "location photobooth",
@@ -29,7 +28,6 @@ export const metadata: Metadata = {
     "Cher",
     "Event'S Location",
   ],
-
   openGraph: {
     title: "Event'S Location",
     description:
@@ -46,7 +44,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
-      <body className={`${poppins.className} bg-white text-gray-900 antialiased`}>
+      <body
+        className={`${poppins.className} bg-white text-gray-900 antialiased`}
+      >
         {children}
       </body>
     </html>
