@@ -29,30 +29,52 @@ export default function Header() {
     <>
       {/* HEADER */}
       <header
-        className={`fixed left-0 right-0 top-0 z-[100] h-[72px] ${
-          scrolled
+          className={`fixed left-0 right-0 top-0 z-[100] h-[80px] ${
+            scrolled
             ? "bg-white shadow-md"
             : "bg-black/10"
-        }`}
-      >
+          }`}
+          >
         <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-5">
 
           {/* LOGO */}
           <Link
-             href="/"
-             onClick={closeMenu}
-              className="relative flex h-[58px] w-[145px] shrink-0 items-center sm:w-[165px]"
-             aria-label="Event'S Location - Accueil"
-          >
-            <Image
-              src="/Logo/Logo.png"
-            alt="Event'S Location"
-            fill
-            priority
-            sizes="(max-width: 640px) 145px, 165px"
-            className="object-contain object-left"
-            />
-        </Link>
+           href="/"
+          onClick={closeMenu}
+          className="flex items-center gap-3"
+          aria-label="Event'S Location - Accueil"
+        >
+      <div
+         className={`relative h-14 w-14 shrink-0 rounded-full p-1 transition-all duration-300 sm:h-16 sm:w-16 ${
+         scrolled
+         ? "bg-transparent"
+          : "bg-white shadow-lg backdrop-blur-sm"
+        }`}
+      >
+          <Image
+          src="/Logo/Logo.png"
+          alt="Logo Event'S Location"
+          fill
+          priority
+          sizes="56px"
+          className="object-contain"
+        />
+      </div>
+
+  <div className="flex flex-col leading-none">
+    <span
+      className={`text-lg font-black tracking-tight transition-colors duration-200 sm:text-xl ${
+        scrolled ? "text-gray-900" : "text-white"
+      }`}
+    >
+      Event&apos;S
+    </span>
+
+    <span className="mt-1 text-sm font-bold tracking-[0.12em] text-green-500 sm:text-base">
+      LOCATION
+    </span>
+  </div>
+</Link>
 
           {/* MENU DESKTOP */}
           <nav
@@ -111,7 +133,7 @@ export default function Header() {
 
       {/* MENU MOBILE */}
       {open && (
-        <div className="fixed left-0 right-0 top-[72px] z-[90] bg-white shadow-xl lg:hidden">
+        <div className="fixed left-0 right-0 top-[80px] z-[90] bg-white shadow-xl lg:hidden">
 
           <nav className="flex flex-col px-5 py-4">
 
