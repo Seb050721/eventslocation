@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X, Phone } from "lucide-react";
 
 export default function Header() {
@@ -38,22 +39,20 @@ export default function Header() {
 
           {/* LOGO */}
           <Link
-            href="/"
-            onClick={closeMenu}
-            className="flex items-center"
+             href="/"
+             onClick={closeMenu}
+              className="relative flex h-[58px] w-[145px] shrink-0 items-center sm:w-[165px]"
+             aria-label="Event'S Location - Accueil"
           >
-            <span
-              className={`text-2xl font-black sm:text-3xl ${
-                scrolled ? "text-gray-900" : "text-white"
-              }`}
-            >
-              Event&apos;S
-            </span>
-
-            <span className="ml-1 text-2xl font-black text-green-500 sm:text-3xl">
-              Location
-            </span>
-          </Link>
+            <Image
+              src="/Logo/Logo.png"
+            alt="Event'S Location"
+            fill
+            priority
+            sizes="(max-width: 640px) 145px, 165px"
+            className="object-contain object-left"
+            />
+        </Link>
 
           {/* MENU DESKTOP */}
           <nav

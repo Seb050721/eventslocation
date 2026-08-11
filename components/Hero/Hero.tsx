@@ -4,97 +4,135 @@ import HeroStats from "./HeroStats";
 
 export default function Hero() {
   return (
-    <section className="relative min-h-[950px] overflow-hidden bg-gradient-to-br from-[#0f172a] via-[#14532d] to-[#16a34a]">
+    <section className="relative overflow-hidden bg-gradient-to-br from-[#07120c] via-[#0d351e] to-[#16833f]">
 
-      {/* Halo gauche */}
-      <div className="absolute -left-40 top-0 h-[500px] w-[500px] rounded-full bg-green-500/20 blur-[180px]" />
+      {/* Halos */}
+      <div className="pointer-events-none absolute -left-40 top-20 h-[420px] w-[420px] rounded-full bg-green-400/15 blur-[140px]" />
 
-      {/* Halo droite */}
-      <div className="absolute right-0 top-1/3 h-[450px] w-[450px] rounded-full bg-emerald-400/20 blur-[180px]" />
+      <div className="pointer-events-none absolute -right-40 top-1/3 h-[500px] w-[500px] rounded-full bg-emerald-300/15 blur-[160px]" />
 
-      <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col items-center justify-center gap-20 px-6 pt-32 pb-20 lg:flex-row">
+      {/* Contenu principal */}
+      <div className="relative mx-auto max-w-7xl px-5 pb-16 pt-28 sm:px-6 sm:pt-32 lg:px-8 lg:pb-24 lg:pt-36">
 
-        {/* Partie texte */}
-        <div className="max-w-2xl">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
 
-          <span className="inline-flex items-center rounded-full border border-green-400/30 bg-green-500/20 px-5 py-2 text-sm font-semibold uppercase tracking-[0.25em] text-green-200 backdrop-blur">
-            Location de matériel événementiel
-          </span>
+          {/* =========================================
+              TEXTE
+          ========================================= */}
 
-          <h1 className="mt-8 text-5xl font-black leading-tight text-white md:text-6xl lg:text-7xl">
-            Donnez vie à
-            <span className="block text-green-400">
-              vos événements
+          <div className="order-1">
+
+            {/* Badge */}
+            <span className="inline-flex rounded-full border border-green-300/25 bg-white/10 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.18em] text-green-100 backdrop-blur-md sm:px-5 sm:text-xs sm:tracking-[0.24em]">
+              Location de matériel événementiel
             </span>
-          </h1>
 
-          <p className="mt-8 max-w-xl text-lg leading-9 text-green-100">
-            Photobooth, sonorisation, barnums, mobilier, vidéoprojecteurs
-            et équipements professionnels pour réussir tous vos événements
-            dans la Nièvre, l'Yonne et le Cher.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+            {/* Titre */}
+            <h1 className="mt-6 max-w-3xl text-[42px] font-black leading-[1.02] tracking-tight text-white sm:text-5xl md:text-6xl lg:mt-8 lg:text-7xl xl:text-[78px]">
 
-    <span className="rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-green-100 backdrop-blur">
-        📸 Photobooth Premium
-    </span>
+              Donnez vie à
 
-    <span className="rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-green-100 backdrop-blur">
-        🚚 Livraison
-    </span>
+              <span className="block text-green-400">
+                vos événements
+              </span>
 
-    <span className="rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-green-100 backdrop-blur">
-        🎨 Personnalisation offerte
-    </span>
+            </h1>
 
-    <span className="rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-green-100 backdrop-blur">
-        ⭐ Note moyenne 4.9/5
-    </span>
+            {/* Description */}
+            <p className="mt-6 max-w-2xl text-base leading-7 text-green-50/85 sm:text-lg sm:leading-8 lg:mt-8 lg:text-xl lg:leading-9">
+              Photo Booth, mobilier, sonorisation, projection vidéo,
+              machines à effets et Smoke Puff pour créer des moments
+              inoubliables dans la Nièvre, l&apos;Yonne et le Cher.
+            </p>
 
-</div>
+            {/* Petits badges */}
+            <div className="mt-6 flex flex-wrap gap-2 sm:gap-3">
 
-          <HeroButtons />
+              <span className="rounded-full border border-white/10 bg-white/10 px-3 py-2 text-xs font-semibold text-white/90 backdrop-blur-md sm:px-4 sm:text-sm">
+                📸 Photo Booth
+              </span>
 
-          <HeroStats />
+              <span className="rounded-full border border-white/10 bg-white/10 px-3 py-2 text-xs font-semibold text-white/90 backdrop-blur-md sm:px-4 sm:text-sm">
+                🪑 Mobilier
+              </span>
 
-        </div>
+              <span className="rounded-full border border-white/10 bg-white/10 px-3 py-2 text-xs font-semibold text-white/90 backdrop-blur-md sm:px-4 sm:text-sm">
+                💨 Smoke Puff
+              </span>
 
-        {/* Image */}
+              <span className="rounded-full border border-white/10 bg-white/10 px-3 py-2 text-xs font-semibold text-white/90 backdrop-blur-md sm:px-4 sm:text-sm">
+                🚚 Livraison 20 km
+              </span>
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition duration-500 group-hover:opacity-100" />
-        <div className="relative">
+            </div>
 
-          <div className="absolute inset-0 rounded-[40px] bg-green-500/20 blur-3xl" />
+            {/* Boutons */}
+            <HeroButtons />
 
-          <div className="group relative overflow-hidden rounded-[40px] border border-white/10 bg-white/5 shadow-[0_30px_80px_rgba(0,0,0,0.35)] backdrop-blur">
+          </div>
 
-            <Image
-              src="/images/hero-photobooth.jpg"
-              alt="Photobooth Event'S Location"
-              width={700}
-              height={850}
-              priority
-              className="h-auto w-full object-cover transition duration-700 hover:scale-105"
-            />
+          {/* =========================================
+              IMAGE
+          ========================================= */}
+
+          <div className="order-2 mx-auto w-full max-w-[520px] lg:max-w-none">
+
+            <div className="relative">
+
+              {/* Halo derrière image */}
+              <div className="absolute -inset-5 rounded-[38px] bg-green-400/20 blur-3xl sm:-inset-8" />
+
+              <div className="group relative overflow-hidden rounded-[28px] border border-white/15 bg-white/5 shadow-[0_30px_90px_rgba(0,0,0,0.35)] sm:rounded-[36px]">
+
+                <div className="relative aspect-[4/5] w-full sm:aspect-[5/6] lg:aspect-[4/5]">
+
+                  <Image
+                    src="/images/hero-photobooth.jpg"
+                    alt="Photo Booth Event'S Location lors d'un événement"
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 90vw, 45vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                  />
+
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
+
+                  {/* Badge photo */}
+                  <div className="absolute bottom-4 left-4 right-4 rounded-2xl border border-white/15 bg-black/35 p-4 text-white backdrop-blur-xl sm:bottom-6 sm:left-6 sm:right-auto sm:max-w-[300px]">
+
+                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-green-300">
+                      Event&apos;S Location
+                    </p>
+
+                    <p className="mt-1 text-sm font-semibold sm:text-base">
+                      Des souvenirs qui restent.
+                    </p>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
 
           </div>
 
         </div>
 
-      </div>
-            <div className="absolute bottom-0 left-0 right-0">
+        {/* =========================================
+            STATISTIQUES
+        ========================================= */}
 
-            <svg
-            viewBox="0 0 1440 140"
-            className="w-full text-white"
-            fill="currentColor"
-             >
-
-          <path d="M0,96L80,90.7C160,85,320,75,480,74.7C640,75,800,85,960,96C1120,107,1280,117,1360,122.7L1440,128L1440,160L1360,160C1280,160,1120,160,960,160C800,160,640,160,480,160C320,160,160,160,80,160L0,160Z" />
-
-        </svg>
+        <div className="mt-12 lg:mt-16">
+          <HeroStats />
+        </div>
 
       </div>
+
+      {/* Ligne basse */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-green-300/30 to-transparent" />
+
     </section>
   );
 }
