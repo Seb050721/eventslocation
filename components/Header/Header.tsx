@@ -110,17 +110,21 @@ export default function Header() {
           </div>
 
           {/* BOUTON MOBILE */}
-          <button
-            type="button"
-            aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
-            aria-expanded={open}
-            onClick={() => setOpen((previous) => !previous)}
-            className={`relative z-[60] flex h-12 w-12 touch-manipulation items-center justify-center rounded-xl transition-colors duration-150 lg:hidden ${
+            <button
+               type="button"
+                aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
+               aria-expanded={open}
+               onPointerDown={(e) => {
+               e.preventDefault();
+                setOpen((previous) => !previous);
+             }}
+             className={`relative z-[100] flex h-12 w-12 touch-manipulation select-none items-center justify-center rounded-xl transition-colors duration-100 lg:hidden ${
               scrolled
-                ? "bg-gray-100 text-gray-900"
+               ? "bg-gray-100 text-gray-900"
                 : "bg-white/15 text-white"
             }`}
           >
+          
             {open ? (
               <X size={28} strokeWidth={2.5} />
             ) : (
