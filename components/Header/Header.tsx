@@ -13,20 +13,12 @@ export default function Header() {
       setScrolled(window.scrollY > 30);
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
 
   const closeMenu = () => {
     setOpen(false);
@@ -36,13 +28,13 @@ export default function Header() {
     <>
       {/* HEADER */}
       <header
-        className={`fixed inset-x-0 top-0 z-50 h-[72px] transition-all duration-300 ${
+        className={`fixed left-0 right-0 top-0 z-[100] h-[72px] ${
           scrolled
-            ? "bg-white/95 shadow-lg backdrop-blur-xl"
-            : "bg-black/10 backdrop-blur-sm"
+            ? "bg-white shadow-md"
+            : "bg-black/10"
         }`}
       >
-        <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-5 sm:px-6">
+        <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-5">
 
           {/* LOGO */}
           <Link
@@ -51,14 +43,14 @@ export default function Header() {
             className="flex items-center"
           >
             <span
-              className={`text-2xl font-black tracking-tight sm:text-3xl ${
+              className={`text-2xl font-black sm:text-3xl ${
                 scrolled ? "text-gray-900" : "text-white"
               }`}
             >
               Event&apos;S
             </span>
 
-            <span className="ml-1 text-2xl font-black tracking-tight text-green-500 sm:text-3xl">
+            <span className="ml-1 text-2xl font-black text-green-500 sm:text-3xl">
               Location
             </span>
           </Link>
@@ -69,24 +61,12 @@ export default function Header() {
               scrolled ? "text-gray-800" : "text-white"
             }`}
           >
-            {[
-              ["Accueil", "/"],
-              ["Prestations", "#services"],
-              ["Galerie", "#gallery"],
-              ["Tarifs", "#packs"],
-              ["Avis", "#testimonials"],
-              ["Contact", "#contact"],
-            ].map(([label, href]) => (
-              <Link
-                key={label}
-                href={href}
-                className="group relative py-2 font-medium"
-              >
-                {label}
-
-                <span className="absolute bottom-0 left-0 h-0.5 w-0 bg-green-500 transition-all duration-200 group-hover:w-full" />
-              </Link>
-            ))}
+            <Link href="/">Accueil</Link>
+            <Link href="#services">Prestations</Link>
+            <Link href="#gallery">Galerie</Link>
+            <Link href="#packs">Tarifs</Link>
+            <Link href="#testimonials">Avis</Link>
+            <Link href="#contact">Contact</Link>
           </nav>
 
           {/* ACTIONS DESKTOP */}
@@ -97,73 +77,49 @@ export default function Header() {
                 scrolled ? "text-green-700" : "text-white"
               }`}
             >
-              <Phone size={17} />
+              <Phone size={18} />
               06 43 89 45 70
             </a>
 
             <Link
               href="#contact"
-              className="rounded-xl bg-green-600 px-5 py-3 font-bold text-white shadow-lg transition hover:bg-green-700"
+              className="rounded-xl bg-green-600 px-5 py-3 font-bold text-white"
             >
               Demander un devis
             </Link>
           </div>
 
           {/* BOUTON MOBILE */}
-            <button
-               type="button"
-                aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
-               aria-expanded={open}
-               onPointerDown={(e) => {
-               e.preventDefault();
-                setOpen((previous) => !previous);
-             }}
-             className={`relative z-[100] flex h-12 w-12 touch-manipulation select-none items-center justify-center rounded-xl transition-colors duration-100 lg:hidden ${
+          <button
+            type="button"
+            aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-expanded={open}
+            onClick={() => setOpen(!open)}
+            className={`flex h-12 w-12 items-center justify-center rounded-xl lg:hidden ${
               scrolled
-               ? "bg-gray-100 text-gray-900"
-                : "bg-white/15 text-white"
+                ? "bg-gray-100 text-gray-900"
+                : "bg-white/20 text-white"
             }`}
           >
-          
             {open ? (
-              <X size={28} strokeWidth={2.5} />
+              <X size={30} />
             ) : (
-              <Menu size={28} strokeWidth={2.5} />
+              <Menu size={30} />
             )}
           </button>
         </div>
       </header>
 
       {/* MENU MOBILE */}
-      <div
-        className={`fixed inset-x-0 top-[72px] z-50 lg:hidden ${
-          open ? "visible" : "invisible"
-        }`}
-      >
-        {/* Fond */}
-        <button
-          type="button"
-          aria-label="Fermer le menu"
-          onClick={closeMenu}
-          className={`fixed inset-0 top-[72px] bg-black/40 transition-opacity duration-150 ${
-            open
-              ? "pointer-events-auto opacity-100"
-              : "pointer-events-none opacity-0"
-          }`}
-        />
+      {open && (
+        <div className="fixed left-0 right-0 top-[72px] z-[90] bg-white shadow-xl lg:hidden">
 
-        {/* Panneau */}
-        <div
-          className={`relative bg-white shadow-2xl transition-transform duration-150 ${
-            open ? "translate-y-0" : "-translate-y-2"
-          }`}
-        >
-          <nav className="mx-auto flex max-w-7xl flex-col px-5 py-5">
+          <nav className="flex flex-col px-5 py-4">
 
             <Link
               href="/"
               onClick={closeMenu}
-              className="border-b border-gray-100 py-4 text-lg font-semibold text-gray-900"
+              className="border-b py-4 text-lg font-semibold"
             >
               Accueil
             </Link>
@@ -171,7 +127,7 @@ export default function Header() {
             <Link
               href="#services"
               onClick={closeMenu}
-              className="border-b border-gray-100 py-4 text-lg font-semibold text-gray-900"
+              className="border-b py-4 text-lg font-semibold"
             >
               Prestations
             </Link>
@@ -179,7 +135,7 @@ export default function Header() {
             <Link
               href="#gallery"
               onClick={closeMenu}
-              className="border-b border-gray-100 py-4 text-lg font-semibold text-gray-900"
+              className="border-b py-4 text-lg font-semibold"
             >
               Galerie
             </Link>
@@ -187,7 +143,7 @@ export default function Header() {
             <Link
               href="#packs"
               onClick={closeMenu}
-              className="border-b border-gray-100 py-4 text-lg font-semibold text-gray-900"
+              className="border-b py-4 text-lg font-semibold"
             >
               Tarifs
             </Link>
@@ -195,24 +151,24 @@ export default function Header() {
             <Link
               href="#testimonials"
               onClick={closeMenu}
-              className="border-b border-gray-100 py-4 text-lg font-semibold text-gray-900"
+              className="border-b py-4 text-lg font-semibold"
             >
-              Avis clients
+              Avis
             </Link>
 
             <Link
               href="#contact"
               onClick={closeMenu}
-              className="border-b border-gray-100 py-4 text-lg font-semibold text-gray-900"
+              className="border-b py-4 text-lg font-semibold"
             >
               Contact
             </Link>
 
             <a
               href="tel:0643894570"
-              className="mt-5 flex items-center justify-center gap-2 rounded-xl border-2 border-green-600 py-3.5 font-bold text-green-700"
+              className="mt-5 flex items-center justify-center gap-2 rounded-xl border-2 border-green-600 py-3 font-bold text-green-700"
             >
-              <Phone size={19} />
+              <Phone size={18} />
               06 43 89 45 70
             </a>
 
@@ -224,12 +180,9 @@ export default function Header() {
               Demander un devis
             </Link>
 
-            <p className="mt-4 text-center text-xs text-gray-500">
-              Nièvre • Yonne • Cher
-            </p>
           </nav>
         </div>
-      </div>
+      )}
     </>
   );
 }
