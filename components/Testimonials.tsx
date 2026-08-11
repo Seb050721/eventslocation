@@ -1,6 +1,10 @@
 "use client";
 
-import { Star } from "lucide-react";
+import {
+  Quote,
+  Star,
+  Heart,
+} from "lucide-react";
 
 const reviews = [
   {
@@ -22,74 +26,128 @@ const reviews = [
 
 export default function Testimonials() {
   return (
-    <section className="bg-[#080808] py-28">
+    <section
+      id="testimonials"
+      className="relative overflow-hidden bg-[#050505] py-20 sm:py-24 lg:py-28"
+    >
+      {/* Halos */}
+      <div className="pointer-events-none absolute -right-52 top-10 h-[500px] w-[500px] rounded-full bg-green-500/10 blur-[170px]" />
 
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
 
-        <div className="mx-auto mb-16 max-w-3xl text-center">
+        {/* TITRE */}
+        <div className="mx-auto mb-12 max-w-3xl text-center sm:mb-16 lg:mb-20">
 
-          <span className="rounded-full border border-green-500/30 bg-green-500/10 px-5 py-2 text-sm uppercase tracking-[0.35em] text-green-400">
+          <span className="inline-flex rounded-full border border-green-500/30 bg-green-500/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.25em] text-green-400 sm:px-5 sm:text-xs sm:tracking-[0.35em]">
             Avis clients
           </span>
 
-          <h2 className="mt-8 text-5xl font-black text-white">
-            Ils nous ont fait confiance
+          <h2 className="mt-6 text-4xl font-black leading-tight tracking-tight text-white sm:text-5xl lg:mt-8 lg:text-6xl">
+            Ils nous ont fait
+            <span className="block text-green-400">
+              confiance
+            </span>
           </h2>
 
-          <p className="mt-8 text-lg text-gray-400">
-            Votre satisfaction est notre priorité.
+          <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-gray-400 sm:text-lg sm:leading-8">
+            Des événements uniques et des clients satisfaits : c&apos;est
+            notre meilleure récompense.
           </p>
 
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-3">
+        {/* NOTE GLOBALE */}
+        <div className="mx-auto mb-8 flex max-w-md items-center justify-center gap-4 rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4 sm:mb-12">
+
+          <div className="flex gap-0.5">
+
+            {Array.from({ length: 5 }).map((_, index) => (
+              <Star
+                key={index}
+                size={18}
+                fill="currentColor"
+                className="text-yellow-400"
+              />
+            ))}
+
+          </div>
+
+          <div className="h-7 w-px bg-white/10" />
+
+          <p className="text-sm font-semibold text-gray-300">
+            Votre satisfaction au cœur de nos événements
+          </p>
+
+        </div>
+
+        {/* AVIS */}
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-7">
 
           {reviews.map((review) => (
-
-            <div
-              key={review.name}
-              className="rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl transition duration-300 hover:-translate-y-2 hover:border-green-500/30"
+            <article
+              key={`${review.name}-${review.event}`}
+              className="group relative flex h-full flex-col rounded-[26px] border border-white/10 bg-white/[0.05] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-green-500/30 hover:bg-white/[0.07] hover:shadow-[0_20px_60px_rgba(34,197,94,0.10)] sm:rounded-[30px] sm:p-8"
             >
+              {/* Guillemets */}
+              <div className="absolute right-5 top-5 text-green-500/15">
+                <Quote
+                  size={52}
+                  fill="currentColor"
+                  strokeWidth={1}
+                />
+              </div>
 
-              <div className="mb-5 flex gap-1">
+              {/* Étoiles */}
+              <div className="relative flex gap-1">
 
-                {[...Array(5)].map((_, i) => (
-
+                {Array.from({ length: 5 }).map((_, index) => (
                   <Star
-                    key={i}
-                    size={18}
+                    key={index}
+                    size={17}
                     fill="currentColor"
                     className="text-yellow-400"
                   />
-
                 ))}
 
               </div>
 
-              <p className="leading-8 text-gray-300">
-                "{review.text}"
+              {/* Texte */}
+              <p className="relative mt-6 flex-1 text-sm leading-7 text-gray-300 sm:text-base sm:leading-8">
+                &ldquo;{review.text}&rdquo;
               </p>
 
-              <div className="mt-8">
+              {/* Client */}
+              <div className="mt-7 border-t border-white/10 pt-5">
 
-                <p className="font-bold text-white">
-                  {review.name}
-                </p>
+                <div className="flex items-center justify-between gap-4">
 
-                <p className="text-green-400">
-                  {review.event}
-                </p>
+                  <div>
+                    <p className="font-bold text-white">
+                      {review.name}
+                    </p>
+
+                    <p className="mt-1 text-sm font-medium text-green-400">
+                      {review.event}
+                    </p>
+                  </div>
+
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500/10 text-green-400">
+                    <Heart
+                      size={18}
+                      fill="currentColor"
+                    />
+                  </div>
+
+                </div>
 
               </div>
 
-            </div>
-
+            </article>
           ))}
 
         </div>
 
       </div>
-
     </section>
   );
 }

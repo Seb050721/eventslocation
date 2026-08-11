@@ -9,6 +9,7 @@ import Packs from "@/components/Packs";
 import QuoteForm from "@/components/QuoteForm";
 import TrustBar from "@/components/TrustBar";
 import Testimonials from "@/components/Testimonials";
+import Footer from "@/components/Footer/Footer";
 
 export default function Home() {
   return (
@@ -42,6 +43,8 @@ export default function Home() {
       <section id="contact">
         <QuoteForm />
       </section>
+
+      <Footer />
     </>
   );
 }
