@@ -1,73 +1,70 @@
 "use client";
 
 import { motion } from "framer-motion";
+
 import { services } from "@/data/services";
 import ServiceCard from "./ServiceCard";
 
 export default function Services() {
   return (
     <section
-      id="prestations"
-      className="relative overflow-hidden bg-[#050505] py-24"
+      id="services"
+      className="relative overflow-hidden bg-[#050505] py-20 sm:py-24 lg:py-28"
     >
-      {/* Halo gauche */}
-      <div className="absolute left-0 top-0 h-96 w-96 rounded-full bg-green-500/10 blur-[150px]" />
+      {/* HALOS */}
+      <div className="pointer-events-none absolute -left-52 top-10 h-[500px] w-[500px] rounded-full bg-green-500/10 blur-[160px]" />
 
-      {/* Halo droit */}
-      <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-green-500/10 blur-[170px]" />
+      <div className="pointer-events-none absolute -right-52 bottom-0 h-[500px] w-[500px] rounded-full bg-emerald-500/10 blur-[170px]" />
 
-      <div className="relative mx-auto max-w-7xl px-6">
+      <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
 
+        {/* TITRE */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="mx-auto mb-20 max-w-3xl text-center"
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6 }}
+          className="mx-auto mb-12 max-w-3xl text-center sm:mb-16 lg:mb-20"
         >
-
-          <span className="rounded-full border border-green-500/30 bg-green-500/10 px-5 py-2 text-sm font-semibold uppercase tracking-[0.35em] text-green-400">
-            Nos locations
+          <span className="inline-flex rounded-full border border-green-500/30 bg-green-500/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.25em] text-green-400 sm:px-5 sm:text-xs sm:tracking-[0.35em]">
+            Nos prestations
           </span>
 
-          <h2 className="mt-8 text-5xl font-bold text-white md:text-6xl">
-            Tout le matériel
-            <br />
-            pour réussir votre événement
+          <h2 className="mt-6 text-4xl font-black leading-tight tracking-tight text-white sm:text-5xl lg:mt-8 lg:text-6xl">
+            Tout pour rendre votre
+            <span className="block text-green-400">
+              événement inoubliable
+            </span>
           </h2>
 
-          <p className="mx-auto mt-8 max-w-3xl text-lg leading-8 text-gray-400">
-            Que vous organisiez un mariage, un anniversaire, une soirée privée,
-            une réception ou un événement professionnel, Event'S Location met
-            à votre disposition du matériel de qualité, prêt à l'emploi et
-            disponible à la location.
+          <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-gray-400 sm:text-lg sm:leading-8">
+            Découvrez nos solutions de location pour vos mariages,
+            anniversaires, événements privés, professionnels ou associatifs.
           </p>
-
         </motion.div>
 
-        <div className="grid gap-10 lg:grid-cols-2">
+        {/* CARTES */}
+        <div className="grid gap-6 md:grid-cols-2 lg:gap-8">
 
           {services.map((service, index) => (
-
             <motion.div
               key={service.id}
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.1 }}
               transition={{
-                duration: 0.6,
-                delay: index * 0.08,
+                duration: 0.5,
+                delay: Math.min(index * 0.08, 0.3),
               }}
+              className="h-full"
             >
               <ServiceCard service={service} />
             </motion.div>
-
           ))}
 
         </div>
 
       </div>
-
     </section>
   );
 }

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CheckCircle } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 
 import type { Service } from "@/data/services";
 
@@ -12,86 +12,107 @@ interface Props {
 
 export default function ServiceCard({ service }: Props) {
   return (
-    <article className="group overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl transition-all duration-500 hover:-translate-y-3 hover:border-green-500/40 hover:shadow-[0_25px_80px_rgba(34,197,94,0.18)]">
+    <article className="group flex h-full flex-col overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.05] transition-all duration-300 hover:-translate-y-2 hover:border-green-500/30 hover:shadow-[0_25px_70px_rgba(34,197,94,0.12)] sm:rounded-[32px]">
 
       {/* IMAGE */}
-
-      <div className="relative h-72 overflow-hidden">
-
+      <Link
+        href={`/prestations/${service.id}`}
+        className="relative block h-[240px] overflow-hidden sm:h-[280px] lg:h-[300px]"
+      >
         <Image
           src={service.cardImage}
           alt={service.title}
           fill
-          className="object-cover transition duration-700 group-hover:scale-110"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
 
-        <div className="absolute right-5 top-5 rounded-full bg-green-500 px-4 py-2 text-xs font-bold uppercase tracking-widest text-white shadow-lg">
-          À partir de {service.startingPrice} €
+        {/* PRIX */}
+        <div className="absolute right-4 top-4 rounded-full border border-white/20 bg-black/50 px-4 py-2 text-sm font-bold text-white backdrop-blur-md">
+          Dès {service.startingPrice} €
         </div>
 
-        <div className="absolute bottom-6 left-6">
+        {/* TITRE SUR PHOTO */}
+        <div className="absolute bottom-5 left-5 right-5 sm:bottom-6 sm:left-6">
 
-          <p className="text-sm uppercase tracking-[0.35em] text-green-400">
+          <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-green-400 sm:text-xs">
             {service.category}
           </p>
 
-          <h2 className="mt-2 text-4xl font-black text-white">
+          <h3 className="mt-2 text-3xl font-black text-white sm:text-4xl">
             {service.title}
-          </h2>
+          </h3>
 
         </div>
-
-      </div>
+      </Link>
 
       {/* CONTENU */}
+      <div className="flex flex-1 flex-col p-6 sm:p-8">
 
-      <div className="space-y-7 p-8">
-
-        <p className="leading-7 text-gray-300">
+        <p className="text-sm leading-7 text-gray-400 sm:text-base">
           {service.shortDescription}
         </p>
 
-        <div className="space-y-3">
+        {/* POINTS FORTS */}
+        <div className="mt-6 space-y-3">
 
           {service.included.slice(0, 3).map((item) => (
-
             <div
               key={item}
-              className="flex items-center gap-3"
+              className="flex items-start gap-3"
             >
+              <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-green-500/15">
+                <Check
+                  size={13}
+                  strokeWidth={3}
+                  className="text-green-400"
+                />
+              </div>
 
-              <CheckCircle
-                size={18}
-                className="text-green-400"
-              />
-
-              <span className="text-gray-200">
+              <span className="text-sm leading-6 text-gray-300">
                 {item}
               </span>
-
             </div>
-
           ))}
 
         </div>
 
-        <div className="border-t border-white/10 pt-6">
+        {/* BAS DE CARTE */}
+        <div className="mt-auto pt-8">
 
-          <Link
-            href={`/prestations/${service.id}`}
-            className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-green-500 to-green-600 px-6 py-4 font-semibold text-white transition duration-300 hover:scale-[1.02] hover:from-green-600 hover:to-green-700"
-          >
-            Découvrir la prestation
+          <div className="mb-6 h-px bg-white/10" />
 
-            <ArrowRight size={18} />
-          </Link>
+          <div className="flex items-end justify-between gap-4">
+
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-gray-500">
+                À partir de
+              </p>
+
+              <p className="mt-1 text-3xl font-black text-green-400 sm:text-4xl">
+                {service.startingPrice} €
+              </p>
+            </div>
+
+            <Link
+              href={`/prestations/${service.id}`}
+              className="group/button flex h-12 items-center justify-center gap-2 rounded-full bg-green-600 px-5 text-sm font-bold text-white transition-all duration-200 hover:bg-green-700 sm:h-13 sm:px-6 sm:text-base"
+            >
+              En savoir plus
+
+              <ArrowRight
+                size={18}
+                className="transition-transform duration-200 group-hover/button:translate-x-1"
+              />
+            </Link>
+
+          </div>
 
         </div>
 
       </div>
-
     </article>
   );
 }
