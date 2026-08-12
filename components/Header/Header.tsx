@@ -119,7 +119,7 @@ export default function Header() {
             className={`flex h-12 w-12 items-center justify-center rounded-xl lg:hidden ${
               scrolled
                 ? "bg-gray-100 text-gray-900"
-                : "bg-white/20 text-white"
+                : "bg-white/20 text-red"
             }`}
           >
             {open ? (
