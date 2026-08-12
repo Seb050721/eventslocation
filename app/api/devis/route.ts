@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 function escapeHtml(value: unknown) {
   return String(value ?? "")
     .replaceAll("&", "&amp;")
@@ -14,7 +12,10 @@ function escapeHtml(value: unknown) {
 
 export async function POST(request: Request) {
   try {
-    if (!process.env.RESEND_API_KEY) {
+    // On vérifie la clé seulement lorsqu'un client envoie un devis
+    const apiKey = process.env.RESEND_API_KEY;
+
+    if (!apiKey) {
       console.error("RESEND_API_KEY absente");
 
       return NextResponse.json(
@@ -22,6 +23,11 @@ export async function POST(request: Request) {
         { status: 500 }
       );
     }
+
+    // IMPORTANT :
+    // Resend est créé ici et NON en haut du fichier.
+    // Cela permet à Vercel de construire le site même sans clé pour l'instant.
+    const resend = new Resend(apiKey);
 
     const body = await request.json();
 
@@ -39,6 +45,7 @@ export async function POST(request: Request) {
       estimatedPrice,
     } = body;
 
+    // Vérification des champs obligatoires
     if (
       !lastname ||
       !firstname ||
@@ -64,6 +71,7 @@ export async function POST(request: Request) {
       );
     }
 
+    // Sécurisation des informations saisies
     const safeLastname = escapeHtml(lastname);
     const safeFirstname = escapeHtml(firstname);
     const safeEmail = escapeHtml(email);
@@ -80,10 +88,18 @@ export async function POST(request: Request) {
 
     const safeEstimatedPrice = Number(estimatedPrice) || 0;
 
+    // =========================================================
+    // MAIL REÇU PAR EVENT'S LOCATION
+    // =========================================================
+
     const adminMail = await resend.emails.send({
       from: "Event'S Location <devis@eventslocation.fr>",
+
       to: ["events.location@outlook.com"],
+
+      // En cliquant sur Répondre, tu répondras directement au client
       replyTo: email,
+
       subject: `Nouvelle demande de devis - ${firstname} ${lastname}`,
 
       html: `
@@ -93,6 +109,7 @@ export async function POST(request: Request) {
           padding:32px 16px;
           color:#1f2937;
         ">
+
           <div style="
             max-width:680px;
             margin:0 auto;
@@ -107,6 +124,7 @@ export async function POST(request: Request) {
               padding:28px;
               color:white;
             ">
+
               <p style="
                 margin:0;
                 font-size:12px;
@@ -124,39 +142,32 @@ export async function POST(request: Request) {
               ">
                 Nouvelle demande de devis
               </h1>
+
             </div>
 
             <div style="padding:28px;">
 
-              <h2 style="
-                margin:0 0 18px;
-                font-size:20px;
-              ">
-                Coordonnées
-              </h2>
+              <h2>Coordonnées</h2>
 
-              <p><strong>Nom :</strong> ${safeLastname}</p>
-              <p><strong>Prénom :</strong> ${safeFirstname}</p>
-              <p><strong>E-mail :</strong> ${safeEmail}</p>
-              <p><strong>Téléphone :</strong> ${safePhone}</p>
+              <p>
+                <strong>Nom :</strong>
+                ${safeLastname}
+              </p>
 
-              <hr style="
-                border:none;
-                border-top:1px solid #e5e7eb;
-                margin:28px 0;
-              " />
+              <p>
+                <strong>Prénom :</strong>
+                ${safeFirstname}
+              </p>
 
-              <h2 style="
-                margin:0 0 18px;
-                font-size:20px;
-              ">
-                Événement
-              </h2>
+              <p>
+                <strong>E-mail :</strong>
+                ${safeEmail}
+              </p>
 
-              <p><strong>Type :</strong> ${safeEventType}</p>
-              <p><strong>Date :</strong> ${safeDate}</p>
-              <p><strong>Lieu :</strong> ${safeCity}</p>
-              <p><strong>Invités :</strong> ${safeGuests}</p>
+              <p>
+                <strong>Téléphone :</strong>
+                ${safePhone}
+              </p>
 
               <hr style="
                 border:none;
@@ -164,14 +175,39 @@ export async function POST(request: Request) {
                 margin:28px 0;
               " />
 
-              <h2 style="
-                margin:0 0 18px;
-                font-size:20px;
-              ">
-                Prestations demandées
-              </h2>
+              <h2>Événement</h2>
 
-              <p>${safeServices}</p>
+              <p>
+                <strong>Type :</strong>
+                ${safeEventType}
+              </p>
+
+              <p>
+                <strong>Date :</strong>
+                ${safeDate}
+              </p>
+
+              <p>
+                <strong>Lieu :</strong>
+                ${safeCity}
+              </p>
+
+              <p>
+                <strong>Nombre d'invités :</strong>
+                ${safeGuests}
+              </p>
+
+              <hr style="
+                border:none;
+                border-top:1px solid #e5e7eb;
+                margin:28px 0;
+              " />
+
+              <h2>Prestations demandées</h2>
+
+              <p>
+                ${safeServices}
+              </p>
 
               <div style="
                 margin-top:20px;
@@ -180,6 +216,7 @@ export async function POST(request: Request) {
                 border-radius:12px;
                 border:1px solid #bbf7d0;
               ">
+
                 <p style="
                   margin:0;
                   font-size:13px;
@@ -196,6 +233,7 @@ export async function POST(request: Request) {
                 ">
                   ${safeEstimatedPrice} €
                 </p>
+
               </div>
 
               <hr style="
@@ -204,12 +242,7 @@ export async function POST(request: Request) {
                 margin:28px 0;
               " />
 
-              <h2 style="
-                margin:0 0 18px;
-                font-size:20px;
-              ">
-                Message
-              </h2>
+              <h2>Message du client</h2>
 
               <p style="
                 white-space:pre-line;
@@ -225,32 +258,52 @@ export async function POST(request: Request) {
                 color:white;
                 border-radius:12px;
               ">
+
                 <p style="margin:0;">
-                  Tu peux répondre directement à cet e-mail :
-                  la réponse sera envoyée à ${safeEmail}.
+                  Réponds directement à cet e-mail pour contacter
+                  ${safeFirstname} ${safeLastname}.
                 </p>
+
               </div>
 
             </div>
+
           </div>
+
         </div>
       `,
     });
 
+    // Si ton mail n'a pas pu être envoyé,
+    // on considère que la demande a échoué.
     if (adminMail.error) {
-      console.error("Erreur mail admin :", adminMail.error);
+      console.error(
+        "Erreur mail Event'S Location :",
+        adminMail.error
+      );
 
       return NextResponse.json(
-        { error: "Impossible d'envoyer votre demande pour le moment." },
+        {
+          error:
+            "Impossible d'envoyer votre demande pour le moment.",
+        },
         { status: 500 }
       );
     }
 
+    // =========================================================
+    // MAIL AUTOMATIQUE ENVOYÉ AU CLIENT
+    // =========================================================
+
     const clientMail = await resend.emails.send({
       from: "Event'S Location <devis@eventslocation.fr>",
+
       to: [email],
+
       replyTo: "events.location@outlook.com",
-      subject: "Votre demande de devis - Event'S Location",
+
+      subject:
+        "Votre demande de devis - Event'S Location",
 
       html: `
         <div style="
@@ -259,6 +312,7 @@ export async function POST(request: Request) {
           padding:32px 16px;
           color:#1f2937;
         ">
+
           <div style="
             max-width:650px;
             margin:0 auto;
@@ -273,6 +327,7 @@ export async function POST(request: Request) {
               padding:28px;
               color:white;
             ">
+
               <p style="
                 margin:0;
                 font-size:12px;
@@ -290,6 +345,7 @@ export async function POST(request: Request) {
               ">
                 Merci ${safeFirstname} !
               </h1>
+
             </div>
 
             <div style="
@@ -302,8 +358,8 @@ export async function POST(request: Request) {
               </p>
 
               <p>
-                Nous allons vérifier la disponibilité du matériel et
-                étudier votre demande avant de revenir vers vous.
+                Nous allons vérifier la disponibilité du matériel
+                et étudier votre demande avant de revenir vers vous.
               </p>
 
               <div style="
@@ -313,6 +369,7 @@ export async function POST(request: Request) {
                 border-radius:12px;
                 border:1px solid #bbf7d0;
               ">
+
                 <p>
                   <strong>Événement :</strong>
                   ${safeEventType}
@@ -332,7 +389,13 @@ export async function POST(request: Request) {
                   <strong>Prestations :</strong>
                   ${safeServices}
                 </p>
+
               </div>
+
+              <p>
+                Nous reviendrons vers vous rapidement avec une
+                proposition adaptée à votre événement.
+              </p>
 
               <p>
                 À très bientôt,
@@ -347,26 +410,37 @@ export async function POST(request: Request) {
               </p>
 
             </div>
+
           </div>
+
         </div>
       `,
     });
 
+    // Si seulement le mail de confirmation client échoue,
+    // la demande reste bien reçue chez nous.
     if (clientMail.error) {
-      console.error("Erreur confirmation client :", clientMail.error);
-
-      // La demande est tout de même arrivée chez Event'S Location.
-      // On ne retourne donc pas une erreur au client.
+      console.error(
+        "Erreur confirmation client :",
+        clientMail.error
+      );
     }
 
     return NextResponse.json({
       success: true,
     });
+
   } catch (error) {
-    console.error("Erreur API devis :", error);
+    console.error(
+      "Erreur API devis :",
+      error
+    );
 
     return NextResponse.json(
-      { error: "Une erreur est survenue pendant l'envoi." },
+      {
+        error:
+          "Une erreur est survenue pendant l'envoi.",
+      },
       { status: 500 }
     );
   }
