@@ -20,6 +20,11 @@ export interface FAQItem {
   answer: string;
 }
 
+export interface ServiceSeo {
+  title: string;
+  description: string;
+}
+
 export interface Service {
   id: string;
   title: string;
@@ -44,4 +49,6 @@ export interface Service {
   gallery: string[];
 
   faq: FAQItem[];
+
+  seo?: ServiceSeo;
 }

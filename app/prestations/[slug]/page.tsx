@@ -26,7 +26,6 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-
   const { slug } = await params;
 
   const service = services.find(
@@ -36,38 +35,92 @@ export async function generateMetadata({
   if (!service) {
     return {
       title: "Prestation introuvable",
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
   }
 
+  const canonicalUrl =
+    `https://eventslocation.fr/prestations/${service.id}`;
+
+  const title =
+    service.seo?.title ??
+    `${service.title} en Nièvre, Yonne et Cher`;
+
+  const description =
+    service.seo?.description ??
+    service.description;
+
+  const image =
+    service.heroImage ??
+    service.cardImage ??
+    "/images/hero-photobooth.jpg";
+
   return {
-    title: `${service.title} | Event'S Location`,
-    description: service.description,
+    title,
+
+    description,
+
+    alternates: {
+      canonical: canonicalUrl,
+    },
+
+    openGraph: {
+      type: "website",
+      locale: "fr_FR",
+      url: canonicalUrl,
+
+      title,
+      description,
+
+      siteName: "Event'S Location",
+
+      images: [
+        {
+          url: image,
+          alt: service.title,
+        },
+      ],
+    },
+
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image],
+    },
+
+    robots: {
+      index: true,
+      follow: true,
+    },
   };
 }
 
 export default async function ServicePage({
   params,
 }: PageProps) {
-
   const { slug } = await params;
- const service = services.find(
-  (item) => item.id === slug
-);
+
+  const service = services.find(
+    (item) => item.id === slug
+  );
 
   if (!service) {
     notFound();
   }
 
   return (
-    <main className="min-h-screen bg-[#050505] pt-32 pb-24">
+    <main className="relative min-h-screen overflow-hidden bg-[#050505] pb-24 pt-32">
 
-      {/* Halo */}
+      {/* HALOS */}
+      <div className="pointer-events-none absolute left-0 top-0 h-[450px] w-[450px] rounded-full bg-green-500/10 blur-[180px]" />
 
-      <div className="absolute left-0 top-0 h-[450px] w-[450px] rounded-full bg-green-500/10 blur-[180px]" />
+      <div className="pointer-events-none absolute right-0 top-[400px] h-[450px] w-[450px] rounded-full bg-green-500/10 blur-[180px]" />
 
-      <div className="absolute right-0 top-[400px] h-[450px] w-[450px] rounded-full bg-green-500/10 blur-[180px]" />
-
-      <div className="relative mx-auto flex max-w-7xl flex-col gap-12 px-6">
+      <div className="relative mx-auto flex max-w-7xl flex-col gap-12 px-5 sm:px-6 lg:px-8">
 
         <ServiceHero service={service} />
 
@@ -80,7 +133,6 @@ export default async function ServicePage({
           items={service.pricing}
         />
 
-        
         <OptionsGrid
           options={service.options}
         />
@@ -91,24 +143,28 @@ export default async function ServicePage({
 
         <FAQAccordion
           faq={service.faq}
-        />    
-            <section className="overflow-hidden rounded-3xl border border-green-500/20 bg-gradient-to-br from-green-600 via-green-500 to-green-700 p-12">
+        />
 
-          <div className="flex flex-col items-center justify-between gap-10 lg:flex-row">
+        <RelatedServices
+          currentId={service.id}
+        />
+
+        {/* CTA */}
+        <section className="overflow-hidden rounded-[28px] border border-green-500/20 bg-gradient-to-br from-green-600 via-green-500 to-green-700 p-6 sm:p-8 lg:p-12">
+
+          <div className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center lg:gap-10">
 
             <div className="max-w-2xl">
 
-              <span className="rounded-full bg-white/20 px-4 py-2 text-sm font-semibold uppercase tracking-[0.3em] text-white">
+              <span className="inline-flex rounded-full bg-white/20 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.25em] text-white sm:text-sm sm:tracking-[0.3em]">
                 Demande de devis
               </span>
 
-              <RelatedServices currentId={service.id} />
-
-              <h2 className="mt-6 text-4xl font-black text-white">
+              <h2 className="mt-6 text-3xl font-black leading-tight text-white sm:text-4xl">
                 Vous souhaitez réserver cette prestation ?
               </h2>
 
-              <p className="mt-5 text-lg leading-8 text-green-50">
+              <p className="mt-5 text-base leading-7 text-green-50 sm:text-lg sm:leading-8">
                 Contactez-nous pour vérifier la disponibilité de votre date,
                 obtenir un devis personnalisé et organiser votre événement
                 en toute sérénité.
@@ -116,18 +172,18 @@ export default async function ServicePage({
 
             </div>
 
-            <div className="flex flex-col gap-4">
+            <div className="flex w-full flex-col gap-3 sm:w-auto sm:min-w-[260px]">
 
               <a
                 href="/#contact"
-                className="rounded-full bg-white px-10 py-4 text-center text-lg font-bold text-green-700 transition duration-300 hover:scale-105"
+                className="rounded-xl bg-white px-6 py-4 text-center font-bold text-green-700 transition hover:scale-[1.02] sm:rounded-2xl sm:text-lg"
               >
                 Demander un devis
               </a>
 
               <a
-                href="tel:0643894570"
-                className="rounded-full border border-white/40 px-10 py-4 text-center text-lg font-semibold text-white transition duration-300 hover:bg-white/10"
+                href="tel:+33643894570"
+                className="rounded-xl border border-white/40 px-6 py-4 text-center font-semibold text-white transition hover:bg-white/10 sm:rounded-2xl sm:text-lg"
               >
                 📞 06 43 89 45 70
               </a>
