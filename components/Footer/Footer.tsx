@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { FaInstagram, FaFacebookF } from "react-icons/fa";
 
 import {
   Phone,
@@ -11,7 +12,7 @@ import {
   Projector,
   Armchair,
   Sparkles,
-} from "lucide-react";
+  } from "lucide-react";
 
 const services = [
   {
@@ -52,7 +53,9 @@ export default function Footer() {
 
       <div className="pointer-events-none absolute -right-48 bottom-0 h-[400px] w-[400px] rounded-full bg-emerald-500/10 blur-[150px]" />
 
-      {/* CTA SUPÉRIEUR */}
+      {/* =========================================================
+          CTA SUPÉRIEUR
+      ========================================================= */}
       <div className="relative border-b border-white/10">
 
         <div className="mx-auto max-w-7xl px-5 py-12 sm:px-6 sm:py-16 lg:px-8">
@@ -94,12 +97,16 @@ export default function Footer() {
 
       </div>
 
-      {/* FOOTER PRINCIPAL */}
+      {/* =========================================================
+          FOOTER PRINCIPAL
+      ========================================================= */}
       <div className="relative mx-auto max-w-7xl px-5 py-14 sm:px-6 sm:py-16 lg:px-8">
 
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.15fr]">
 
-          {/* ENTREPRISE */}
+          {/* =====================================================
+              ENTREPRISE
+          ===================================================== */}
           <div>
 
             <Link
@@ -108,6 +115,7 @@ export default function Footer() {
               aria-label="Event'S Location - Accueil"
             >
               <div className="relative h-16 w-16 shrink-0 rounded-full bg-white p-1.5">
+
                 <Image
                   src="/Logo/Logo.png"
                   alt="Logo Event'S Location"
@@ -115,9 +123,11 @@ export default function Footer() {
                   sizes="64px"
                   className="object-contain p-1"
                 />
+
               </div>
 
               <div>
+
                 <p className="text-xl font-black text-white">
                   Event&apos;S
                 </p>
@@ -125,7 +135,9 @@ export default function Footer() {
                 <p className="text-sm font-bold tracking-[0.18em] text-green-500">
                   LOCATION
                 </p>
+
               </div>
+
             </Link>
 
             <p className="mt-6 max-w-sm text-sm leading-7 text-gray-400">
@@ -135,6 +147,7 @@ export default function Footer() {
             </p>
 
             <div className="mt-6 flex items-start gap-3 text-sm text-gray-400">
+
               <MapPin
                 size={19}
                 className="mt-0.5 shrink-0 text-green-500"
@@ -145,11 +158,14 @@ export default function Footer() {
                 <br />
                 Déplacements plus éloignés sur devis
               </p>
+
             </div>
 
           </div>
 
-          {/* NAVIGATION */}
+          {/* =====================================================
+              NAVIGATION
+          ===================================================== */}
           <div>
 
             <h3 className="text-sm font-black uppercase tracking-[0.2em] text-white">
@@ -204,7 +220,9 @@ export default function Footer() {
 
           </div>
 
-          {/* PRESTATIONS */}
+          {/* =====================================================
+              PRESTATIONS
+          ===================================================== */}
           <div>
 
             <h3 className="text-sm font-black uppercase tracking-[0.2em] text-white">
@@ -236,7 +254,9 @@ export default function Footer() {
 
           </div>
 
-          {/* CONTACT */}
+          {/* =====================================================
+              CONTACT
+          ===================================================== */}
           <div>
 
             <h3 className="text-sm font-black uppercase tracking-[0.2em] text-white">
@@ -245,18 +265,23 @@ export default function Footer() {
 
             <div className="mt-6 space-y-4">
 
+              {/* TÉLÉPHONE */}
               <a
-                href="tel:0643894570"
+                href="tel:+33643894570"
                 className="flex items-center gap-3 text-sm text-gray-400 transition-colors hover:text-green-400"
               >
+
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-500/10">
+
                   <Phone
                     size={18}
                     className="text-green-400"
                   />
+
                 </div>
 
                 <div>
+
                   <p className="text-xs text-gray-500">
                     Téléphone
                   </p>
@@ -264,21 +289,28 @@ export default function Footer() {
                   <p className="font-semibold text-gray-300">
                     06 43 89 45 70
                   </p>
+
                 </div>
+
               </a>
 
+              {/* EMAIL */}
               <a
                 href="mailto:events.location@outlook.com"
                 className="flex items-center gap-3 text-sm text-gray-400 transition-colors hover:text-green-400"
               >
+
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-500/10">
+
                   <Mail
                     size={18}
                     className="text-green-400"
                   />
+
                 </div>
 
                 <div className="min-w-0">
+
                   <p className="text-xs text-gray-500">
                     E-mail
                   </p>
@@ -286,8 +318,55 @@ export default function Footer() {
                   <p className="break-all font-semibold text-gray-300">
                     events.location@outlook.com
                   </p>
+
                 </div>
+
               </a>
+
+              {/* =================================================
+                  RÉSEAUX SOCIAUX
+              ================================================= */}
+              <div className="pt-3">
+
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
+                  Suivez-nous
+                </p>
+
+                <div className="mt-3 flex gap-3">
+
+                  {/* INSTAGRAM */}
+                  <a
+                    href="https://www.instagram.com/events_location__/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram Event'S Location"
+                    title="Instagram Event'S Location"
+                    className="group flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-gray-300 transition-all duration-200 hover:-translate-y-1 hover:border-green-500/40 hover:bg-green-500/10 hover:text-green-400"
+                  >
+                    <FaInstagram
+                     size={21}
+                     className="transition-transform duration-200 group-hover:scale-110"
+                    />
+                  </a>
+
+                  {/* FACEBOOK */}
+                  <a
+                    href="https://www.facebook.com/share/1H7nS1AuH4/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Facebook Event'S Location"
+                    title="Facebook Event'S Location"
+                    className="group flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-gray-300 transition-all duration-200 hover:-translate-y-1 hover:border-green-500/40 hover:bg-green-500/10 hover:text-green-400"
+                  >
+                    <FaFacebookF
+                      size={20}
+                    className="transition-transform duration-200 group-hover:scale-110"
+                    />
+                  </a>
+
+                </div>
+
+              </div>
 
             </div>
 
@@ -297,7 +376,9 @@ export default function Footer() {
 
       </div>
 
-      {/* BAS DU FOOTER */}
+      {/* =========================================================
+          BAS DU FOOTER
+      ========================================================= */}
       <div className="relative border-t border-white/10">
 
         <div className="mx-auto flex max-w-7xl flex-col gap-5 px-5 py-6 text-center text-xs text-gray-500 sm:px-6 md:flex-row md:items-center md:justify-between md:text-left lg:px-8">
