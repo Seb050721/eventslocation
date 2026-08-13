@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import {
   CalendarDays,
@@ -117,6 +118,12 @@ export default function QuoteForm() {
       return;
     }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      setError("Merci de renseigner une adresse e-mail valide.");
+      return;
+    }
     if (!phone.trim()) {
       setError("Merci de renseigner votre numéro de téléphone.");
       return;
@@ -369,8 +376,9 @@ export default function QuoteForm() {
                 </label>
 
                 <input
-                  type="date"
-                  value={date}
+                 type="date"
+                 min={new Date().toISOString().split("T")[0]}
+                 value={date}
                   onChange={(event) =>
                     setDate(event.target.value)
                   }
@@ -510,9 +518,14 @@ export default function QuoteForm() {
             {/* RGPD */}
             <p className="mt-5 text-xs leading-5 text-gray-500">
               En envoyant cette demande, vous acceptez que les informations
-              renseignées soient utilisées afin de répondre à votre demande
-              de devis. Consultez notre politique de confidentialité pour
-              en savoir plus.
+             renseignées soient utilisées afin de répondre à votre demande de devis.{" "}
+            <Link
+             href="/politique-de-confidentialite"
+              className="font-semibold text-green-400 transition hover:text-green-300"
+            >
+            Consultez notre politique de confidentialité
+         </Link>{" "}
+           pour en savoir plus.
             </p>
 
             {/* BOUTON */}
