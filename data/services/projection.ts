@@ -19,25 +19,34 @@ export const projection: Service = {
   description:
     "Le vidéoprojecteur est proposé seul ou accompagné d'un écran de projection de 150 pouces.",
 
+  // SEO
+  seo: {
+    title:
+      "Location vidéoprojecteur en Nièvre, Yonne et Cher dès 55 €",
+
+    description:
+      "Location de vidéoprojecteur Full HD 4500 lumens en Nièvre, Yonne et Cher dès 55 €. Écran de projection 150 pouces disponible en complément.",
+  },
+
   included: [
     "Conseils d'installation",
-    "Matériel testé avant location"
+    "Matériel testé avant location",
   ],
 
   pricing: [
     {
       label: "Vidéoprojecteur",
-      price: 55
+      price: 55,
     },
     {
       label: "Écran 150 pouces",
-      price: 30
-    }
+      price: 30,
+    },
   ],
 
   options: [],
 
   gallery: [],
 
-  faq: []
+  faq: [],
 };

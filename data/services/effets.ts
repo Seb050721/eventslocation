@@ -19,6 +19,15 @@ export const effets: Service = {
   description:
     "Nos machines à effets apportent une véritable valeur ajoutée à vos événements. Mariages, anniversaires, soirées privées ou événements professionnels.",
 
+  // SEO
+  seo: {
+    title:
+      "Location machines à effets en Nièvre, Yonne et Cher",
+
+    description:
+      "Location de machines à fumée et à bulles pour mariages, anniversaires et soirées en Nièvre, Yonne et Cher. Matériel dès 15 €, liquide fourni.",
+  },
+
   included: [
     "Liquide fourni",
     "Installation comprise",
@@ -49,11 +58,13 @@ export const effets: Service = {
   faq: [
     {
       question: "Le liquide est-il fourni ?",
-      answer: "Oui, le liquide est inclus dans chaque location.",
+      answer:
+        "Oui, le liquide est inclus dans chaque location.",
     },
     {
       question: "L'installation est-elle comprise ?",
-      answer: "Oui, nous installons le matériel si nécessaire.",
+      answer:
+        "Oui, nous installons le matériel si nécessaire.",
     },
   ],
 };

@@ -19,6 +19,15 @@ export const mobilier: Service = {
   description:
     "Que ce soit pour un mariage, un anniversaire, une réception ou un événement professionnel, nous mettons à votre disposition du mobilier propre, robuste et prêt à l'emploi.",
 
+  // SEO
+  seo: {
+    title:
+      "Location mobilier événementiel en Nièvre, Yonne et Cher",
+
+    description:
+      "Location de mobilier événementiel en Nièvre, Yonne et Cher : tables, chaises, mange-debout, tabourets et tente 4 × 8 m pour mariages et réceptions.",
+  },
+
   included: [
     "Matériel contrôlé avant chaque location",
     "Conseils sur les quantités",

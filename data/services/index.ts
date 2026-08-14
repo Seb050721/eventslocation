@@ -1,16 +1,11 @@
-
-
-
-
 import { photobooth } from "./photobooth";
 import { sonorisation } from "./sonorisation";
 import { projection } from "./projection";
 import { mobilier } from "./mobilier";
 import { effets } from "./effets";
 import { feux } from "./feux";
+
 import type { Service } from "./types";
-
-
 
 export const services: Service[] = [
   photobooth,
@@ -18,7 +13,7 @@ export const services: Service[] = [
   projection,
   mobilier,
   effets,
-  feux, 
+  feux,
 ];
 
 export * from "./types";

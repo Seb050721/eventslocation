@@ -1,18 +1,16 @@
 import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
+  const baseUrl = "https://eventslocation.fr";
+
   return {
     rules: {
       userAgent: "*",
       allow: "/",
-
-      disallow: [
-        "/api/",
-      ],
+      disallow: ["/api/"],
     },
 
-    sitemap: "https://eventslocation.fr/sitemap.xml",
-
-    host: "https://eventslocation.fr",
+    sitemap: `${baseUrl}/sitemap.xml`,
+    host: baseUrl,
   };
 }

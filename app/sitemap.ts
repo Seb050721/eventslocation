@@ -1,14 +1,13 @@
 import type { MetadataRoute } from "next";
-
 import { services } from "@/data/services";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://eventslocation.fr";
 
-  const servicePages = services.map((service) => ({
+  const servicePages: MetadataRoute.Sitemap = services.map((service) => ({
     url: `${baseUrl}/prestations/${service.id}`,
     lastModified: new Date(),
-    changeFrequency: "monthly" as const,
+    changeFrequency: "monthly",
     priority: 0.8,
   }));
 
