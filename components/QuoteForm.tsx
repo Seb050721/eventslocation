@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   CalendarDays,
   MapPin,
@@ -76,11 +76,36 @@ export default function QuoteForm() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
 
+
   const [message, setMessage] = useState("");
 
   const [sending, setSending] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+
+useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+
+  const dateParam = params.get("date");
+  const serviceParam = params.get("service");
+
+  // Préremplissage de la date
+  if (dateParam) {
+    setDate(dateParam);
+  }
+
+  // Préremplissage de la prestation
+  if (
+    serviceParam &&
+    services.includes(serviceParam)
+  ) {
+    setSelectedServices((current) =>
+      current.includes(serviceParam)
+        ? current
+        : [...current, serviceParam]
+    );
+  }
+}, []);  
 
   function toggleService(service: string) {
     setSelectedServices((current) =>
