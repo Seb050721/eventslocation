@@ -27,26 +27,14 @@ export default function Header() {
 
     handleScroll();
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  // Empêche la page derrière de défiler
-  // lorsque le menu mobile est ouvert
-  useEffect(() => {
-    if (open) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
 
   const closeMenu = () => {
     setOpen(false);
@@ -58,7 +46,7 @@ export default function Header() {
           HEADER
       ===================================================== */}
       <header
-        className={`fixed left-0 right-0 top-0 z-[100] h-[80px] transition-all duration-300 ${
+        className={`fixed left-0 right-0 top-0 z-[100] h-[80px] transition-colors duration-200 ${
           scrolled
             ? "bg-white shadow-md"
             : "bg-black/10"
@@ -76,7 +64,7 @@ export default function Header() {
             aria-label="Event'S Location - Accueil"
           >
             <div
-              className={`relative h-14 w-14 shrink-0 rounded-full p-1 transition-all duration-300 sm:h-16 sm:w-16 ${
+              className={`relative h-14 w-14 shrink-0 rounded-full p-1 transition-all duration-200 sm:h-16 sm:w-16 ${
                 scrolled
                   ? "bg-transparent"
                   : "bg-white shadow-lg backdrop-blur-sm"
@@ -93,8 +81,9 @@ export default function Header() {
             </div>
 
             <div className="flex flex-col leading-none">
+
               <span
-                className={`text-lg font-black tracking-tight transition-colors duration-300 sm:text-xl ${
+                className={`text-lg font-black tracking-tight transition-colors duration-200 sm:text-xl ${
                   scrolled
                     ? "text-gray-900"
                     : "text-white"
@@ -106,6 +95,7 @@ export default function Header() {
               <span className="mt-1 text-sm font-bold tracking-[0.12em] text-green-500 sm:text-base">
                 LOCATION
               </span>
+
             </div>
           </Link>
 
@@ -119,6 +109,7 @@ export default function Header() {
                 : "text-white"
             }`}
           >
+
             <Link
               href="/"
               className="transition-colors hover:text-green-500"
@@ -138,6 +129,7 @@ export default function Header() {
               className="flex items-center gap-1.5 transition-colors hover:text-green-500"
             >
               <CalendarDays size={16} />
+
               Disponibilités
             </Link>
 
@@ -168,6 +160,7 @@ export default function Header() {
             >
               Contact
             </Link>
+
           </nav>
 
           {/* =================================================
@@ -220,6 +213,7 @@ export default function Header() {
 
               06 43 89 45 70
             </a>
+
           </div>
 
           {/* =================================================
@@ -233,32 +227,28 @@ export default function Header() {
                 : "Ouvrir le menu"
             }
             aria-expanded={open}
-            onClick={() =>
-              setOpen((current) => !current)
-            }
-            className={`relative flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-300 lg:hidden ${
+            onClick={() => setOpen((current) => !current)}
+            className={`relative z-[110] flex h-12 w-12 shrink-0 touch-manipulation items-center justify-center rounded-xl transition-colors duration-150 lg:hidden ${
               scrolled
                 ? "bg-gray-100 text-gray-900"
                 : "bg-white/20 text-white"
             }`}
           >
-            {/* HAMBURGER */}
             <Menu
               size={30}
-              className={`absolute transition-all duration-300 ease-out ${
+              className={`absolute transition-all duration-150 ${
                 open
-                  ? "rotate-90 scale-75 opacity-0"
-                  : "rotate-0 scale-100 opacity-100"
+                  ? "scale-75 opacity-0"
+                  : "scale-100 opacity-100"
               }`}
             />
 
-            {/* CROIX */}
             <X
               size={30}
-              className={`absolute transition-all duration-300 ease-out ${
+              className={`absolute transition-all duration-150 ${
                 open
-                  ? "rotate-0 scale-100 opacity-100"
-                  : "-rotate-90 scale-75 opacity-0"
+                  ? "scale-100 opacity-100"
+                  : "scale-75 opacity-0"
               }`}
             />
           </button>
@@ -267,15 +257,16 @@ export default function Header() {
       </header>
 
       {/* =====================================================
-          FOND SOMBRE MOBILE
+          FOND MOBILE
       ===================================================== */}
-      <div
+      <button
+        type="button"
+        aria-label="Fermer le menu"
         onClick={closeMenu}
-        aria-hidden="true"
-        className={`fixed inset-x-0 bottom-0 top-[80px] z-[80] bg-black/40 backdrop-blur-[2px] transition-all duration-300 lg:hidden ${
+        className={`fixed inset-x-0 bottom-0 top-[80px] z-[80] bg-black/30 transition-opacity duration-200 lg:hidden ${
           open
-            ? "visible opacity-100"
-            : "invisible opacity-0"
+            ? "pointer-events-auto opacity-100"
+            : "pointer-events-none opacity-0"
         }`}
       />
 
@@ -283,10 +274,10 @@ export default function Header() {
           MENU MOBILE
       ===================================================== */}
       <div
-        className={`fixed left-0 right-0 top-[80px] z-[90] max-h-[calc(100vh-80px)] origin-top overflow-y-auto bg-white shadow-2xl transition-all duration-300 ease-out lg:hidden ${
+        className={`fixed left-0 right-0 top-[80px] z-[90] max-h-[calc(100vh-80px)] overflow-y-auto overscroll-contain bg-white shadow-2xl transition-all duration-200 ease-out lg:hidden ${
           open
-            ? "visible translate-y-0 scale-y-100 opacity-100"
-            : "invisible -translate-y-3 scale-y-95 opacity-0"
+            ? "pointer-events-auto translate-y-0 opacity-100"
+            : "pointer-events-none -translate-y-4 opacity-0"
         }`}
       >
         <nav className="flex flex-col px-5 py-4">
@@ -295,7 +286,7 @@ export default function Header() {
           <Link
             href="/"
             onClick={closeMenu}
-            className="border-b border-gray-100 py-4 text-lg font-semibold transition-colors hover:text-green-600"
+            className="border-b border-gray-100 py-4 text-lg font-semibold"
           >
             Accueil
           </Link>
@@ -304,7 +295,7 @@ export default function Header() {
           <Link
             href="/#services"
             onClick={closeMenu}
-            className="border-b border-gray-100 py-4 text-lg font-semibold transition-colors hover:text-green-600"
+            className="border-b border-gray-100 py-4 text-lg font-semibold"
           >
             Prestations
           </Link>
@@ -324,7 +315,7 @@ export default function Header() {
           <Link
             href="/#gallery"
             onClick={closeMenu}
-            className="border-b border-gray-100 py-4 text-lg font-semibold transition-colors hover:text-green-600"
+            className="border-b border-gray-100 py-4 text-lg font-semibold"
           >
             Galerie
           </Link>
@@ -333,7 +324,7 @@ export default function Header() {
           <Link
             href="/#packs"
             onClick={closeMenu}
-            className="border-b border-gray-100 py-4 text-lg font-semibold transition-colors hover:text-green-600"
+            className="border-b border-gray-100 py-4 text-lg font-semibold"
           >
             Tarifs
           </Link>
@@ -342,7 +333,7 @@ export default function Header() {
           <Link
             href="/#testimonials"
             onClick={closeMenu}
-            className="border-b border-gray-100 py-4 text-lg font-semibold transition-colors hover:text-green-600"
+            className="border-b border-gray-100 py-4 text-lg font-semibold"
           >
             Avis
           </Link>
@@ -351,52 +342,52 @@ export default function Header() {
           <Link
             href="/#contact"
             onClick={closeMenu}
-            className="border-b border-gray-100 py-4 text-lg font-semibold transition-colors hover:text-green-600"
+            className="border-b border-gray-100 py-4 text-lg font-semibold"
           >
             Contact
           </Link>
 
           {/* =================================================
-              RÉSEAUX MOBILE
+              RÉSEAUX
           ================================================= */}
           <div className="mt-5">
+
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-gray-400">
               Suivez-nous
             </p>
 
             <div className="mt-3 flex gap-3">
 
-              {/* INSTAGRAM */}
               <a
                 href="https://www.instagram.com/events_location__/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram Event'S Location"
-                className="flex h-12 w-12 items-center justify-center rounded-xl border border-gray-200 bg-gray-50 text-gray-700 transition-all duration-200 hover:border-green-500/40 hover:bg-green-50 hover:text-green-600"
+                className="flex h-12 w-12 items-center justify-center rounded-xl border border-gray-200 bg-gray-50 text-gray-700"
               >
                 <FaInstagram size={21} />
               </a>
 
-              {/* FACEBOOK */}
               <a
                 href="https://www.facebook.com/share/1H7nS1AuH4/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook Event'S Location"
-                className="flex h-12 w-12 items-center justify-center rounded-xl border border-gray-200 bg-gray-50 text-gray-700 transition-all duration-200 hover:border-green-500/40 hover:bg-green-50 hover:text-green-600"
+                className="flex h-12 w-12 items-center justify-center rounded-xl border border-gray-200 bg-gray-50 text-gray-700"
               >
                 <FaFacebookF size={20} />
               </a>
 
             </div>
+
           </div>
 
           {/* =================================================
-              TÉLÉPHONE MOBILE
+              TÉLÉPHONE
           ================================================= */}
           <a
             href="tel:+33643894570"
-            className="mt-5 flex items-center justify-center gap-2 rounded-xl border-2 border-green-600 py-3 font-bold text-green-700 transition-colors hover:bg-green-50"
+            className="mt-5 flex items-center justify-center gap-2 rounded-xl border-2 border-green-600 py-3 font-bold text-green-700"
           >
             <Phone size={18} />
 
@@ -404,12 +395,12 @@ export default function Header() {
           </a>
 
           {/* =================================================
-              DEVIS MOBILE
+              DEVIS
           ================================================= */}
           <Link
             href="/#contact"
             onClick={closeMenu}
-            className="mt-3 rounded-xl bg-green-600 py-4 text-center font-bold text-white transition-colors hover:bg-green-700"
+            className="mt-3 rounded-xl bg-green-600 py-4 text-center font-bold text-white"
           >
             Demander un devis
           </Link>
