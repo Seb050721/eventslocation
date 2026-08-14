@@ -210,15 +210,7 @@ export default function Header() {
               06 43 89 45 70
             </a>
 
-            {/* DEVIS */}
-            <Link
-              href="/#contact"
-              className="rounded-xl bg-green-600 px-5 py-3 font-bold text-white transition hover:bg-green-700"
-            >
-              Demander un devis
-            </Link>
-
-          </div>
+            </div>
 
           {/* =================================================
               BOUTON MOBILE
