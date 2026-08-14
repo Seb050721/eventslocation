@@ -10,6 +10,7 @@ import QuoteForm from "@/components/QuoteForm";
 import TrustBar from "@/components/TrustBar";
 import Testimonials from "@/components/Testimonials";
 import Footer from "@/components/Footer/Footer";
+import LocalSEO from "@/components/LocalSEO";
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
 
       <section id="services">
         <Services />
+        <LocalSEO />
       </section>
 
       <WhyChooseUs />
