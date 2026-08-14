@@ -8,7 +8,7 @@ import {
 const stats = [
   {
     icon: Camera,
-    title: "+300",
+    title: "+100",
     subtitle: "Événements réalisés",
   },
   {

@@ -45,9 +45,9 @@ const eventSuggestions: Record<string, string[]> = {
   ],
 };
 
-const servicePrices: Record<string, number> = {
+const servicePrices: Record<string, number | null> = {
   "Photo Booth": 169,
-  Mobilier: 50,
+  Mobilier: null,
   "Smoke Puff": 155,
   Sonorisation: 100,
   Projection: 55,
@@ -91,13 +91,40 @@ export default function QuoteForm() {
   }
 
   const estimatedPrice = useMemo(() => {
-    return selectedServices.reduce(
-      (total, service) => total + (servicePrices[service] ?? 0),
-      0
+    return selectedServices.reduce((total, service) => {
+      const price = servicePrices[service];
+
+      return total + (typeof price === "number" ? price : 0);
+    }, 0);
+  }, [selectedServices]);
+
+  const hasCustomPriceService = useMemo(() => {
+    return selectedServices.some(
+      (service) => servicePrices[service] === null
     );
   }, [selectedServices]);
 
   const suggestions = eventSuggestions[eventType] ?? [];
+
+  const estimationLabel = useMemo(() => {
+    if (selectedServices.length === 0) {
+      return "Sur devis";
+    }
+
+    if (estimatedPrice === 0 && hasCustomPriceService) {
+      return "Sur devis";
+    }
+
+    if (estimatedPrice > 0 && hasCustomPriceService) {
+      return `${estimatedPrice} € + sur devis`;
+    }
+
+    return `${estimatedPrice} €`;
+  }, [
+    selectedServices.length,
+    estimatedPrice,
+    hasCustomPriceService,
+  ]);
 
   async function sendQuote() {
     setError("");
@@ -124,6 +151,7 @@ export default function QuoteForm() {
       setError("Merci de renseigner une adresse e-mail valide.");
       return;
     }
+
     if (!phone.trim()) {
       setError("Merci de renseigner votre numéro de téléphone.");
       return;
@@ -171,6 +199,8 @@ export default function QuoteForm() {
           selectedServices,
           message,
           estimatedPrice,
+          hasCustomPriceService,
+          estimationLabel,
         }),
       });
 
@@ -184,7 +214,6 @@ export default function QuoteForm() {
 
       setSuccess(true);
 
-      // Réinitialisation du formulaire après envoi
       setLastname("");
       setFirstname("");
       setEmail("");
@@ -376,9 +405,9 @@ export default function QuoteForm() {
                 </label>
 
                 <input
-                 type="date"
-                 min={new Date().toISOString().split("T")[0]}
-                 value={date}
+                  type="date"
+                  min={new Date().toISOString().split("T")[0]}
+                  value={date}
                   onChange={(event) =>
                     setDate(event.target.value)
                   }
@@ -457,6 +486,9 @@ export default function QuoteForm() {
                   const checked =
                     selectedServices.includes(service);
 
+                  const price =
+                    servicePrices[service];
+
                   return (
                     <button
                       type="button"
@@ -482,8 +514,9 @@ export default function QuoteForm() {
                       </p>
 
                       <p className="mt-2 text-sm font-semibold text-green-400">
-                        À partir de{" "}
-                        {servicePrices[service]} €
+                        {price === null
+                          ? "Sur devis"
+                          : `À partir de ${price} €`}
                       </p>
                     </button>
                   );
@@ -518,14 +551,16 @@ export default function QuoteForm() {
             {/* RGPD */}
             <p className="mt-5 text-xs leading-5 text-gray-500">
               En envoyant cette demande, vous acceptez que les informations
-             renseignées soient utilisées afin de répondre à votre demande de devis.{" "}
-            <Link
-             href="/politique-de-confidentialite"
-              className="font-semibold text-green-400 transition hover:text-green-300"
-            >
-            Consultez notre politique de confidentialité
-         </Link>{" "}
-           pour en savoir plus.
+              renseignées soient utilisées afin de répondre à votre demande de devis.{" "}
+
+              <Link
+                href="/politique-de-confidentialite"
+                className="font-semibold text-green-400 transition hover:text-green-300"
+              >
+                Consultez notre politique de confidentialité
+              </Link>{" "}
+
+              pour en savoir plus.
             </p>
 
             {/* BOUTON */}
@@ -655,20 +690,27 @@ export default function QuoteForm() {
                 ) : (
                   <div className="mt-4 space-y-2">
 
-                    {selectedServices.map((service) => (
-                      <div
-                        key={service}
-                        className="flex items-center justify-between gap-4 rounded-xl bg-white/5 px-4 py-3"
-                      >
-                        <span className="text-sm text-white">
-                          {service}
-                        </span>
+                    {selectedServices.map((service) => {
+                      const price =
+                        servicePrices[service];
 
-                        <span className="shrink-0 text-sm font-bold text-green-400">
-                          {servicePrices[service]} €
-                        </span>
-                      </div>
-                    ))}
+                      return (
+                        <div
+                          key={service}
+                          className="flex items-center justify-between gap-4 rounded-xl bg-white/5 px-4 py-3"
+                        >
+                          <span className="text-sm text-white">
+                            {service}
+                          </span>
+
+                          <span className="shrink-0 text-sm font-bold text-green-400">
+                            {price === null
+                              ? "Sur devis"
+                              : `${price} €`}
+                          </span>
+                        </div>
+                      );
+                    })}
 
                   </div>
                 )}
@@ -715,9 +757,16 @@ export default function QuoteForm() {
                   Estimation
                 </p>
 
-                <p className="mt-3 text-4xl font-black text-white sm:text-5xl">
-                  {estimatedPrice} €
+                <p className="mt-3 text-3xl font-black leading-tight text-white sm:text-4xl">
+                  {estimationLabel}
                 </p>
+
+                {hasCustomPriceService && estimatedPrice > 0 && (
+                  <p className="mt-2 text-sm font-semibold text-green-400">
+                    Une ou plusieurs prestations seront chiffrées
+                    précisément dans votre devis.
+                  </p>
+                )}
 
                 <p className="mt-3 text-xs leading-5 text-gray-400 sm:text-sm sm:leading-6">
                   Estimation indicative basée sur les prix de départ des

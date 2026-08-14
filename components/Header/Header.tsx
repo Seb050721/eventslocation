@@ -3,8 +3,18 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X, Phone } from "lucide-react";
-import { FaInstagram, FaFacebookF } from "react-icons/fa";
+
+import {
+  Menu,
+  X,
+  Phone,
+  CalendarDays,
+} from "lucide-react";
+
+import {
+  FaInstagram,
+  FaFacebookF,
+} from "react-icons/fa";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -28,7 +38,9 @@ export default function Header() {
 
   return (
     <>
-      {/* HEADER */}
+      {/* =====================================================
+          HEADER
+      ===================================================== */}
       <header
         className={`fixed left-0 right-0 top-0 z-[100] h-[80px] ${
           scrolled
@@ -38,7 +50,9 @@ export default function Header() {
       >
         <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-5">
 
-          {/* LOGO */}
+          {/* =================================================
+              LOGO
+          ================================================= */}
           <Link
             href="/"
             onClick={closeMenu}
@@ -63,9 +77,12 @@ export default function Header() {
             </div>
 
             <div className="flex flex-col leading-none">
+
               <span
                 className={`text-lg font-black tracking-tight transition-colors duration-200 sm:text-xl ${
-                  scrolled ? "text-gray-900" : "text-white"
+                  scrolled
+                    ? "text-gray-900"
+                    : "text-white"
                 }`}
               >
                 Event&apos;S
@@ -74,15 +91,21 @@ export default function Header() {
               <span className="mt-1 text-sm font-bold tracking-[0.12em] text-green-500 sm:text-base">
                 LOCATION
               </span>
+
             </div>
           </Link>
 
-          {/* MENU DESKTOP */}
+          {/* =================================================
+              MENU DESKTOP
+          ================================================= */}
           <nav
-            className={`hidden items-center gap-7 lg:flex ${
-              scrolled ? "text-gray-800" : "text-white"
+            className={`hidden items-center gap-6 lg:flex ${
+              scrolled
+                ? "text-gray-800"
+                : "text-white"
             }`}
           >
+
             <Link
               href="/"
               className="transition-colors hover:text-green-500"
@@ -91,42 +114,54 @@ export default function Header() {
             </Link>
 
             <Link
-              href="#services"
+              href="/#services"
               className="transition-colors hover:text-green-500"
             >
               Prestations
             </Link>
 
             <Link
-              href="#gallery"
+              href="/disponibilites"
+              className="flex items-center gap-1.5 transition-colors hover:text-green-500"
+            >
+              <CalendarDays size={16} />
+
+              Disponibilités
+            </Link>
+
+            <Link
+              href="/#gallery"
               className="transition-colors hover:text-green-500"
             >
               Galerie
             </Link>
 
             <Link
-              href="#packs"
+              href="/#packs"
               className="transition-colors hover:text-green-500"
             >
               Tarifs
             </Link>
 
             <Link
-              href="#testimonials"
+              href="/#testimonials"
               className="transition-colors hover:text-green-500"
             >
               Avis
             </Link>
 
             <Link
-              href="#contact"
+              href="/#contact"
               className="transition-colors hover:text-green-500"
             >
               Contact
             </Link>
+
           </nav>
 
-          {/* ACTIONS DESKTOP */}
+          {/* =================================================
+              ACTIONS DESKTOP
+          ================================================= */}
           <div className="hidden items-center gap-3 lg:flex">
 
             {/* INSTAGRAM */}
@@ -165,26 +200,36 @@ export default function Header() {
             <a
               href="tel:+33643894570"
               className={`flex items-center gap-2 font-semibold ${
-                scrolled ? "text-green-700" : "text-white"
+                scrolled
+                  ? "text-green-700"
+                  : "text-white"
               }`}
             >
               <Phone size={18} />
+
               06 43 89 45 70
             </a>
 
             {/* DEVIS */}
             <Link
-              href="#contact"
+              href="/#contact"
               className="rounded-xl bg-green-600 px-5 py-3 font-bold text-white transition hover:bg-green-700"
             >
               Demander un devis
             </Link>
+
           </div>
 
-          {/* BOUTON MOBILE */}
+          {/* =================================================
+              BOUTON MOBILE
+          ================================================= */}
           <button
             type="button"
-            aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-label={
+              open
+                ? "Fermer le menu"
+                : "Ouvrir le menu"
+            }
             aria-expanded={open}
             onClick={() => setOpen(!open)}
             className={`flex h-12 w-12 items-center justify-center rounded-xl lg:hidden ${
@@ -199,12 +244,15 @@ export default function Header() {
               <Menu size={30} />
             )}
           </button>
+
         </div>
       </header>
 
-      {/* MENU MOBILE */}
+      {/* =====================================================
+          MENU MOBILE
+      ===================================================== */}
       {open && (
-        <div className="fixed left-0 right-0 top-[80px] z-[90] bg-white shadow-xl lg:hidden">
+        <div className="fixed left-0 right-0 top-[80px] z-[90] max-h-[calc(100vh-80px)] overflow-y-auto bg-white shadow-xl lg:hidden">
 
           <nav className="flex flex-col px-5 py-4">
 
@@ -217,15 +265,26 @@ export default function Header() {
             </Link>
 
             <Link
-              href="#services"
+              href="/#services"
               onClick={closeMenu}
               className="border-b py-4 text-lg font-semibold"
             >
               Prestations
             </Link>
 
+            {/* DISPONIBILITÉS */}
             <Link
-              href="#gallery"
+              href="/disponibilites"
+              onClick={closeMenu}
+              className="flex items-center gap-2 border-b py-4 text-lg font-bold text-green-700"
+            >
+              <CalendarDays size={20} />
+
+              Disponibilités
+            </Link>
+
+            <Link
+              href="/#gallery"
               onClick={closeMenu}
               className="border-b py-4 text-lg font-semibold"
             >
@@ -233,7 +292,7 @@ export default function Header() {
             </Link>
 
             <Link
-              href="#packs"
+              href="/#packs"
               onClick={closeMenu}
               className="border-b py-4 text-lg font-semibold"
             >
@@ -241,7 +300,7 @@ export default function Header() {
             </Link>
 
             <Link
-              href="#testimonials"
+              href="/#testimonials"
               onClick={closeMenu}
               className="border-b py-4 text-lg font-semibold"
             >
@@ -249,14 +308,16 @@ export default function Header() {
             </Link>
 
             <Link
-              href="#contact"
+              href="/#contact"
               onClick={closeMenu}
               className="border-b py-4 text-lg font-semibold"
             >
               Contact
             </Link>
 
-            {/* RÉSEAUX MOBILE */}
+            {/* =================================================
+                RÉSEAUX MOBILE
+            ================================================= */}
             <div className="mt-5">
 
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-gray-400">
@@ -289,18 +350,23 @@ export default function Header() {
 
             </div>
 
-            {/* TÉLÉPHONE MOBILE */}
+            {/* =================================================
+                TÉLÉPHONE MOBILE
+            ================================================= */}
             <a
               href="tel:+33643894570"
               className="mt-5 flex items-center justify-center gap-2 rounded-xl border-2 border-green-600 py-3 font-bold text-green-700"
             >
               <Phone size={18} />
+
               06 43 89 45 70
             </a>
 
-            {/* DEVIS MOBILE */}
+            {/* =================================================
+                DEVIS MOBILE
+            ================================================= */}
             <Link
-              href="#contact"
+              href="/#contact"
               onClick={closeMenu}
               className="mt-3 rounded-xl bg-green-600 py-4 text-center font-bold text-white"
             >
