@@ -17,11 +17,19 @@ interface PageProps {
   }>;
 }
 
+/* =========================================================
+   GÉNÉRATION DES PAGES STATIQUES
+========================================================= */
+
 export async function generateStaticParams() {
   return services.map((service) => ({
     slug: service.id,
   }));
 }
+
+/* =========================================================
+   SEO / METADATA
+========================================================= */
 
 export async function generateMetadata({
   params,
@@ -53,10 +61,7 @@ export async function generateMetadata({
     service.seo?.description ??
     service.description;
 
-  const image =
-    service.heroImage ??
-    service.cardImage ??
-    "/images/hero-photobooth.jpg";
+  const image = service.heroImage;
 
   return {
     title,
@@ -99,6 +104,10 @@ export async function generateMetadata({
   };
 }
 
+/* =========================================================
+   PAGE PRESTATION
+========================================================= */
+
 export default async function ServicePage({
   params,
 }: PageProps) {
@@ -112,44 +121,104 @@ export default async function ServicePage({
     notFound();
   }
 
+  /* =======================================================
+     DONNÉES STRUCTURÉES FAQ
+  ======================================================= */
+
+  const faqSchema =
+    service.faq.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+
+          mainEntity: service.faq.map((item) => ({
+            "@type": "Question",
+
+            name: item.question,
+
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: item.answer,
+            },
+          })),
+        }
+      : null;
+
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#050505] pb-24 pt-32">
 
-      {/* HALOS */}
+      {/* ===================================================
+          FAQ SCHEMA POUR GOOGLE
+      =================================================== */}
+
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(faqSchema),
+          }}
+        />
+      )}
+
+      {/* ===================================================
+          HALOS
+      =================================================== */}
+
       <div className="pointer-events-none absolute left-0 top-0 h-[450px] w-[450px] rounded-full bg-green-500/10 blur-[180px]" />
 
       <div className="pointer-events-none absolute right-0 top-[400px] h-[450px] w-[450px] rounded-full bg-green-500/10 blur-[180px]" />
 
+      {/* ===================================================
+          CONTENU
+      =================================================== */}
+
       <div className="relative mx-auto flex max-w-7xl flex-col gap-12 px-5 sm:px-6 lg:px-8">
 
+        {/* HERO */}
+
         <ServiceHero service={service} />
+
+        {/* CE QUI EST INCLUS */}
 
         <ServiceHighlights
           items={service.included}
         />
+
+        {/* TARIFS */}
 
         <PriceTable
           title="Nos tarifs"
           items={service.pricing}
         />
 
+        {/* OPTIONS */}
+
         <OptionsGrid
           options={service.options}
         />
+
+        {/* MATÉRIEL À L'UNITÉ */}
 
         <EquipmentTable
           equipments={service.equipments}
         />
 
+        {/* FAQ */}
+
         <FAQAccordion
           faq={service.faq}
         />
+
+        {/* PRESTATIONS ASSOCIÉES */}
 
         <RelatedServices
           currentId={service.id}
         />
 
-        {/* CTA */}
+        {/* =================================================
+            CTA
+        ================================================= */}
+
         <section className="overflow-hidden rounded-[28px] border border-green-500/20 bg-gradient-to-br from-green-600 via-green-500 to-green-700 p-6 sm:p-8 lg:p-12">
 
           <div className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center lg:gap-10">
