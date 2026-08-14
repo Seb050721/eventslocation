@@ -119,23 +119,35 @@ const localBusinessSchema = {
 
   url: "https://eventslocation.fr",
 
+  logo: "https://eventslocation.fr/Logo/Logo.png",
+
+  image:
+    "https://eventslocation.fr/images/hero-photobooth.jpg",
+
+  description:
+    "Location de matériel événementiel : Photo Booth, mobilier, sonorisation, vidéoprojecteur, machines à effets et Smoke Puff en Nièvre, Yonne et Cher.",
+
   telephone: "+33643894570",
 
   email: "events.location@outlook.com",
 
-  image: "https://eventslocation.fr/images/hero-photobooth.jpg",
-
-  logo: "https://eventslocation.fr/Logo/Logo.png",
-
-  description:
-    "Location de matériel événementiel : Photo Booth, mobilier, sonorisation, projection vidéo, machines à effets et Smoke Puff.",
+  priceRange: "€€",
 
   address: {
     "@type": "PostalAddress",
     streetAddress: "17 Boulevard Dupin",
     postalCode: "58210",
     addressLocality: "Varzy",
+    addressRegion: "Bourgogne-Franche-Comté",
     addressCountry: "FR",
+  },
+
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+33643894570",
+    contactType: "customer service",
+    areaServed: "FR",
+    availableLanguage: "fr",
   },
 
   areaServed: [
@@ -153,14 +165,55 @@ const localBusinessSchema = {
     },
   ],
 
-  priceRange: "€€",
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Prestations Event'S Location",
+
+    itemListElement: [
+      {
+        "@type": "OfferCatalog",
+        name: "Photo Booth",
+        url:
+          "https://eventslocation.fr/prestations/photobooth",
+      },
+      {
+        "@type": "OfferCatalog",
+        name: "Sonorisation",
+        url:
+          "https://eventslocation.fr/prestations/sonorisation",
+      },
+      {
+        "@type": "OfferCatalog",
+        name: "Projection vidéo",
+        url:
+          "https://eventslocation.fr/prestations/projection",
+      },
+      {
+        "@type": "OfferCatalog",
+        name: "Mobilier événementiel",
+        url:
+          "https://eventslocation.fr/prestations/mobilier",
+      },
+      {
+        "@type": "OfferCatalog",
+        name: "Machines à effets",
+        url:
+          "https://eventslocation.fr/prestations/effets",
+      },
+      {
+        "@type": "OfferCatalog",
+        name: "Smoke Puff",
+        url:
+          "https://eventslocation.fr/prestations/feux",
+      },
+    ],
+  },
 
   sameAs: [
     "https://www.instagram.com/events_location__/",
     "https://www.facebook.com/share/1H7nS1AuH4/",
   ],
 };
-
 export default function RootLayout({
   children,
 }: {
