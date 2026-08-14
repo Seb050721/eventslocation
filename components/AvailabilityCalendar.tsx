@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+
 import {
   ChevronLeft,
   ChevronRight,
@@ -10,39 +11,105 @@ import {
   XCircle,
   Clock3,
   ArrowRight,
+  Info,
+  PackageCheck,
 } from "lucide-react";
 
-type AvailabilityStatus =
-  | "available"
-  | "unavailable"
+import { inventory } from "@/data/inventory";
+
+type BookingStatus =
+  | "confirmed"
   | "pending";
 
-const services = [
-  "Photo Booth",
-  "Mobilier",
-  "Smoke Puff",
-  "Sonorisation",
-  "Projection",
-  "Machines à effets",
-];
+interface ReservationItem {
+  inventoryId: string;
+  quantity: number;
+}
+
+interface Reservation {
+  date: string;
+  status: BookingStatus;
+  items: ReservationItem[];
+}
 
 /*
   ============================================================
-  DATES DE TEST
+  RÉSERVATIONS DE TEST
 
-  Elles seront supprimées lorsque nous connecterons
-  Google Calendar.
+  Plus tard, cette partie sera remplacée par Google Calendar
+  ou une vraie base de réservations.
   ============================================================
 */
 
-const testAvailability: Record<string, AvailabilityStatus> = {
-  "2026-08-14": "unavailable",
-  "2026-08-15": "unavailable",
-  "2026-08-16": "pending",
-  "2026-08-22": "unavailable",
-  "2026-08-23": "pending",
-  "2026-08-29": "unavailable",
-};
+const testReservations: Reservation[] = [
+  {
+    date: "2026-08-15",
+    status: "confirmed",
+    items: [
+      {
+        inventoryId: "photobooth",
+        quantity: 1,
+      },
+      {
+        inventoryId: "chaise",
+        quantity: 30,
+      },
+      {
+        inventoryId: "table-ronde-152",
+        quantity: 8,
+      },
+    ],
+  },
+
+  {
+    date: "2026-08-16",
+    status: "pending",
+    items: [
+      {
+        inventoryId: "photobooth",
+        quantity: 1,
+      },
+      {
+        inventoryId: "mange-debout",
+        quantity: 4,
+      },
+    ],
+  },
+
+  {
+    date: "2026-08-22",
+    status: "confirmed",
+    items: [
+      {
+        inventoryId: "sonorisation",
+        quantity: 1,
+      },
+      {
+        inventoryId: "machine-fumee",
+        quantity: 1,
+      },
+      {
+        inventoryId: "chaise",
+        quantity: 50,
+      },
+    ],
+  },
+
+  {
+    date: "2026-08-29",
+    status: "confirmed",
+    items: [
+      {
+        inventoryId: "smoke-puff",
+        quantity: 1,
+      },
+      {
+        inventoryId: "videoprojecteur",
+        quantity: 1,
+      },
+    ],
+  },
+];
 
 const monthNames = [
   "Janvier",
@@ -85,7 +152,11 @@ function formatFrenchDate(dateString: string) {
     .split("-")
     .map(Number);
 
-  const date = new Date(year, month - 1, day);
+  const date = new Date(
+    year,
+    month - 1,
+    day
+  );
 
   return new Intl.DateTimeFormat("fr-FR", {
     weekday: "long",
@@ -95,31 +166,57 @@ function formatFrenchDate(dateString: string) {
   }).format(date);
 }
 
+function getReservedQuantity(
+  date: string,
+  inventoryId: string,
+  status?: BookingStatus
+) {
+  return testReservations
+    .filter(
+      (reservation) =>
+        reservation.date === date &&
+        (!status ||
+          reservation.status === status)
+    )
+    .reduce((total, reservation) => {
+      const item = reservation.items.find(
+        (entry) =>
+          entry.inventoryId === inventoryId
+      );
+
+      return total + (item?.quantity ?? 0);
+    }, 0);
+}
+
 export default function AvailabilityCalendar() {
   const today = new Date();
 
-  const [currentMonth, setCurrentMonth] = useState(
-    new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      1
-    )
-  );
+  const [currentMonth, setCurrentMonth] =
+    useState(
+      new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        1
+      )
+    );
 
   const [selectedDate, setSelectedDate] =
     useState("");
 
-  const [selectedService, setSelectedService] =
+  const [selectedInventoryId, setSelectedInventoryId] =
     useState("");
+
+  const [requestedQuantity, setRequestedQuantity] =
+    useState(1);
 
   const year = currentMonth.getFullYear();
   const month = currentMonth.getMonth();
 
-  /*
-    ============================================================
-    CRÉATION DU CALENDRIER
-    ============================================================
-  */
+  const selectedInventory =
+    inventory.find(
+      (item) =>
+        item.id === selectedInventoryId
+    ) ?? null;
 
   const calendarDays = useMemo(() => {
     const numberOfDays = new Date(
@@ -134,16 +231,10 @@ export default function AvailabilityCalendar() {
       1
     ).getDay();
 
-    /*
-      JavaScript :
-      dimanche = 0
-      lundi = 1
-
-      Notre calendrier commence le lundi.
-    */
-
     const offset =
-      firstDay === 0 ? 6 : firstDay - 1;
+      firstDay === 0
+        ? 6
+        : firstDay - 1;
 
     const days: Array<number | null> = [];
 
@@ -151,7 +242,11 @@ export default function AvailabilityCalendar() {
       days.push(null);
     }
 
-    for (let day = 1; day <= numberOfDays; day++) {
+    for (
+      let day = 1;
+      day <= numberOfDays;
+      day++
+    ) {
       days.push(day);
     }
 
@@ -174,34 +269,95 @@ export default function AvailabilityCalendar() {
     setSelectedDate("");
   }
 
-  /*
-    ============================================================
-    ÉTAT DE LA DATE
-    ============================================================
-  */
+  function changeInventory(
+    inventoryId: string
+  ) {
+    setSelectedInventoryId(inventoryId);
+    setRequestedQuantity(1);
+  }
 
-  const selectedStatus:
-    | AvailabilityStatus
-    | null = selectedDate
-    ? testAvailability[selectedDate] ??
-      "available"
-    : null;
+  const selectedAvailability =
+    useMemo(() => {
+      if (
+        !selectedDate ||
+        !selectedInventory
+      ) {
+        return null;
+      }
 
-  /*
-    ============================================================
-    LIEN VERS LE DEVIS
-    ============================================================
-  */
+      const confirmed =
+        getReservedQuantity(
+          selectedDate,
+          selectedInventory.id,
+          "confirmed"
+        );
+
+      const pending =
+        getReservedQuantity(
+          selectedDate,
+          selectedInventory.id,
+          "pending"
+        );
+
+      const availableConfirmed =
+        Math.max(
+          selectedInventory.stock -
+            confirmed,
+          0
+        );
+
+      const availableIncludingPending =
+        Math.max(
+          selectedInventory.stock -
+            confirmed -
+            pending,
+          0
+        );
+
+      return {
+        confirmed,
+        pending,
+        availableConfirmed,
+        availableIncludingPending,
+      };
+    }, [
+      selectedDate,
+      selectedInventory,
+    ]);
+
+  const canRequest =
+    !!selectedAvailability &&
+    requestedQuantity <=
+      selectedAvailability.availableConfirmed;
+
+  const hasPendingRisk =
+    !!selectedAvailability &&
+    selectedAvailability.pending > 0 &&
+    requestedQuantity >
+      selectedAvailability.availableIncludingPending &&
+    requestedQuantity <=
+      selectedAvailability.availableConfirmed;
 
   const quoteUrl = useMemo(() => {
     const params = new URLSearchParams();
 
     if (selectedDate) {
-      params.set("date", selectedDate);
+      params.set(
+        "date",
+        selectedDate
+      );
     }
 
-    if (selectedService) {
-      params.set("service", selectedService);
+    if (selectedInventory) {
+      params.set(
+        "service",
+        selectedInventory.name
+      );
+
+      params.set(
+        "quantity",
+        String(requestedQuantity)
+      );
     }
 
     const query = params.toString();
@@ -209,7 +365,11 @@ export default function AvailabilityCalendar() {
     return query
       ? `/?${query}#contact`
       : "/#contact";
-  }, [selectedDate, selectedService]);
+  }, [
+    selectedDate,
+    selectedInventory,
+    requestedQuantity,
+  ]);
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1.35fr_0.75fr] lg:gap-10">
@@ -220,7 +380,51 @@ export default function AvailabilityCalendar() {
 
       <div className="rounded-[28px] border border-white/10 bg-white/[0.05] p-5 backdrop-blur-xl sm:p-8">
 
-        {/* NAVIGATION MOIS */}
+        {!selectedInventory && (
+          <div className="mb-6 flex items-start gap-3 rounded-2xl border border-green-500/20 bg-green-500/10 p-4">
+
+            <Info
+              size={20}
+              className="mt-0.5 shrink-0 text-green-400"
+            />
+
+            <p className="text-sm leading-6 text-green-100">
+              Sélectionnez d&apos;abord le matériel
+              souhaité pour afficher sa disponibilité.
+            </p>
+
+          </div>
+        )}
+
+        {selectedInventory && (
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-green-500/20 bg-green-500/10 px-4 py-3">
+
+            <div>
+
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-green-400">
+                Disponibilités affichées pour
+              </p>
+
+              <p className="mt-1 font-bold text-white">
+                {selectedInventory.name}
+              </p>
+
+              <p className="mt-1 text-xs text-gray-400">
+                Stock total :{" "}
+                {selectedInventory.stock}
+              </p>
+
+            </div>
+
+            <PackageCheck
+              size={22}
+              className="text-green-400"
+            />
+
+          </div>
+        )}
+
+        {/* NAVIGATION */}
 
         <div className="flex items-center justify-between gap-4">
 
@@ -236,7 +440,7 @@ export default function AvailabilityCalendar() {
           <div className="text-center">
 
             <p className="text-xs font-bold uppercase tracking-[0.22em] text-green-400">
-              Disponibilités
+              Calendrier
             </p>
 
             <h2 className="mt-1 text-2xl font-black text-white sm:text-3xl">
@@ -256,7 +460,7 @@ export default function AvailabilityCalendar() {
 
         </div>
 
-        {/* JOURS DE LA SEMAINE */}
+        {/* JOURS */}
 
         <div className="mt-8 grid grid-cols-7 gap-1 sm:gap-2">
 
@@ -269,97 +473,140 @@ export default function AvailabilityCalendar() {
             </div>
           ))}
 
-          {/* JOURS */}
+          {calendarDays.map(
+            (day, index) => {
+              if (day === null) {
+                return (
+                  <div
+                    key={`empty-${index}`}
+                    className="aspect-square"
+                  />
+                );
+              }
 
-          {calendarDays.map((day, index) => {
-            if (day === null) {
+              const dateKey =
+                formatDateKey(
+                  year,
+                  month,
+                  day
+                );
+
+              const dateObject =
+                new Date(
+                  year,
+                  month,
+                  day
+                );
+
+              const todayWithoutTime =
+                new Date(
+                  today.getFullYear(),
+                  today.getMonth(),
+                  today.getDate()
+                );
+
+              const isPast =
+                dateObject <
+                todayWithoutTime;
+
+              let available =
+                selectedInventory
+                  ? Math.max(
+                      selectedInventory.stock -
+                        getReservedQuantity(
+                          dateKey,
+                          selectedInventory.id,
+                          "confirmed"
+                        ),
+                      0
+                    )
+                  : 0;
+
+              const pending =
+                selectedInventory
+                  ? getReservedQuantity(
+                      dateKey,
+                      selectedInventory.id,
+                      "pending"
+                    )
+                  : 0;
+
+              const selected =
+                selectedDate === dateKey;
+
+              let statusClasses =
+                "border-white/10 bg-white/[0.03] text-gray-500";
+
+              if (
+                selectedInventory &&
+                available > 0
+              ) {
+                statusClasses =
+                  pending > 0
+                    ? "border-amber-500/20 bg-amber-500/10 text-amber-200"
+                    : "border-green-500/20 bg-green-500/10 text-green-200";
+              }
+
+              if (
+                selectedInventory &&
+                available === 0
+              ) {
+                statusClasses =
+                  "border-red-500/20 bg-red-500/10 text-red-200";
+              }
+
+              if (isPast) {
+                statusClasses =
+                  "cursor-not-allowed border-white/5 bg-white/[0.02] text-gray-700 opacity-40";
+              }
+
+              if (
+                selected &&
+                !isPast
+              ) {
+                statusClasses =
+                  "border-green-400 bg-green-500 text-white shadow-[0_8px_30px_rgba(34,197,94,0.25)]";
+              }
+
               return (
-                <div
-                  key={`empty-${index}`}
-                  className="aspect-square"
-                />
+                <button
+                  type="button"
+                  key={dateKey}
+                  disabled={
+                    isPast ||
+                    !selectedInventory
+                  }
+                  onClick={() =>
+                    setSelectedDate(
+                      dateKey
+                    )
+                  }
+                  className={`relative aspect-square rounded-xl border text-sm font-bold transition-all duration-200 sm:rounded-2xl sm:text-base ${
+                    !selectedInventory &&
+                    !isPast
+                      ? "cursor-not-allowed opacity-60"
+                      : ""
+                  } ${statusClasses}`}
+                >
+                  {day}
+
+                  {selectedInventory &&
+                    !isPast && (
+                      <span
+                        className={`absolute bottom-1.5 left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full sm:bottom-2 ${
+                          available === 0
+                            ? "bg-red-400"
+                            : pending > 0
+                              ? "bg-amber-400"
+                              : "bg-green-400"
+                        }`}
+                      />
+                    )}
+
+                </button>
               );
             }
-
-            const dateKey = formatDateKey(
-              year,
-              month,
-              day
-            );
-
-            const status =
-              testAvailability[dateKey] ??
-              "available";
-
-            const selected =
-              selectedDate === dateKey;
-
-            const dateObject = new Date(
-              year,
-              month,
-              day
-            );
-
-            const todayWithoutTime = new Date(
-              today.getFullYear(),
-              today.getMonth(),
-              today.getDate()
-            );
-
-            const isPast =
-              dateObject < todayWithoutTime;
-
-            let statusClasses =
-              "border-green-500/20 bg-green-500/10 text-green-200 hover:border-green-500/50 hover:bg-green-500/20";
-
-            if (status === "unavailable") {
-              statusClasses =
-                "border-red-500/20 bg-red-500/10 text-red-200 hover:border-red-500/40";
-            }
-
-            if (status === "pending") {
-              statusClasses =
-                "border-amber-500/20 bg-amber-500/10 text-amber-200 hover:border-amber-500/40";
-            }
-
-            if (isPast) {
-              statusClasses =
-                "cursor-not-allowed border-white/5 bg-white/[0.02] text-gray-700 opacity-50";
-            }
-
-            if (selected && !isPast) {
-              statusClasses =
-                "border-green-400 bg-green-500 text-white shadow-[0_8px_30px_rgba(34,197,94,0.25)]";
-            }
-
-            return (
-              <button
-                type="button"
-                key={dateKey}
-                disabled={isPast}
-                onClick={() =>
-                  setSelectedDate(dateKey)
-                }
-                className={`relative aspect-square rounded-xl border text-sm font-bold transition-all duration-200 sm:rounded-2xl sm:text-base ${statusClasses}`}
-              >
-                {day}
-
-                {!isPast && (
-                  <span
-                    className={`absolute bottom-1.5 left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full sm:bottom-2 ${
-                      status === "available"
-                        ? "bg-green-400"
-                        : status ===
-                            "unavailable"
-                          ? "bg-red-400"
-                          : "bg-amber-400"
-                    }`}
-                  />
-                )}
-
-              </button>
-            );
-          })}
+          )}
 
         </div>
 
@@ -374,12 +621,12 @@ export default function AvailabilityCalendar() {
 
           <div className="flex items-center gap-2 text-sm text-gray-400">
             <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
-            Indisponible
+            Complet
           </div>
 
           <div className="flex items-center gap-2 text-sm text-gray-400">
             <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
-            À confirmer
+            Demande en cours
           </div>
 
         </div>
@@ -396,104 +643,18 @@ export default function AvailabilityCalendar() {
           <CalendarDays size={24} />
         </div>
 
-        <p className="mt-6 text-xs font-bold uppercase tracking-[0.25em] text-green-400">
-          Votre date
-        </p>
+        {/* MATÉRIEL */}
 
-        <h3 className="mt-3 text-2xl font-black leading-tight text-white sm:text-3xl">
-          {selectedDate
-            ? formatFrenchDate(selectedDate)
-            : "Sélectionnez une date"}
-        </h3>
-
-        {/* STATUT */}
-
-        {selectedStatus && (
-          <div className="mt-5">
-
-            {selectedStatus ===
-              "available" && (
-              <div className="flex items-center gap-3 rounded-2xl border border-green-500/30 bg-green-500/10 p-4 text-green-300">
-
-                <CheckCircle2
-                  size={22}
-                  className="shrink-0"
-                />
-
-                <div>
-                  <p className="font-bold">
-                    Date disponible
-                  </p>
-
-                  <p className="mt-1 text-xs text-green-200/70">
-                    Vous pouvez nous envoyer une
-                    demande pour cette date.
-                  </p>
-                </div>
-
-              </div>
-            )}
-
-            {selectedStatus ===
-              "unavailable" && (
-              <div className="flex items-center gap-3 rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-red-300">
-
-                <XCircle
-                  size={22}
-                  className="shrink-0"
-                />
-
-                <div>
-                  <p className="font-bold">
-                    Date indisponible
-                  </p>
-
-                  <p className="mt-1 text-xs text-red-200/70">
-                    Cette date est actuellement
-                    réservée.
-                  </p>
-                </div>
-
-              </div>
-            )}
-
-            {selectedStatus === "pending" && (
-              <div className="flex items-center gap-3 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-amber-300">
-
-                <Clock3
-                  size={22}
-                  className="shrink-0"
-                />
-
-                <div>
-                  <p className="font-bold">
-                    À confirmer
-                  </p>
-
-                  <p className="mt-1 text-xs text-amber-200/70">
-                    Une demande est déjà en cours
-                    pour cette date.
-                  </p>
-                </div>
-
-              </div>
-            )}
-
-          </div>
-        )}
-
-        {/* PRESTATION */}
-
-        <div className="mt-8">
+        <div className="mt-6">
 
           <label className="mb-2 block text-sm font-semibold text-gray-200">
-            Prestation souhaitée
+            Matériel souhaité *
           </label>
 
           <select
-            value={selectedService}
+            value={selectedInventoryId}
             onChange={(event) =>
-              setSelectedService(
+              changeInventory(
                 event.target.value
               )
             }
@@ -503,12 +664,12 @@ export default function AvailabilityCalendar() {
               Sélectionnez...
             </option>
 
-            {services.map((service) => (
+            {inventory.map((item) => (
               <option
-                key={service}
-                value={service}
+                key={item.id}
+                value={item.id}
               >
-                {service}
+                {item.name}
               </option>
             ))}
 
@@ -516,49 +677,200 @@ export default function AvailabilityCalendar() {
 
         </div>
 
+        {/* QUANTITÉ */}
+
+        {selectedInventory && (
+          <div className="mt-6">
+
+            <label className="mb-2 block text-sm font-semibold text-gray-200">
+              Quantité souhaitée
+            </label>
+
+            <input
+              type="number"
+              min="1"
+              max={selectedInventory.stock}
+              value={requestedQuantity}
+              onChange={(event) =>
+                setRequestedQuantity(
+                  Math.max(
+                    1,
+                    Math.min(
+                      Number(
+                        event.target.value
+                      ) || 1,
+                      selectedInventory.stock
+                    )
+                  )
+                )
+              }
+              className="w-full rounded-xl border border-white/10 bg-[#101010] p-4 text-white outline-none transition focus:border-green-500/60"
+            />
+
+            <p className="mt-2 text-xs text-gray-500">
+              Stock total :{" "}
+              {selectedInventory.stock}
+            </p>
+
+          </div>
+        )}
+
+        {/* DATE */}
+
+        <div className="mt-8">
+
+          <p className="text-xs font-bold uppercase tracking-[0.25em] text-green-400">
+            Votre date
+          </p>
+
+          <h3 className="mt-3 text-2xl font-black leading-tight text-white sm:text-3xl">
+            {selectedDate
+              ? formatFrenchDate(
+                  selectedDate
+                )
+              : "Sélectionnez une date"}
+          </h3>
+
+        </div>
+
+        {/* DISPONIBILITÉ */}
+
+        {selectedAvailability &&
+          selectedInventory && (
+            <div className="mt-6">
+
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
+                  Stock disponible
+                </p>
+
+                <p className="mt-2 text-3xl font-black text-white">
+                  {
+                    selectedAvailability.availableConfirmed
+                  }{" "}
+                  / {selectedInventory.stock}
+                </p>
+
+                <p className="mt-1 text-sm text-gray-400">
+                  {selectedInventory.name}
+                </p>
+
+              </div>
+
+              {canRequest &&
+                !hasPendingRisk && (
+                  <div className="mt-4 flex items-start gap-3 rounded-2xl border border-green-500/30 bg-green-500/10 p-4 text-green-300">
+
+                    <CheckCircle2
+                      size={22}
+                      className="mt-0.5 shrink-0"
+                    />
+
+                    <div>
+
+                      <p className="font-bold">
+                        Disponible
+                      </p>
+
+                      <p className="mt-1 text-xs text-green-200/70">
+                        La quantité demandée est
+                        actuellement disponible.
+                      </p>
+
+                    </div>
+
+                  </div>
+                )}
+
+              {hasPendingRisk && (
+                <div className="mt-4 flex items-start gap-3 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-amber-300">
+
+                  <Clock3
+                    size={22}
+                    className="mt-0.5 shrink-0"
+                  />
+
+                  <div>
+
+                    <p className="font-bold">
+                      À confirmer
+                    </p>
+
+                    <p className="mt-1 text-xs text-amber-200/70">
+                      Une demande est déjà en cours
+                      sur une partie du stock.
+                    </p>
+
+                  </div>
+
+                </div>
+              )}
+
+              {!canRequest && (
+                <div className="mt-4 flex items-start gap-3 rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-red-300">
+
+                  <XCircle
+                    size={22}
+                    className="mt-0.5 shrink-0"
+                  />
+
+                  <div>
+
+                    <p className="font-bold">
+                      Quantité indisponible
+                    </p>
+
+                    <p className="mt-1 text-xs text-red-200/70">
+                      Il ne reste pas assez de stock
+                      disponible pour cette date.
+                    </p>
+
+                  </div>
+
+                </div>
+              )}
+
+            </div>
+          )}
+
         {/* CTA */}
 
-        {selectedStatus === "available" && (
-          <Link
-            href={quoteUrl}
-            className="group mt-6 flex min-h-[56px] w-full items-center justify-center gap-2 rounded-xl bg-green-600 px-5 py-4 text-center font-bold text-white transition hover:bg-green-700"
-          >
-            Demander un devis
+        {selectedAvailability &&
+          canRequest && (
+            <Link
+              href={quoteUrl}
+              className={`group mt-6 flex min-h-[56px] w-full items-center justify-center gap-2 rounded-xl px-5 py-4 text-center font-bold transition ${
+                hasPendingRisk
+                  ? "bg-amber-500 text-black hover:bg-amber-400"
+                  : "bg-green-600 text-white hover:bg-green-700"
+              }`}
+            >
+              {hasPendingRisk
+                ? "Nous contacter"
+                : "Demander un devis"}
 
-            <ArrowRight
-              size={19}
-              className="transition-transform group-hover:translate-x-1"
-            />
-          </Link>
-        )}
+              <ArrowRight
+                size={19}
+                className="transition-transform group-hover:translate-x-1"
+              />
+            </Link>
+          )}
 
-        {selectedStatus === "pending" && (
-          <Link
-            href={quoteUrl}
-            className="group mt-6 flex min-h-[56px] w-full items-center justify-center gap-2 rounded-xl bg-amber-500 px-5 py-4 text-center font-bold text-black transition hover:bg-amber-400"
-          >
-            Nous contacter
-
-            <ArrowRight
-              size={19}
-              className="transition-transform group-hover:translate-x-1"
-            />
-          </Link>
-        )}
-
-        {selectedStatus === "unavailable" && (
-          <p className="mt-6 rounded-xl border border-white/10 bg-black/20 p-4 text-center text-sm leading-6 text-gray-400">
-            Vous pouvez sélectionner une autre date
-            pour vérifier nos disponibilités.
-          </p>
-        )}
-
-        {!selectedDate && (
+        {!selectedInventory && (
           <p className="mt-6 text-sm leading-6 text-gray-400">
-            Choisissez une date dans le calendrier
-            pour connaître son statut.
+            Commencez par sélectionner le matériel
+            que vous souhaitez réserver.
           </p>
         )}
+
+        {selectedInventory &&
+          !selectedDate && (
+            <p className="mt-6 text-sm leading-6 text-gray-400">
+              Sélectionnez ensuite une date dans
+              le calendrier.
+            </p>
+          )}
 
         <p className="mt-6 text-xs leading-5 text-gray-500">
           Les disponibilités affichées sont
