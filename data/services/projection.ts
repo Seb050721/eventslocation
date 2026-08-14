@@ -31,6 +31,7 @@ export const projection: Service = {
   included: [
     "Conseils d'installation",
     "Matériel testé avant location",
+    "Assistance",
   ],
 
   pricing: [
