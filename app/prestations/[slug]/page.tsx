@@ -61,7 +61,8 @@ export async function generateMetadata({
     service.seo?.description ??
     service.description;
 
-  const image = service.heroImage;
+  const image =
+    service.heroImage;
 
   return {
     title,
@@ -131,21 +132,23 @@ export default async function ServicePage({
           "@context": "https://schema.org",
           "@type": "FAQPage",
 
-          mainEntity: service.faq.map((item) => ({
-            "@type": "Question",
+          mainEntity: service.faq.map(
+            (item) => ({
+              "@type": "Question",
 
-            name: item.question,
+              name: item.question,
 
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: item.answer,
-            },
-          })),
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: item.answer,
+              },
+            })
+          ),
         }
       : null;
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#050505] pb-24 pt-32">
+    <main className="relative min-h-screen overflow-hidden bg-[#050505] pb-16 pt-24 sm:pb-20 sm:pt-28 lg:pb-24 lg:pt-32">
 
       {/* ===================================================
           FAQ SCHEMA POUR GOOGLE
@@ -155,7 +158,10 @@ export default async function ServicePage({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(faqSchema),
+            __html:
+              JSON.stringify(
+                faqSchema
+              ),
           }}
         />
       )}
@@ -164,19 +170,21 @@ export default async function ServicePage({
           HALOS
       =================================================== */}
 
-      <div className="pointer-events-none absolute left-0 top-0 h-[450px] w-[450px] rounded-full bg-green-500/10 blur-[180px]" />
+      <div className="pointer-events-none absolute -left-40 top-0 h-[300px] w-[300px] rounded-full bg-green-500/10 blur-[130px] sm:-left-20 sm:h-[380px] sm:w-[380px] sm:blur-[160px] lg:left-0 lg:h-[450px] lg:w-[450px] lg:blur-[180px]" />
 
-      <div className="pointer-events-none absolute right-0 top-[400px] h-[450px] w-[450px] rounded-full bg-green-500/10 blur-[180px]" />
+      <div className="pointer-events-none absolute -right-40 top-[420px] h-[300px] w-[300px] rounded-full bg-green-500/10 blur-[130px] sm:-right-20 sm:h-[380px] sm:w-[380px] sm:blur-[160px] lg:right-0 lg:top-[400px] lg:h-[450px] lg:w-[450px] lg:blur-[180px]" />
 
       {/* ===================================================
           CONTENU
       =================================================== */}
 
-      <div className="relative mx-auto flex max-w-7xl flex-col gap-12 px-5 sm:px-6 lg:px-8">
+      <div className="relative mx-auto flex max-w-7xl flex-col gap-8 px-4 sm:gap-10 sm:px-6 lg:gap-12 lg:px-8">
 
         {/* HERO */}
 
-        <ServiceHero service={service} />
+        <ServiceHero
+          service={service}
+        />
 
         {/* CE QUI EST INCLUS */}
 
@@ -200,7 +208,9 @@ export default async function ServicePage({
         {/* MATÉRIEL À L'UNITÉ */}
 
         <EquipmentTable
-          equipments={service.equipments}
+          equipments={
+            service.equipments
+          }
         />
 
         {/* FAQ */}
@@ -219,40 +229,40 @@ export default async function ServicePage({
             CTA
         ================================================= */}
 
-        <section className="overflow-hidden rounded-[28px] border border-green-500/20 bg-gradient-to-br from-green-600 via-green-500 to-green-700 p-6 sm:p-8 lg:p-12">
+        <section className="overflow-hidden rounded-[22px] border border-green-500/20 bg-gradient-to-br from-green-600 via-green-500 to-green-700 p-5 sm:rounded-[26px] sm:p-7 lg:rounded-[28px] lg:p-12">
 
-          <div className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center lg:gap-10">
+          <div className="flex flex-col gap-7 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
 
             <div className="max-w-2xl">
 
-              <span className="inline-flex rounded-full bg-white/20 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.25em] text-white sm:text-sm sm:tracking-[0.3em]">
+              <span className="inline-flex rounded-full bg-white/20 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white sm:px-4 sm:py-2 sm:text-xs sm:tracking-[0.25em] lg:text-sm lg:tracking-[0.3em]">
                 Demande de devis
               </span>
 
-              <h2 className="mt-6 text-3xl font-black leading-tight text-white sm:text-4xl">
+              <h2 className="mt-4 text-2xl font-black leading-tight tracking-tight text-white sm:mt-5 sm:text-3xl lg:mt-6 lg:text-4xl">
                 Vous souhaitez réserver cette prestation ?
               </h2>
 
-              <p className="mt-5 text-base leading-7 text-green-50 sm:text-lg sm:leading-8">
-                Contactez-nous pour vérifier la disponibilité de votre date,
-                obtenir un devis personnalisé et organiser votre événement
-                en toute sérénité.
+              <p className="mt-4 text-sm leading-6 text-green-50 sm:text-base sm:leading-7 lg:mt-5 lg:text-lg lg:leading-8">
+                Contactez-nous pour vérifier la disponibilité
+                de votre date, obtenir un devis personnalisé
+                et organiser votre événement en toute sérénité.
               </p>
 
             </div>
 
-            <div className="flex w-full flex-col gap-3 sm:w-auto sm:min-w-[260px]">
+            <div className="grid w-full gap-3 sm:grid-cols-2 lg:w-auto lg:min-w-[280px] lg:grid-cols-1">
 
               <a
                 href="/#contact"
-                className="rounded-xl bg-white px-6 py-4 text-center font-bold text-green-700 transition hover:scale-[1.02] sm:rounded-2xl sm:text-lg"
+                className="inline-flex min-h-[52px] items-center justify-center rounded-xl bg-white px-5 py-3.5 text-center text-sm font-bold text-green-700 transition hover:scale-[1.02] sm:text-base lg:rounded-2xl lg:px-6 lg:py-4 lg:text-lg"
               >
                 Demander un devis
               </a>
 
               <a
                 href="tel:+33643894570"
-                className="rounded-xl border border-white/40 px-6 py-4 text-center font-semibold text-white transition hover:bg-white/10 sm:rounded-2xl sm:text-lg"
+                className="inline-flex min-h-[52px] items-center justify-center rounded-xl border border-white/40 px-5 py-3.5 text-center text-sm font-semibold text-white transition hover:bg-white/10 sm:text-base lg:rounded-2xl lg:px-6 lg:py-4 lg:text-lg"
               >
                 📞 06 43 89 45 70
               </a>

@@ -16,97 +16,112 @@ export default function PriceTable({
   items,
 }: PriceTableProps) {
   return (
-    <section>
+    <section className="py-4 sm:py-6 lg:py-8">
 
-      <div className="mb-12 text-center">
+      {/* =====================================================
+          TITRE
+      ===================================================== */}
 
-        <span className="rounded-full border border-green-500/30 bg-green-500/10 px-5 py-2 text-sm uppercase tracking-[0.35em] text-green-400">
+      <div className="mx-auto mb-8 max-w-3xl text-center sm:mb-10 lg:mb-12">
+
+        <span className="inline-flex rounded-full border border-green-500/30 bg-green-500/10 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-green-400 sm:px-5 sm:py-2 sm:text-xs sm:tracking-[0.3em]">
           Tarifs
         </span>
 
-        <h2 className="mt-6 text-5xl font-black text-white">
+        <h2 className="mt-5 text-3xl font-black leading-tight tracking-tight text-white sm:mt-6 sm:text-4xl lg:text-5xl">
           {title}
         </h2>
 
-        <p className="mt-5 text-lg text-gray-400">
+        <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-gray-400 sm:mt-5 sm:text-base sm:leading-7 lg:text-lg">
           Choisissez la formule qui correspond à votre événement.
         </p>
 
       </div>
 
-      <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+      {/* =====================================================
+          FORMULES
+      ===================================================== */}
+
+      <div className="grid gap-4 sm:gap-5 md:grid-cols-2 xl:grid-cols-3">
 
         {items.map((item) => (
-
           <div
             key={item.label}
-            className="group rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl transition duration-500 hover:-translate-y-2 hover:border-green-500/40 hover:shadow-[0_20px_60px_rgba(34,197,94,.18)]"
+            className="group flex h-full flex-col rounded-2xl border border-white/10 bg-white/[0.05] p-5 backdrop-blur-xl transition duration-300 sm:rounded-3xl sm:p-6 lg:p-8 lg:hover:-translate-y-1 lg:hover:border-green-500/40 lg:hover:shadow-[0_20px_60px_rgba(34,197,94,.12)]"
           >
 
-            <p className="text-sm uppercase tracking-[0.35em] text-green-400">
+            {/* FORMULE */}
+
+            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-green-400 sm:text-xs sm:tracking-[0.3em]">
               Formule
             </p>
 
-            <h3 className="mt-4 text-3xl font-bold text-white">
+            <h3 className="mt-2 text-xl font-bold leading-tight text-white sm:mt-3 sm:text-2xl lg:mt-4 lg:text-3xl">
               {item.label}
             </h3>
 
-            <div className="mt-8">
+            {/* PRIX */}
 
-              <span className="text-5xl font-black text-green-400">
+            <div className="mt-5 sm:mt-6 lg:mt-8">
 
-                {item.price === null
-                  ? "Sur devis"
-                  : `${item.price} €`}
-
-              </span>
+              {item.price === null ? (
+                <p className="text-3xl font-black leading-none text-green-400 sm:text-4xl">
+                  Sur devis
+                </p>
+              ) : (
+                <p className="text-4xl font-black leading-none text-green-400 sm:text-5xl">
+                  {item.price} €
+                </p>
+              )}
 
             </div>
 
-            {item.description && (
+            {/* DESCRIPTION */}
 
-              <p className="mt-6 leading-7 text-gray-400">
+            {item.description && (
+              <p className="mt-4 text-sm leading-6 text-gray-400 sm:mt-5 sm:text-base sm:leading-7 lg:mt-6">
                 {item.description}
               </p>
-
             )}
 
-            <div className="mt-8 space-y-3">
+            {/* AVANTAGES */}
 
-              <div className="flex items-center gap-3">
+            <div className="mt-6 space-y-3 border-t border-white/10 pt-5 sm:mt-7 sm:pt-6 lg:mt-8">
+
+              <div className="flex items-start gap-3">
 
                 <CheckCircle
                   size={18}
-                  className="text-green-400"
+                  className="mt-0.5 shrink-0 text-green-400"
                 />
 
-                <span className="text-gray-200">
+                <span className="text-sm leading-5 text-gray-200 sm:text-base">
                   Installation comprise
                 </span>
 
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-start gap-3">
 
                 <CheckCircle
                   size={18}
-                  className="text-green-400"
+                  className="mt-0.5 shrink-0 text-green-400"
                 />
 
-                <span className="text-gray-200">
+                <span className="text-sm leading-5 text-gray-200 sm:text-base">
                   Matériel professionnel
                 </span>
 
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-start gap-3">
 
                 <CheckCircle
                   size={18}
-                  className="text-green-400"
+                  className="mt-0.5 shrink-0 text-green-400"
                 />
 
-                <span className="text-gray-200">
+                <span className="text-sm leading-5 text-gray-200 sm:text-base">
                   Assistance si besoin
                 </span>
 
@@ -115,7 +130,6 @@ export default function PriceTable({
             </div>
 
           </div>
-
         ))}
 
       </div>
