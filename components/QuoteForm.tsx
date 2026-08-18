@@ -50,7 +50,7 @@ const eventSuggestions: Record<string, string[]> = {
 const servicePrices: Record<string, number | null> = {
   "Photo Booth": 169,
   Mobilier: null,
-  "Smoke Puff": 155,
+  "Smoke Puff": 79,
   Sonorisation: 100,
   Projection: 55,
   "Machines à effets": 15,
