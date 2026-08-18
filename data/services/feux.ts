@@ -39,19 +39,23 @@ export const feux: Service = {
   pricing: [
     {
       label: "1 feu",
-      price: 155,
+      price: 79,
     },
     {
       label: "2 feux",
-      price: 255,
+      price: 129,
+    },
+    {
+      label: "3 feux",
+      price: 179,
     },
     {
       label: "4 feux",
-      price: 455,
+      price: 229,
     },
     {
-      label: "6 feux",
-      price: 655,
+      label: "5 feux",
+      price: 279,
     },
   ],
 
