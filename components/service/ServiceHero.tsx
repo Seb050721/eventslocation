@@ -36,13 +36,19 @@ export default function ServiceHero({
 
         {/* =====================================================
             OVERLAYS
+
+            Plus clair pour mieux voir la photo,
+            tout en gardant le texte lisible.
         ===================================================== */}
 
-        <div className="absolute inset-0 bg-black/45 sm:bg-black/35" />
+        {/* Assombrissement général léger */}
+        <div className="absolute inset-0 bg-black/20 sm:bg-black/15" />
 
-        <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/75 to-black/30" />
+        {/* Assombrissement principalement derrière le texte */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/40 to-black/5" />
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/10" />
+        {/* Dégradé bas pour conserver la lisibilité */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent" />
 
         {/* =====================================================
             RETOUR
@@ -71,19 +77,19 @@ export default function ServiceHero({
 
             {/* CATÉGORIE */}
 
-            <span className="inline-flex rounded-full border border-green-400/30 bg-green-500/15 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-green-400 sm:px-4 sm:py-2 sm:text-xs sm:tracking-[0.25em]">
+            <span className="inline-flex rounded-full border border-green-400/30 bg-green-500/15 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-green-400 backdrop-blur-sm sm:px-4 sm:py-2 sm:text-xs sm:tracking-[0.25em]">
               {service.category}
             </span>
 
             {/* TITRE */}
 
-            <h1 className="mt-4 text-4xl font-black leading-[1.02] tracking-tight text-white sm:mt-5 sm:text-5xl lg:mt-6 lg:text-7xl">
+            <h1 className="mt-4 text-4xl font-black leading-[1.02] tracking-tight text-white drop-shadow-[0_3px_10px_rgba(0,0,0,0.8)] sm:mt-5 sm:text-5xl lg:mt-6 lg:text-7xl">
               {service.title}
             </h1>
 
             {/* DESCRIPTION */}
 
-            <p className="mt-5 max-w-2xl text-base leading-7 text-gray-200 sm:text-lg sm:leading-8 lg:mt-7 lg:text-xl lg:leading-9">
+            <p className="mt-5 max-w-2xl text-base leading-7 text-gray-100 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] sm:text-lg sm:leading-8 lg:mt-7 lg:text-xl lg:leading-9">
               {service.description}
             </p>
 
@@ -97,11 +103,11 @@ export default function ServiceHero({
 
               <div className="min-w-0">
 
-                <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-gray-400 sm:text-xs lg:text-sm">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-gray-200 drop-shadow-md sm:text-xs lg:text-sm">
                   À partir de
                 </p>
 
-                <p className="mt-1 text-4xl font-black leading-none text-green-400 sm:text-5xl lg:text-6xl">
+                <p className="mt-1 text-4xl font-black leading-none text-green-400 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] sm:text-5xl lg:text-6xl">
                   {service.startingPrice} €
                 </p>
 
@@ -113,7 +119,7 @@ export default function ServiceHero({
 
                 <Link
                   href="/#contact"
-                  className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-green-500 to-green-600 px-5 py-3.5 text-sm font-bold text-white transition duration-300 hover:from-green-600 hover:to-green-700 sm:px-6 sm:text-base lg:rounded-full lg:px-8 lg:py-5"
+                  className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-green-500 to-green-600 px-5 py-3.5 text-sm font-bold text-white shadow-lg transition duration-300 hover:from-green-600 hover:to-green-700 sm:px-6 sm:text-base lg:rounded-full lg:px-8 lg:py-5"
                 >
                   <CalendarDays size={19} />
 
@@ -122,7 +128,7 @@ export default function ServiceHero({
 
                 <a
                   href="tel:+33643894570"
-                  className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-2xl border border-white/30 bg-black/35 px-5 py-3.5 text-sm font-semibold text-white backdrop-blur-md transition duration-300 hover:bg-white/10 sm:px-6 sm:text-base lg:rounded-full lg:px-8 lg:py-5"
+                  className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-2xl border border-white/30 bg-black/40 px-5 py-3.5 text-sm font-semibold text-white backdrop-blur-md transition duration-300 hover:bg-black/55 sm:px-6 sm:text-base lg:rounded-full lg:px-8 lg:py-5"
                 >
                   <Phone size={19} />
 
