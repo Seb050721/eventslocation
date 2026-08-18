@@ -8,19 +8,19 @@ import {
 
 const reviews = [
   {
-    name: "Marie & Julien",
-    event: "Mariage",
-    text: "Service irréprochable ! Le Photo Booth a eu un énorme succès auprès de nos invités. Installation rapide et matériel de qualité.",
+    name: "David & Paola",
+    event: "Concert",
+    text: "Merci à Séb de Event's location de nous avoir permis d'avoir un super Son pour notre concert d'hier soir à RUAGES 🤘 Duo CHORUS ",
   },
   {
-    name: "Sophie",
+    name: "Océane",
+    event: "Naissance",
+    text: "Tnous avons passé une super soirée je recommande à 100%",
+  },
+  {
+    name: "Audrey",
     event: "Anniversaire",
-    text: "Très professionnel, ponctuel et à l'écoute. Je recommande sans hésiter !",
-  },
-  {
-    name: "Comité des fêtes",
-    event: "Événement associatif",
-    text: "Excellent matériel, installation parfaite et très bonne communication avant l'événement.",
+    text: "Seb super sympa, Disponible, installation et explications adéquates du matériel",
   },
 ];
 
