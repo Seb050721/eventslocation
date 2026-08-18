@@ -11,7 +11,7 @@ export const feux: Service = {
 
   cardImage: "/images/services/feux.webp",
 
-  startingPrice: 155,
+  startingPrice: 79,
 
   shortDescription:
     "Des fumigènes de jour colorés pour créer un effet spectaculaire lors de vos événements.",
@@ -21,10 +21,10 @@ export const feux: Service = {
 
   seo: {
     title:
-      "Location Smoke Puff colorés en Nièvre, Yonne et Cher dès 155 €",
+      "Location Smoke Puff colorés en Nièvre, Yonne et Cher dès 79 €",
 
     description:
-      "Location de Smoke Puff et fumigènes de jour colorés pour mariage, Gender Reveal et événement en Nièvre, Yonne et Cher dès 155 €. Couleur au choix et installation comprise.",
+      "Location de Smoke Puff et fumigènes de jour colorés pour mariage, Gender Reveal et événement en Nièvre, Yonne et Cher dès 79 €. Couleur au choix et installation comprise.",
   },
 
   included: [
