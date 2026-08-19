@@ -9,7 +9,7 @@ export const sonorisation: Service = {
 
   heroImage: "/images/services/sonorisation-hero.webp",
 
-  cardImage: "/images/services/sonorisation.webp",
+  cardImage: "/images/services/Sonorisation4.webp",
 
   startingPrice: 100,
 
