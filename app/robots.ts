@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = "https://eventslocation.fr";
+  const baseUrl = "https://www.eventslocation.fr";
 
   return {
     rules: {
@@ -11,6 +11,7 @@ export default function robots(): MetadataRoute.Robots {
     },
 
     sitemap: `${baseUrl}/sitemap.xml`,
+
     host: baseUrl,
   };
 }
