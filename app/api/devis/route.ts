@@ -8,7 +8,7 @@ import { Resend } from "resend";
 export const dynamic = "force-dynamic";
 
 const LOGO_URL =
-  "https://www.eventslocation.fr/Logo/Logo.png";
+  "https://www.eventslocation.fr/Logo/Logo1.png";
 
 const WEBSITE_URL =
   "https://www.eventslocation.fr";
