@@ -2,6 +2,18 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
 /* ============================================================
+   CONFIGURATION
+============================================================ */
+
+export const dynamic = "force-dynamic";
+
+const LOGO_URL =
+  "https://www.eventslocation.fr/Logo/Logo.png";
+
+const WEBSITE_URL =
+  "https://www.eventslocation.fr";
+
+/* ============================================================
    SÉCURISATION HTML
 ============================================================ */
 
@@ -39,10 +51,22 @@ function formatFrenchDate(value: unknown) {
 }
 
 /* ============================================================
+   VALIDATION E-MAIL
+============================================================ */
+
+function isValidEmail(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+    value
+  );
+}
+
+/* ============================================================
    API POST /api/devis
 ============================================================ */
 
-export async function POST(request: Request) {
+export async function POST(
+  request: Request
+) {
   try {
     /* ========================================================
        CONFIGURATION RESEND
@@ -71,7 +95,7 @@ export async function POST(request: Request) {
       new Resend(apiKey);
 
     /* ========================================================
-       DONNÉES REÇUES
+       DONNÉES
     ======================================================== */
 
     const body =
@@ -90,30 +114,14 @@ export async function POST(request: Request) {
 
       selectedServices,
 
-      /*
-        MATÉRIEL ISSU DU CALENDRIER
-      */
-
       selectedMaterial,
       selectedQuantity,
-
-      /*
-        DISPONIBILITÉS
-      */
 
       fromAvailability,
       availabilityVerified,
       availabilityCheckedDate,
 
-      /*
-        MESSAGE
-      */
-
       message,
-
-      /*
-        ESTIMATION
-      */
 
       estimatedPrice,
       hasCustomPriceService,
@@ -145,6 +153,22 @@ export async function POST(request: Request) {
     }
 
     if (
+      !isValidEmail(
+        String(email)
+      )
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            "Adresse e-mail invalide.",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    if (
       !Array.isArray(
         selectedServices
       ) ||
@@ -163,7 +187,7 @@ export async function POST(request: Request) {
     }
 
     /* ========================================================
-       SÉCURISATION DES VALEURS
+       SÉCURISATION
     ======================================================== */
 
     const safeLastname =
@@ -204,7 +228,7 @@ export async function POST(request: Request) {
     const safeServices =
       selectedServices
         .map(
-          (service: string) =>
+          (service: unknown) =>
             escapeHtml(service)
         )
         .join(", ");
@@ -220,13 +244,15 @@ export async function POST(request: Request) {
           )
         : "";
 
-    const safeQuantity =
+    const quantity =
       Number(
         selectedQuantity
-      ) > 0
-        ? Number(
-            selectedQuantity
-          )
+      );
+
+    const safeQuantity =
+      Number.isFinite(quantity) &&
+      quantity > 0
+        ? Math.floor(quantity)
         : null;
 
     /* ========================================================
@@ -269,72 +295,57 @@ export async function POST(request: Request) {
     const safeEstimationLabel =
       escapeHtml(
         estimationLabel ||
-          (safeHasCustomPriceService
-            ? "Sur devis"
-            : `${safeEstimatedPrice} €`)
+          (
+            safeHasCustomPriceService
+              ? "Sur devis"
+              : `${safeEstimatedPrice} €`
+          )
       );
 
     /* ========================================================
-       BLOC MATÉRIEL ADMIN
+       BLOCS HTML COMMUNS
     ======================================================== */
 
     const materialAdminHtml =
       safeMaterial
         ? `
-          <hr style="
-            border:none;
-            border-top:1px solid #e5e7eb;
-            margin:28px 0;
-          " />
-
-          <h2>
-            Matériel demandé
-          </h2>
-
           <div style="
+            margin-top:20px;
             padding:18px;
-            background:#f9fafb;
-            border-radius:12px;
             border:1px solid #e5e7eb;
+            border-radius:14px;
+            background:#f9fafb;
           ">
-
             <p style="
-              margin:0 0 8px;
+              margin:0 0 6px;
+              font-size:12px;
+              font-weight:bold;
+              text-transform:uppercase;
+              letter-spacing:1px;
+              color:#6b7280;
             ">
-              <strong>
-                Matériel :
-              </strong>
-
-              ${safeMaterial}
+              Matériel demandé
             </p>
 
             <p style="
               margin:0;
+              font-size:17px;
+              font-weight:bold;
+              color:#111827;
             ">
-              <strong>
-                Quantité :
-              </strong>
-
-              ${
-                safeQuantity ??
-                1
-              }
+              ${safeMaterial}
+              × ${safeQuantity ?? 1}
             </p>
-
           </div>
         `
         : "";
-
-    /* ========================================================
-       BLOC DISPONIBILITÉ ADMIN
-    ======================================================== */
 
     const availabilityAdminHtml =
       isFromAvailability
         ? `
           <div style="
-            margin-top:16px;
-            padding:18px;
+            margin-top:14px;
+            padding:16px;
             border-radius:12px;
             ${
               isAvailabilityVerified
@@ -358,20 +369,18 @@ export async function POST(request: Request) {
                   : "#a16207"
               };
             ">
-
               ${
                 isAvailabilityVerified
                   ? "✓ Disponibilité vérifiée"
                   : "⚠ Disponibilité à confirmer"
               }
-
             </p>
 
             ${
               safeCheckedDate
                 ? `
                   <p style="
-                    margin:8px 0 0;
+                    margin:6px 0 0;
                     font-size:13px;
                     color:#4b5563;
                   ">
@@ -382,22 +391,34 @@ export async function POST(request: Request) {
                 : ""
             }
 
-            ${
-              !isAvailabilityVerified
-                ? `
-                  <p style="
-                    margin:8px 0 0;
-                    font-size:13px;
-                    color:#92400e;
-                  ">
-                    Le client a modifié la date après
-                    sa consultation du calendrier.
-                  </p>
-                `
-                : ""
-            }
-
           </div>
+        `
+        : "";
+
+    const materialClientHtml =
+      safeMaterial
+        ? `
+          <tr>
+            <td style="
+              padding:10px 0;
+              color:#6b7280;
+              font-size:14px;
+              vertical-align:top;
+            ">
+              Matériel
+            </td>
+
+            <td style="
+              padding:10px 0;
+              color:#111827;
+              font-size:14px;
+              font-weight:bold;
+              text-align:right;
+            ">
+              ${safeMaterial}
+              × ${safeQuantity ?? 1}
+            </td>
+          </tr>
         `
         : "";
 
@@ -414,265 +435,312 @@ export async function POST(request: Request) {
           "events.location@outlook.com",
         ],
 
-        /*
-          Quand tu cliques
-          sur répondre :
-          réponse directe au client.
-        */
-
-        replyTo: email,
+        replyTo:
+          String(email),
 
         subject:
           `Nouvelle demande de devis - ${firstname} ${lastname}`,
 
         html: `
-          <div style="
-            font-family:Arial, Helvetica, sans-serif;
-            background:#f6f7f8;
-            padding:32px 16px;
-            color:#1f2937;
+<!doctype html>
+<html lang="fr">
+<body style="
+  margin:0;
+  padding:0;
+  background:#f3f4f6;
+  font-family:Arial, Helvetica, sans-serif;
+  color:#111827;
+">
+
+  <div style="
+    width:100%;
+    padding:24px 12px;
+    box-sizing:border-box;
+  ">
+
+    <div style="
+      max-width:680px;
+      margin:0 auto;
+      background:#ffffff;
+      border-radius:20px;
+      overflow:hidden;
+      border:1px solid #e5e7eb;
+    ">
+
+      <!-- HEADER -->
+
+      <div style="
+        background:#0b0b0b;
+        padding:24px;
+        text-align:center;
+      ">
+
+        <img
+          src="${LOGO_URL}"
+          alt="Event'S Location"
+          width="90"
+          style="
+            display:block;
+            margin:0 auto 14px;
+            max-width:90px;
+            height:auto;
+          "
+        />
+
+        <p style="
+          margin:0;
+          font-size:11px;
+          font-weight:bold;
+          text-transform:uppercase;
+          letter-spacing:2px;
+          color:#22c55e;
+        ">
+          Event'S Location
+        </p>
+
+        <h1 style="
+          margin:8px 0 0;
+          font-size:26px;
+          line-height:1.2;
+          color:#ffffff;
+        ">
+          Nouvelle demande de devis
+        </h1>
+
+      </div>
+
+      <!-- CONTENU -->
+
+      <div style="
+        padding:26px;
+      ">
+
+        <div style="
+          padding:18px;
+          background:#f0fdf4;
+          border:1px solid #bbf7d0;
+          border-radius:14px;
+          margin-bottom:24px;
+        ">
+
+          <p style="
+            margin:0;
+            font-size:12px;
+            color:#166534;
+            text-transform:uppercase;
+            font-weight:bold;
+            letter-spacing:1px;
           ">
+            Estimation indicative
+          </p>
 
-            <div style="
-              max-width:680px;
-              margin:0 auto;
-              background:white;
-              border-radius:18px;
-              overflow:hidden;
-              border:1px solid #e5e7eb;
-            ">
+          <p style="
+            margin:6px 0 0;
+            font-size:30px;
+            font-weight:bold;
+            color:#15803d;
+          ">
+            ${safeEstimationLabel}
+          </p>
 
-              <!-- HEADER -->
-
-              <div style="
-                background:#15803d;
-                padding:28px;
-                color:white;
-              ">
-
+          ${
+            safeHasCustomPriceService
+              ? `
                 <p style="
-                  margin:0;
-                  font-size:12px;
-                  font-weight:bold;
-                  text-transform:uppercase;
-                  letter-spacing:2px;
-                  opacity:.8;
-                ">
-                  Event'S Location
-                </p>
-
-                <h1 style="
                   margin:8px 0 0;
-                  font-size:28px;
+                  font-size:12px;
+                  color:#4b5563;
                 ">
-                  Nouvelle demande de devis
-                </h1>
-
-              </div>
-
-              <!-- CONTENU -->
-
-              <div style="
-                padding:28px;
-              ">
-
-                <!-- CLIENT -->
-
-                <h2>
-                  Coordonnées
-                </h2>
-
-                <p>
-                  <strong>
-                    Nom :
-                  </strong>
-
-                  ${safeLastname}
+                  Une ou plusieurs prestations
+                  nécessitent un chiffrage personnalisé.
                 </p>
+              `
+              : ""
+          }
 
-                <p>
-                  <strong>
-                    Prénom :
-                  </strong>
+        </div>
 
-                  ${safeFirstname}
-                </p>
+        <!-- CLIENT -->
 
-                <p>
-                  <strong>
-                    E-mail :
-                  </strong>
+        <h2 style="
+          margin:0 0 14px;
+          font-size:19px;
+          color:#111827;
+        ">
+          Coordonnées du client
+        </h2>
 
-                  ${safeEmail}
-                </p>
+        <div style="
+          padding:18px;
+          background:#f9fafb;
+          border-radius:14px;
+          border:1px solid #e5e7eb;
+        ">
 
-                <p>
-                  <strong>
-                    Téléphone :
-                  </strong>
+          <p style="margin:0 0 8px;">
+            <strong>Nom :</strong>
+            ${safeLastname}
+          </p>
 
-                  ${safePhone}
-                </p>
+          <p style="margin:0 0 8px;">
+            <strong>Prénom :</strong>
+            ${safeFirstname}
+          </p>
 
-                <hr style="
-                  border:none;
-                  border-top:1px solid #e5e7eb;
-                  margin:28px 0;
-                " />
+          <p style="margin:0 0 8px;">
+            <strong>E-mail :</strong>
+            ${safeEmail}
+          </p>
 
-                <!-- ÉVÉNEMENT -->
+          <p style="margin:0;">
+            <strong>Téléphone :</strong>
+            ${safePhone}
+          </p>
 
-                <h2>
-                  Événement
-                </h2>
+        </div>
 
-                <p>
-                  <strong>
-                    Type :
-                  </strong>
+        <!-- EVENEMENT -->
 
-                  ${safeEventType}
-                </p>
+        <h2 style="
+          margin:26px 0 14px;
+          font-size:19px;
+        ">
+          Événement
+        </h2>
 
-                <p>
-                  <strong>
-                    Date :
-                  </strong>
+        <div style="
+          padding:18px;
+          background:#f9fafb;
+          border-radius:14px;
+          border:1px solid #e5e7eb;
+        ">
 
-                  ${safeDate}
-                </p>
+          <p style="margin:0 0 8px;">
+            <strong>Type :</strong>
+            ${safeEventType}
+          </p>
 
-                <p>
-                  <strong>
-                    Lieu :
-                  </strong>
+          <p style="margin:0 0 8px;">
+            <strong>Date :</strong>
+            ${safeDate}
+          </p>
 
-                  ${safeCity}
-                </p>
+          <p style="margin:0 0 8px;">
+            <strong>Lieu :</strong>
+            ${safeCity}
+          </p>
 
-                <p>
-                  <strong>
-                    Nombre d'invités :
-                  </strong>
+          <p style="margin:0;">
+            <strong>Invités :</strong>
+            ${safeGuests}
+          </p>
 
-                  ${safeGuests}
-                </p>
+        </div>
 
-                <!-- MATÉRIEL -->
+        ${materialAdminHtml}
 
-                ${materialAdminHtml}
+        ${availabilityAdminHtml}
 
-                ${availabilityAdminHtml}
+        <!-- PRESTATIONS -->
 
-                <hr style="
-                  border:none;
-                  border-top:1px solid #e5e7eb;
-                  margin:28px 0;
-                " />
+        <h2 style="
+          margin:26px 0 14px;
+          font-size:19px;
+        ">
+          Prestations demandées
+        </h2>
 
-                <!-- PRESTATIONS -->
+        <div style="
+          padding:18px;
+          background:#f9fafb;
+          border-radius:14px;
+          border:1px solid #e5e7eb;
+        ">
 
-                <h2>
-                  Prestations demandées
-                </h2>
+          <p style="
+            margin:0;
+            line-height:1.6;
+          ">
+            ${safeServices}
+          </p>
 
-                <p>
-                  ${safeServices}
-                </p>
+        </div>
 
-                <!-- ESTIMATION -->
+        <!-- MESSAGE -->
 
-                <div style="
-                  margin-top:20px;
-                  padding:18px;
-                  background:#f0fdf4;
-                  border-radius:12px;
-                  border:1px solid #bbf7d0;
-                ">
+        <h2 style="
+          margin:26px 0 14px;
+          font-size:19px;
+        ">
+          Message du client
+        </h2>
 
-                  <p style="
-                    margin:0;
-                    font-size:13px;
-                    color:#166534;
-                  ">
-                    Estimation indicative
-                  </p>
+        <div style="
+          padding:18px;
+          background:#f9fafb;
+          border-radius:14px;
+          border:1px solid #e5e7eb;
+        ">
 
-                  <p style="
-                    margin:4px 0 0;
-                    font-size:28px;
-                    font-weight:bold;
-                    color:#15803d;
-                  ">
-                    ${safeEstimationLabel}
-                  </p>
+          <p style="
+            margin:0;
+            white-space:pre-line;
+            line-height:1.7;
+          ">
+            ${safeMessage}
+          </p>
 
-                  ${
-                    safeHasCustomPriceService
-                      ? `
-                        <p style="
-                          margin:8px 0 0;
-                          font-size:12px;
-                          color:#4b5563;
-                        ">
-                          Une ou plusieurs prestations
-                          nécessitent un chiffrage personnalisé.
-                        </p>
-                      `
-                      : ""
-                  }
+        </div>
 
-                </div>
+        <!-- ACTION -->
 
-                <hr style="
-                  border:none;
-                  border-top:1px solid #e5e7eb;
-                  margin:28px 0;
-                " />
+        <div style="
+          margin-top:26px;
+          padding:18px;
+          background:#111827;
+          border-radius:14px;
+          text-align:center;
+        ">
 
-                <!-- MESSAGE -->
+          <p style="
+            margin:0 0 14px;
+            color:#ffffff;
+            font-size:14px;
+          ">
+            Réponds directement à cet e-mail
+            pour contacter ${safeFirstname}.
+          </p>
 
-                <h2>
-                  Message du client
-                </h2>
+          <a
+            href="${WEBSITE_URL}"
+            style="
+              display:inline-block;
+              padding:12px 18px;
+              background:#22c55e;
+              color:#ffffff;
+              font-weight:bold;
+              text-decoration:none;
+              border-radius:10px;
+            "
+          >
+            Voir le site
+          </a>
 
-                <p style="
-                  white-space:pre-line;
-                  line-height:1.7;
-                ">
-                  ${safeMessage}
-                </p>
+        </div>
 
-                <!-- CTA -->
+      </div>
 
-                <div style="
-                  margin-top:28px;
-                  padding:18px;
-                  background:#111827;
-                  color:white;
-                  border-radius:12px;
-                ">
+    </div>
 
-                  <p style="
-                    margin:0;
-                  ">
-                    Réponds directement à cet e-mail pour
-                    contacter ${safeFirstname}
-                    ${safeLastname}.
-                  </p>
+  </div>
 
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
+</body>
+</html>
         `,
       });
 
     /* ========================================================
-       ERREUR MAIL ADMIN
+       ERREUR ADMIN
     ======================================================== */
 
     if (adminMail.error) {
@@ -693,47 +761,6 @@ export async function POST(request: Request) {
     }
 
     /* ========================================================
-       BLOC MATÉRIEL CLIENT
-    ======================================================== */
-
-    const materialClientHtml =
-      safeMaterial
-        ? `
-          <p>
-            <strong>
-              Matériel :
-            </strong>
-
-            ${safeMaterial}
-            × ${safeQuantity ?? 1}
-          </p>
-
-          ${
-            isFromAvailability
-              ? `
-                <p style="
-                  color:${
-                    isAvailabilityVerified
-                      ? "#15803d"
-                      : "#a16207"
-                  };
-                  font-weight:bold;
-                ">
-
-                  ${
-                    isAvailabilityVerified
-                      ? "✓ Disponibilité vérifiée lors de votre consultation"
-                      : "⚠ Disponibilité à confirmer"
-                  }
-
-                </p>
-              `
-              : ""
-          }
-        `
-        : "";
-
-    /* ========================================================
        MAIL CLIENT
     ======================================================== */
 
@@ -743,7 +770,7 @@ export async function POST(request: Request) {
           "Event'S Location <devis@eventslocation.fr>",
 
         to: [
-          email,
+          String(email),
         ],
 
         replyTo:
@@ -753,170 +780,367 @@ export async function POST(request: Request) {
           "Votre demande de devis - Event'S Location",
 
         html: `
+<!doctype html>
+<html lang="fr">
+<body style="
+  margin:0;
+  padding:0;
+  background:#f3f4f6;
+  font-family:Arial, Helvetica, sans-serif;
+  color:#111827;
+">
+
+  <div style="
+    width:100%;
+    padding:24px 12px;
+    box-sizing:border-box;
+  ">
+
+    <div style="
+      max-width:650px;
+      margin:0 auto;
+      background:#ffffff;
+      border-radius:20px;
+      overflow:hidden;
+      border:1px solid #e5e7eb;
+    ">
+
+      <!-- HEADER -->
+
+      <div style="
+        background:#0b0b0b;
+        padding:26px;
+        text-align:center;
+      ">
+
+        <img
+          src="${LOGO_URL}"
+          alt="Event'S Location"
+          width="92"
+          style="
+            display:block;
+            margin:0 auto 14px;
+            max-width:92px;
+            height:auto;
+          "
+        />
+
+        <p style="
+          margin:0;
+          font-size:11px;
+          font-weight:bold;
+          text-transform:uppercase;
+          letter-spacing:2px;
+          color:#22c55e;
+        ">
+          Event'S Location
+        </p>
+
+        <h1 style="
+          margin:8px 0 0;
+          color:#ffffff;
+          font-size:26px;
+          line-height:1.2;
+        ">
+          Merci ${safeFirstname} !
+        </h1>
+
+      </div>
+
+      <!-- CONTENU -->
+
+      <div style="
+        padding:26px;
+        line-height:1.7;
+      ">
+
+        <p style="
+          margin:0 0 12px;
+          font-size:16px;
+        ">
+          Nous avons bien reçu votre demande de devis.
+        </p>
+
+        <p style="
+          margin:0 0 24px;
+          color:#4b5563;
+        ">
+          Notre équipe va l&apos;étudier et revenir vers vous rapidement
+          avec une proposition adaptée à votre événement.
+        </p>
+
+        <!-- RECAP -->
+
+        <div style="
+          padding:20px;
+          background:#f9fafb;
+          border:1px solid #e5e7eb;
+          border-radius:14px;
+        ">
+
+          <p style="
+            margin:0 0 14px;
+            font-size:12px;
+            font-weight:bold;
+            text-transform:uppercase;
+            letter-spacing:1px;
+            color:#22c55e;
+          ">
+            Récapitulatif
+          </p>
+
+          <table
+            width="100%"
+            cellpadding="0"
+            cellspacing="0"
+            style="
+              width:100%;
+              border-collapse:collapse;
+            "
+          >
+
+            <tr>
+              <td style="
+                padding:10px 0;
+                color:#6b7280;
+                font-size:14px;
+              ">
+                Événement
+              </td>
+
+              <td style="
+                padding:10px 0;
+                color:#111827;
+                font-size:14px;
+                font-weight:bold;
+                text-align:right;
+              ">
+                ${safeEventType}
+              </td>
+            </tr>
+
+            <tr>
+              <td style="
+                padding:10px 0;
+                color:#6b7280;
+                font-size:14px;
+              ">
+                Date
+              </td>
+
+              <td style="
+                padding:10px 0;
+                color:#111827;
+                font-size:14px;
+                font-weight:bold;
+                text-align:right;
+              ">
+                ${safeDate}
+              </td>
+            </tr>
+
+            <tr>
+              <td style="
+                padding:10px 0;
+                color:#6b7280;
+                font-size:14px;
+              ">
+                Lieu
+              </td>
+
+              <td style="
+                padding:10px 0;
+                color:#111827;
+                font-size:14px;
+                font-weight:bold;
+                text-align:right;
+              ">
+                ${safeCity}
+              </td>
+            </tr>
+
+            ${materialClientHtml}
+
+          </table>
+
           <div style="
-            font-family:Arial, Helvetica, sans-serif;
-            background:#f6f7f8;
-            padding:32px 16px;
-            color:#1f2937;
+            margin-top:14px;
+            padding-top:14px;
+            border-top:1px solid #e5e7eb;
           ">
 
-            <div style="
-              max-width:650px;
-              margin:0 auto;
-              background:white;
-              border-radius:18px;
-              overflow:hidden;
-              border:1px solid #e5e7eb;
+            <p style="
+              margin:0 0 6px;
+              font-size:13px;
+              color:#6b7280;
             ">
+              Prestations
+            </p>
 
+            <p style="
+              margin:0;
+              font-size:14px;
+              font-weight:bold;
+              color:#111827;
+            ">
+              ${safeServices}
+            </p>
+
+          </div>
+
+        </div>
+
+        <!-- ESTIMATION -->
+
+        <div style="
+          margin-top:20px;
+          padding:20px;
+          text-align:center;
+          background:#f0fdf4;
+          border:1px solid #bbf7d0;
+          border-radius:14px;
+        ">
+
+          <p style="
+            margin:0;
+            font-size:12px;
+            color:#166534;
+            text-transform:uppercase;
+            font-weight:bold;
+            letter-spacing:1px;
+          ">
+            Estimation indicative
+          </p>
+
+          <p style="
+            margin:6px 0 0;
+            font-size:30px;
+            font-weight:bold;
+            color:#15803d;
+          ">
+            ${safeEstimationLabel}
+          </p>
+
+          <p style="
+            margin:8px 0 0;
+            font-size:12px;
+            color:#4b5563;
+          ">
+            Le tarif définitif sera confirmé dans votre devis.
+          </p>
+
+        </div>
+
+        ${
+          isAvailabilityVerified
+            ? `
               <div style="
-                background:#15803d;
-                padding:28px;
-                color:white;
+                margin-top:20px;
+                padding:16px;
+                background:#f0fdf4;
+                border-left:4px solid #22c55e;
+                border-radius:10px;
               ">
 
                 <p style="
                   margin:0;
-                  font-size:12px;
+                  color:#166534;
+                  font-size:14px;
                   font-weight:bold;
-                  text-transform:uppercase;
-                  letter-spacing:2px;
-                  opacity:.8;
                 ">
-                  Event'S Location
+                  ✓ Disponibilité vérifiée
                 </p>
 
-                <h1 style="
-                  margin:8px 0 0;
-                  font-size:28px;
+                <p style="
+                  margin:6px 0 0;
+                  color:#4b5563;
+                  font-size:13px;
                 ">
-                  Merci ${safeFirstname} !
-                </h1>
-
-              </div>
-
-              <div style="
-                padding:28px;
-                line-height:1.7;
-              ">
-
-                <p>
-                  Nous avons bien reçu votre demande de devis.
-                </p>
-
-                <p>
-                  Nous allons étudier votre demande et
-                  confirmer définitivement la disponibilité
-                  du matériel avant validation.
-                </p>
-
-                <div style="
-                  margin:26px 0;
-                  padding:20px;
-                  background:#f0fdf4;
-                  border-radius:12px;
-                  border:1px solid #bbf7d0;
-                ">
-
-                  <p>
-                    <strong>
-                      Événement :
-                    </strong>
-
-                    ${safeEventType}
-                  </p>
-
-                  <p>
-                    <strong>
-                      Date :
-                    </strong>
-
-                    ${safeDate}
-                  </p>
-
-                  <p>
-                    <strong>
-                      Lieu :
-                    </strong>
-
-                    ${safeCity}
-                  </p>
-
-                  ${materialClientHtml}
-
-                  <p>
-                    <strong>
-                      Prestations :
-                    </strong>
-
-                    ${safeServices}
-                  </p>
-
-                  <p>
-                    <strong>
-                      Estimation indicative :
-                    </strong>
-
-                    ${safeEstimationLabel}
-                  </p>
-
-                </div>
-
-                ${
-                  isAvailabilityVerified
-                    ? `
-                      <p style="
-                        padding:14px 16px;
-                        background:#f0fdf4;
-                        border-left:4px solid #22c55e;
-                        border-radius:8px;
-                        color:#166534;
-                      ">
-                        Le matériel sélectionné était disponible
-                        au moment de votre consultation.
-                        La réservation sera définitive uniquement
-                        après confirmation d'Event'S Location.
-                      </p>
-                    `
-                    : ""
-                }
-
-                <p>
-                  Nous reviendrons vers vous rapidement avec
-                  une proposition adaptée à votre événement.
-                </p>
-
-                <p>
-                  À très bientôt,
-                </p>
-
-                <p>
-                  <strong>
-                    Event'S Location
-                  </strong>
-
-                  <br />
-
-                  06 43 89 45 70
-
-                  <br />
-
-                  events.location@outlook.com
+                  Le matériel sélectionné était disponible
+                  lors de votre consultation.
+                  La réservation sera définitive après
+                  confirmation d&apos;Event&apos;S Location.
                 </p>
 
               </div>
+            `
+            : ""
+        }
 
-            </div>
+        <!-- CTA -->
 
-          </div>
+        <div style="
+          margin-top:26px;
+          text-align:center;
+        ">
+
+          <a
+            href="${WEBSITE_URL}"
+            style="
+              display:inline-block;
+              padding:13px 22px;
+              background:#16a34a;
+              color:#ffffff;
+              text-decoration:none;
+              font-weight:bold;
+              border-radius:10px;
+            "
+          >
+            Visiter notre site
+          </a>
+
+        </div>
+
+        <!-- FOOTER -->
+
+        <div style="
+          margin-top:30px;
+          padding-top:22px;
+          border-top:1px solid #e5e7eb;
+          text-align:center;
+        ">
+
+          <p style="
+            margin:0;
+            font-weight:bold;
+            color:#111827;
+          ">
+            Event'S Location
+          </p>
+
+          <p style="
+            margin:6px 0 0;
+            font-size:13px;
+            color:#6b7280;
+          ">
+            Location de matériel événementiel
+          </p>
+
+          <p style="
+            margin:10px 0 0;
+            font-size:13px;
+            color:#4b5563;
+          ">
+            06 43 89 45 70
+            <br />
+            events.location@outlook.com
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+</html>
         `,
       });
 
     /* ========================================================
-       ERREUR MAIL CLIENT
-
-       Le mail admin étant envoyé,
-       la demande reste valide.
+       ERREUR CLIENT
     ======================================================== */
 
     if (clientMail.error) {
