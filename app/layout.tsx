@@ -1,15 +1,26 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
+
 import "./globals.css";
 
 const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: [
+    "300",
+    "400",
+    "500",
+    "600",
+    "700",
+    "800",
+  ],
   display: "swap",
 });
 
+const SITE_URL =
+  "https://www.eventslocation.fr";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://eventslocation.fr"),
+  metadataBase: new URL(SITE_URL),
 
   icons: {
     icon: "/Logo/Logo.png",
@@ -20,12 +31,18 @@ export const metadata: Metadata = {
   title: {
     default:
       "Event'S Location | Location de matériel événementiel en Nièvre",
-    template: "%s | Event'S Location",
+    template:
+      "%s | Event'S Location",
   },
 
   description:
     "Location de Photo Booth, mobilier, sonorisation, vidéoprojecteur, machines à effets et Smoke Puff pour mariages, anniversaires et événements en Nièvre, Yonne et Cher.",
 
+  /*
+    Google n'utilise pratiquement plus
+    la balise meta keywords pour le classement,
+    mais elle ne pose pas de problème.
+  */
   keywords: [
     "Event'S Location",
     "location matériel événementiel",
@@ -49,22 +66,28 @@ export const metadata: Metadata = {
   authors: [
     {
       name: "Event'S Location",
-      url: "https://eventslocation.fr",
+      url: SITE_URL,
     },
   ],
 
-  creator: "Event'S Location",
-  publisher: "Event'S Location",
+  creator:
+    "Event'S Location",
+
+  publisher:
+    "Event'S Location",
 
   alternates: {
-    canonical: "/",
+    canonical: SITE_URL,
   },
 
   openGraph: {
     type: "website",
     locale: "fr_FR",
-    url: "https://eventslocation.fr",
-    siteName: "Event'S Location",
+
+    url: SITE_URL,
+
+    siteName:
+      "Event'S Location",
 
     title:
       "Event'S Location | Location de matériel événementiel",
@@ -77,18 +100,25 @@ export const metadata: Metadata = {
         url: "/images/hero-photobooth.jpg",
         width: 1200,
         height: 630,
-        alt: "Event'S Location - Location de matériel événementiel",
+        alt:
+          "Event'S Location - Location de matériel événementiel",
       },
     ],
   },
 
   twitter: {
-    card: "summary_large_image",
+    card:
+      "summary_large_image",
+
     title:
       "Event'S Location | Location de matériel événementiel",
+
     description:
       "Photo Booth, mobilier, sonorisation, projection vidéo et animations événementielles en Nièvre, Yonne et Cher.",
-    images: ["/images/hero-photobooth.jpg"],
+
+    images: [
+      "/images/hero-photobooth.jpg",
+    ],
   },
 
   robots: {
@@ -98,113 +128,186 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      "max-image-preview": "large",
+
+      "max-image-preview":
+        "large",
+
       "max-snippet": -1,
+
       "max-video-preview": -1,
     },
   },
 
-  category: "Événementiel",
+  category:
+    "Événementiel",
 };
 
+/* ============================================================
+   DONNÉES STRUCTURÉES LOCAL BUSINESS
+============================================================ */
+
 const localBusinessSchema = {
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
+  "@context":
+    "https://schema.org",
 
-  "@id": "https://eventslocation.fr/#business",
+  "@type":
+    "LocalBusiness",
 
-  name: "Event'S Location",
+  "@id":
+    `${SITE_URL}/#business`,
 
-  legalName: "Event'S Location",
+  name:
+    "Event'S Location",
 
-  url: "https://eventslocation.fr",
+  legalName:
+    "Event'S Location",
 
-  logo: "https://eventslocation.fr/Logo/Logo.png",
+  url:
+    SITE_URL,
+
+  logo:
+    `${SITE_URL}/Logo/Logo.png`,
 
   image:
-    "https://eventslocation.fr/images/hero-photobooth.jpg",
+    `${SITE_URL}/images/hero-photobooth.jpg`,
 
   description:
     "Location de matériel événementiel : Photo Booth, mobilier, sonorisation, vidéoprojecteur, machines à effets et Smoke Puff en Nièvre, Yonne et Cher.",
 
-  telephone: "+33643894570",
+  telephone:
+    "+33643894570",
 
-  email: "events.location@outlook.com",
+  email:
+    "events.location@outlook.com",
 
-  priceRange: "€€",
+  priceRange:
+    "€€",
 
   address: {
-    "@type": "PostalAddress",
-    streetAddress: "17 Boulevard Dupin",
-    postalCode: "58210",
-    addressLocality: "Varzy",
-    addressRegion: "Bourgogne-Franche-Comté",
-    addressCountry: "FR",
+    "@type":
+      "PostalAddress",
+
+    streetAddress:
+      "17 Boulevard Dupin",
+
+    postalCode:
+      "58210",
+
+    addressLocality:
+      "Varzy",
+
+    addressRegion:
+      "Bourgogne-Franche-Comté",
+
+    addressCountry:
+      "FR",
   },
 
   contactPoint: {
-    "@type": "ContactPoint",
-    telephone: "+33643894570",
-    contactType: "customer service",
-    areaServed: "FR",
-    availableLanguage: "fr",
+    "@type":
+      "ContactPoint",
+
+    telephone:
+      "+33643894570",
+
+    contactType:
+      "customer service",
+
+    areaServed:
+      "FR",
+
+    availableLanguage:
+      "fr",
   },
 
   areaServed: [
     {
-      "@type": "AdministrativeArea",
-      name: "Nièvre",
+      "@type":
+        "AdministrativeArea",
+      name:
+        "Nièvre",
     },
     {
-      "@type": "AdministrativeArea",
-      name: "Yonne",
+      "@type":
+        "AdministrativeArea",
+      name:
+        "Yonne",
     },
     {
-      "@type": "AdministrativeArea",
-      name: "Cher",
+      "@type":
+        "AdministrativeArea",
+      name:
+        "Cher",
     },
   ],
 
   hasOfferCatalog: {
-    "@type": "OfferCatalog",
-    name: "Prestations Event'S Location",
+    "@type":
+      "OfferCatalog",
+
+    name:
+      "Prestations Event'S Location",
 
     itemListElement: [
       {
-        "@type": "OfferCatalog",
-        name: "Photo Booth",
+        "@type":
+          "OfferCatalog",
+
+        name:
+          "Photo Booth",
+
         url:
-          "https://eventslocation.fr/prestations/photobooth",
+          `${SITE_URL}/prestations/photobooth`,
       },
       {
-        "@type": "OfferCatalog",
-        name: "Sonorisation",
+        "@type":
+          "OfferCatalog",
+
+        name:
+          "Sonorisation",
+
         url:
-          "https://eventslocation.fr/prestations/sonorisation",
+          `${SITE_URL}/prestations/sonorisation`,
       },
       {
-        "@type": "OfferCatalog",
-        name: "Projection vidéo",
+        "@type":
+          "OfferCatalog",
+
+        name:
+          "Projection vidéo",
+
         url:
-          "https://eventslocation.fr/prestations/projection",
+          `${SITE_URL}/prestations/projection`,
       },
       {
-        "@type": "OfferCatalog",
-        name: "Mobilier événementiel",
+        "@type":
+          "OfferCatalog",
+
+        name:
+          "Mobilier événementiel",
+
         url:
-          "https://eventslocation.fr/prestations/mobilier",
+          `${SITE_URL}/prestations/mobilier`,
       },
       {
-        "@type": "OfferCatalog",
-        name: "Machines à effets",
+        "@type":
+          "OfferCatalog",
+
+        name:
+          "Machines à effets",
+
         url:
-          "https://eventslocation.fr/prestations/effets",
+          `${SITE_URL}/prestations/effets`,
       },
       {
-        "@type": "OfferCatalog",
-        name: "Smoke Puff",
+        "@type":
+          "OfferCatalog",
+
+        name:
+          "Smoke Puff",
+
         url:
-          "https://eventslocation.fr/prestations/feux",
+          `${SITE_URL}/prestations/feux`,
       },
     ],
   },
@@ -214,25 +317,38 @@ const localBusinessSchema = {
     "https://www.facebook.com/share/1H7nS1AuH4/",
   ],
 };
+
+/* ============================================================
+   LAYOUT
+============================================================ */
+
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children:
+    React.ReactNode;
 }) {
   return (
     <html lang="fr">
+
       <body
         className={`${poppins.className} bg-white text-gray-900 antialiased`}
       >
+
         {children}
 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(localBusinessSchema),
+            __html:
+              JSON.stringify(
+                localBusinessSchema
+              ),
           }}
         />
+
       </body>
+
     </html>
   );
 }
