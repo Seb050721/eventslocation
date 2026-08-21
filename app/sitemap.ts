@@ -1,37 +1,74 @@
 import type { MetadataRoute } from "next";
 import { services } from "@/data/services";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://eventslocation.fr";
+/* ============================================================
+   CONFIGURATION
+============================================================ */
 
-  const servicePages: MetadataRoute.Sitemap = services.map((service) => ({
-    url: `${baseUrl}/prestations/${service.id}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly",
-    priority: 0.8,
-  }));
+const SITE_URL = "https://www.eventslocation.fr";
+
+/* ============================================================
+   SITEMAP
+============================================================ */
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  /* ==========================================================
+     PAGES DES PRESTATIONS
+  ========================================================== */
+
+  const servicePages: MetadataRoute.Sitemap =
+    services.map((service) => ({
+      url: `${SITE_URL}/prestations/${service.id}`,
+
+      lastModified: new Date(),
+
+      changeFrequency: "monthly",
+
+      priority: 0.8,
+    }));
+
+  /* ==========================================================
+     PAGES DU SITE
+  ========================================================== */
 
   return [
+    /* ACCUEIL */
+
     {
-      url: baseUrl,
+      url: SITE_URL,
+
       lastModified: new Date(),
+
       changeFrequency: "weekly",
+
       priority: 1,
     },
 
+    /* PRESTATIONS */
+
     ...servicePages,
 
+    /* MENTIONS LÉGALES */
+
     {
-      url: `${baseUrl}/mentions-legales`,
+      url: `${SITE_URL}/mentions-legales`,
+
       lastModified: new Date(),
+
       changeFrequency: "yearly",
+
       priority: 0.2,
     },
 
+    /* POLITIQUE DE CONFIDENTIALITÉ */
+
     {
-      url: `${baseUrl}/politique-de-confidentialite`,
+      url: `${SITE_URL}/politique-de-confidentialite`,
+
       lastModified: new Date(),
+
       changeFrequency: "yearly",
+
       priority: 0.2,
     },
   ];
