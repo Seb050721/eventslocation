@@ -10,6 +10,7 @@ import EquipmentTable from "@/components/service/EquipmentTable";
 import FAQAccordion from "@/components/service/FAQAccordion";
 import ServiceHighlights from "@/components/service/ServiceHighlights";
 import RelatedServices from "@/components/service/RelatedServices";
+import SeoContent from "@/components/service/SeoContent";
 
 interface PageProps {
   params: Promise<{
@@ -60,14 +61,6 @@ export async function generateMetadata({
 
   const canonicalUrl =
     `${SITE_URL}/prestations/${service.id}`;
-
-  /*
-    On utilise en priorité les données SEO
-    définies dans data/services.ts.
-
-    Si elles n'existent pas, on génère
-    automatiquement un titre et une description.
-  */
 
   const title =
     service.seo?.title ??
@@ -460,6 +453,19 @@ export default async function ServicePage({
             service.equipments
           }
         />
+
+        {/* CONTENU SEO LOCAL */}
+
+        {service.seoContent && (
+          <SeoContent
+            title={
+              service.seoContent.title
+            }
+            paragraphs={
+              service.seoContent.paragraphs
+            }
+          />
+        )}
 
         {/* FAQ */}
 

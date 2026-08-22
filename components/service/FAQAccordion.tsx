@@ -6,7 +6,7 @@ import {
   HelpCircle,
 } from "lucide-react";
 
-import type { FAQItem } from "@/data/services";
+import type { FAQItem } from "@/components/service/services";
 
 interface Props {
   faq: FAQItem[];

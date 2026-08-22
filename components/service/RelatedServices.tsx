@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-
 import { ArrowRight } from "lucide-react";
 
 import { services } from "@/data/services";
@@ -8,6 +7,7 @@ import { services } from "@/data/services";
 interface Props {
   currentId: string;
 }
+
 
 export default function RelatedServices({
   currentId,

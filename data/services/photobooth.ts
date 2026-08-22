@@ -25,13 +25,19 @@ export const photobooth: Service = {
      SEO
   ============================================================ */
 
-  seo: {
-    title:
-      "Location Photo Booth Nièvre, Nevers, Yonne et Cher dès 169 €",
+  seoContent: {
+  title: "Location de Photobooth en Nièvre (58)",
 
-    description:
-      "Location de Photo Booth pour mariage, anniversaire et événement dès 169 €. Installation comprise, impressions photo, galerie numérique et livraison offerte dans un rayon de 20 km autour de Varzy.",
-  },
+  paragraphs: [
+    "Vous recherchez un photobooth en Nièvre pour votre mariage, anniversaire ou événement ? Event'S Location propose la location de Photo Booth depuis Varzy pour vos événements dans la Nièvre.",
+
+    "Notre Photo Booth est disponible dès 169 € en formule numérique. Plusieurs formules avec impressions sont également proposées, jusqu'à 400 impressions photo, avec galerie en ligne et personnalisation du cadre photo.",
+
+    "La livraison est gratuite dans un rayon de 20 km autour de Varzy. Nous pouvons également intervenir à Nevers et dans les autres communes de la Nièvre, ainsi que dans l'Yonne et le Cher, sur devis.",
+
+    "Installé pour la journée ou pour tout le week-end, le Photo Booth permet à vos invités de réaliser leurs photos librement et de conserver un souvenir personnalisé de votre événement.",
+  ],
+},
 
   /* ============================================================
      INCLUS

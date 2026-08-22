@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { services } from "@/data/services";
+import { services } from "@/components/service/services";
 
 /* ============================================================
    CONFIGURATION

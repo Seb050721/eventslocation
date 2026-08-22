@@ -1,4 +1,4 @@
-import type { OptionItem } from "@/data/services";
+import type { OptionItem } from "@/components/service/services";
 
 interface Props {
   options: OptionItem[];

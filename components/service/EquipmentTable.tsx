@@ -1,4 +1,4 @@
-import type { EquipmentItem } from "@/data/services";
+import type { EquipmentItem } from "@/components/service/services";
 
 interface Props {
   equipments?: EquipmentItem[];

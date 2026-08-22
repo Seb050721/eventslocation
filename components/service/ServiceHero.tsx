@@ -7,7 +7,7 @@ import {
   Phone,
 } from "lucide-react";
 
-import type { Service } from "@/data/services";
+import { Service } from "@/data/services";
 
 interface Props {
   service: Service;
