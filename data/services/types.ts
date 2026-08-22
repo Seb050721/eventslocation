@@ -25,6 +25,11 @@ export interface ServiceSeo {
   description: string;
 }
 
+export interface SeoContent {
+  title: string;
+  paragraphs: string[];
+}
+
 export interface Service {
   id: string;
   title: string;
@@ -51,4 +56,6 @@ export interface Service {
   faq: FAQItem[];
 
   seo?: ServiceSeo;
+
+  seoContent?: SeoContent;
 }

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
 
-import { services } from "@/data/services";
+import type { Service } from "@/data/services";
 
 interface Props {
   service: Service;

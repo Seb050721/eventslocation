@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import {
-  ChevronDown,
   HelpCircle,
+  ChevronDown,
 } from "lucide-react";
 
-import type { FAQItem } from "@/components/service/services";
+import type { FAQItem } from "@/data/services";
 
 interface Props {
   faq: FAQItem[];
@@ -15,7 +15,8 @@ interface Props {
 export default function FAQAccordion({
   faq,
 }: Props) {
-  const [open, setOpen] = useState<number | null>(0);
+  const [open, setOpen] =
+    useState<number | null>(0);
 
   if (faq.length === 0) {
     return null;
@@ -49,7 +50,8 @@ export default function FAQAccordion({
       <div className="space-y-3 sm:space-y-4">
 
         {faq.map((item, index) => {
-          const isOpen = open === index;
+          const isOpen =
+            open === index;
 
           return (
             <div
