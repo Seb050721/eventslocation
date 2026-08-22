@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { services } from "@/components/service/services";
+import { services } from "@/data/services";
 
 /* ============================================================
    CONFIGURATION
@@ -19,11 +19,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const servicePages: MetadataRoute.Sitemap =
     services.map((service) => ({
       url: `${SITE_URL}/prestations/${service.id}`,
-
       lastModified: new Date(),
-
       changeFrequency: "monthly",
-
       priority: 0.8,
     }));
 
@@ -36,11 +33,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     {
       url: SITE_URL,
-
       lastModified: new Date(),
-
       changeFrequency: "weekly",
-
       priority: 1,
     },
 
@@ -52,11 +46,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     {
       url: `${SITE_URL}/mentions-legales`,
-
       lastModified: new Date(),
-
       changeFrequency: "yearly",
-
       priority: 0.2,
     },
 
@@ -64,11 +55,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     {
       url: `${SITE_URL}/politique-de-confidentialite`,
-
       lastModified: new Date(),
-
       changeFrequency: "yearly",
-
       priority: 0.2,
     },
   ];

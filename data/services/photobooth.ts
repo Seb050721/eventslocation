@@ -16,28 +16,45 @@ export const photobooth: Service = {
   startingPrice: 169,
 
   shortDescription:
-    "Location de Photo Booth pour mariages, anniversaires et événements en Nièvre, Yonne et Cher.",
+    "Location de Photo Booth pour mariages, anniversaires et événements à Auxerre, dans l'Yonne et la Nièvre.",
 
   description:
-    "Animez votre mariage, anniversaire ou événement avec notre Photo Booth professionnel. Disponible à la journée ou durant tout le week-end, il permet à vos invités de repartir avec leurs photos imprimées instantanément tout en profitant d'une galerie numérique. Nous intervenons notamment autour de Varzy, Nevers et dans la Nièvre, l'Yonne et le Cher.",
+    "Animez votre mariage, anniversaire ou événement avec notre Photo Booth professionnel. Disponible à la journée ou durant tout le week-end, il permet à vos invités de réaliser leurs photos librement et de conserver un souvenir personnalisé de votre événement.",
 
   /* ============================================================
      SEO
   ============================================================ */
 
+  seo: {
+    title:
+      "Location Photobooth Auxerre, Yonne & Nièvre dès 169 €",
+
+    description:
+      "Location de photobooth à Auxerre, dans l'Yonne et la Nièvre dès 169 €. Mariage, anniversaire et événement avec installation, cadre personnalisé et galerie photo.",
+  },
+
+  /* ============================================================
+     CONTENU SEO LOCAL
+  ============================================================ */
+
   seoContent: {
-  title: "Location de Photobooth en Nièvre (58)",
+    title:
+      "Location de Photobooth à Auxerre, dans l'Yonne et la Nièvre",
 
-  paragraphs: [
-    "Vous recherchez un photobooth en Nièvre pour votre mariage, anniversaire ou événement ? Event'S Location propose la location de Photo Booth depuis Varzy pour vos événements dans la Nièvre.",
+    paragraphs: [
+      "Vous recherchez un photobooth à Auxerre ou dans l'Yonne pour un mariage, un anniversaire ou un événement ? Event'S Location propose la location de Photo Booth à partir de 169 €, avec plusieurs formules numériques ou avec impressions photo.",
 
-    "Notre Photo Booth est disponible dès 169 € en formule numérique. Plusieurs formules avec impressions sont également proposées, jusqu'à 400 impressions photo, avec galerie en ligne et personnalisation du cadre photo.",
+      "Basés à Varzy, nous intervenons dans l'Yonne et la Nièvre, notamment à Auxerre, Clamecy, Nevers, Cosne-Cours-sur-Loire, La Charité-sur-Loire et dans les communes environnantes. La livraison est gratuite dans un rayon de 20 km autour de Varzy et reste possible au-delà sur devis.",
 
-    "La livraison est gratuite dans un rayon de 20 km autour de Varzy. Nous pouvons également intervenir à Nevers et dans les autres communes de la Nièvre, ainsi que dans l'Yonne et le Cher, sur devis.",
+      "Notre Photo Booth peut être installé pour un mariage, un anniversaire, un baptême, une soirée privée ou un événement professionnel. Le cadre photo est personnalisé selon votre événement afin que chaque impression corresponde à votre thème et à vos couleurs.",
 
-    "Installé pour la journée ou pour tout le week-end, le Photo Booth permet à vos invités de réaliser leurs photos librement et de conserver un souvenir personnalisé de votre événement.",
-  ],
-},
+      "Plusieurs formules sont disponibles : version numérique à 169 €, puis des forfaits comprenant 100, 150, 200, 300 ou 400 impressions photo. Vous pouvez ainsi choisir une formule adaptée au nombre d'invités et à votre budget.",
+
+      "Les photos réalisées pendant l'événement sont également accessibles dans une galerie en ligne. Le Photo Booth peut être mis à disposition à la journée ou pendant tout le week-end selon votre événement.",
+
+      "Pour votre événement à Auxerre, dans l'Yonne ou la Nièvre, Event'S Location propose également la location de sonorisation, mobilier, vidéoprojecteur, machines à effets et Smoke Puff.",
+    ],
+  },
 
   /* ============================================================
      INCLUS
@@ -60,6 +77,8 @@ export const photobooth: Service = {
     {
       label: "Numérique",
       price: 169,
+      description:
+        "Photos numériques sans limite d'impression papier.",
     },
 
     {
@@ -116,7 +135,7 @@ export const photobooth: Service = {
     {
       name: "Décoration",
       description:
-        "Personnalisation sur devis selon le thème de votre événement.",
+        "Sur devis",
     },
   ],
 
@@ -129,10 +148,50 @@ export const photobooth: Service = {
   faq: [
     {
       question:
+        "Combien coûte la location d'un photobooth à Auxerre ?",
+
+      answer:
+        "Nos formules Photo Booth débutent à 169 € en version numérique. Des formules comprenant de 100 à 400 impressions photo sont également disponibles.",
+    },
+
+    {
+      question:
+        "Proposez-vous la location de photobooth à Auxerre ?",
+
+      answer:
+        "Oui. Basés à Varzy, nous proposons la location de notre Photo Booth à Auxerre et plus largement dans l'Yonne, selon les disponibilités et les conditions de livraison.",
+    },
+
+    {
+      question:
+        "Peut-on louer le Photo Booth pour un mariage ?",
+
+      answer:
+        "Oui. Le Photo Booth est particulièrement adapté aux mariages et permet aux invités de réaliser leurs propres photos tout au long de la réception.",
+    },
+
+    {
+      question:
+        "Le cadre des photos est-il personnalisé ?",
+
+      answer:
+        "Oui. Un cadre photo personnalisé est créé pour votre événement afin de l'adapter à votre thème, vos couleurs et au type de réception.",
+    },
+
+    {
+      question:
         "Combien de temps puis-je conserver le Photo Booth ?",
 
       answer:
-        "Le Photo Booth peut être loué à la journée ou pendant tout le week-end, selon votre événement.",
+        "Le Photo Booth peut être mis à disposition à la journée ou pendant tout le week-end selon votre événement.",
+    },
+
+    {
+      question:
+        "Les invités peuvent-ils récupérer leurs photos en ligne ?",
+
+      answer:
+        "Oui. Une galerie photo en ligne permet de retrouver les photos réalisées pendant l'événement.",
     },
 
     {
@@ -140,39 +199,15 @@ export const photobooth: Service = {
         "La livraison du Photo Booth est-elle comprise ?",
 
       answer:
-        "Oui, la livraison est offerte dans un rayon de 20 km autour de Varzy. Au-delà, un tarif de déplacement est établi sur devis.",
+        "La livraison est gratuite dans un rayon de 20 km autour de Varzy. Pour Auxerre, Nevers et les autres communes situées au-delà de cette zone, le déplacement est calculé lors de la demande de devis.",
     },
 
     {
       question:
-        "Le Photo Booth convient-il pour un mariage ou un anniversaire ?",
+        "Dans quelles villes proposez-vous la location de Photo Booth ?",
 
       answer:
-        "Oui. Le Photo Booth convient particulièrement aux mariages, anniversaires, soirées privées, événements associatifs et événements d'entreprise.",
-    },
-
-    {
-      question:
-        "Les photos sont-elles imprimées immédiatement ?",
-
-      answer:
-        "Oui, selon la formule choisie, les photos sont imprimées directement pendant l'événement. Une formule entièrement numérique est également disponible.",
-    },
-
-    {
-      question:
-        "Peut-on personnaliser le cadre des photos ?",
-
-      answer:
-        "Oui. Le cadre photo est personnalisé pour votre événement afin de reprendre votre thème, vos couleurs, vos prénoms ou la date de votre événement.",
-    },
-
-    {
-      question:
-        "Dans quelles zones proposez-vous la location de Photo Booth ?",
-
-      answer:
-        "Nous proposons principalement la location de Photo Booth en Nièvre, dans l'Yonne et dans le Cher, avec notamment des interventions autour de Varzy et Nevers. Les déplacements plus éloignés peuvent être étudiés sur devis.",
+        "Nous intervenons principalement dans l'Yonne et la Nièvre, notamment à Auxerre, Varzy, Clamecy, Nevers, Cosne-Cours-sur-Loire, La Charité-sur-Loire et dans les communes environnantes.",
     },
   ],
 };
