@@ -11,6 +11,7 @@ import FAQAccordion from "@/components/service/FAQAccordion";
 import ServiceHighlights from "@/components/service/ServiceHighlights";
 import RelatedServices from "@/components/service/RelatedServices";
 import SeoContent from "@/components/service/SeoContent";
+import FlashComparison from "@/components/service/FlashComparison";
 
 interface PageProps {
   params: Promise<{
@@ -22,8 +23,7 @@ interface PageProps {
    CONFIGURATION
 ============================================================ */
 
-const SITE_URL =
-  "https://www.eventslocation.fr";
+const SITE_URL = "https://www.eventslocation.fr";
 
 /* ============================================================
    GÉNÉRATION DES PAGES STATIQUES
@@ -445,6 +445,12 @@ export default async function ServicePage({
             service.options
           }
         />
+
+        {/* COMPARATIF FLASH PHOTOBOOTH */}
+
+        {service.id === "photobooth" && (
+          <FlashComparison />
+        )}
 
         {/* MATÉRIEL À L'UNITÉ */}
 
