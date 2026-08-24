@@ -410,7 +410,7 @@ export async function GET(
     );
 
     endDate.setFullYear(
-      endDate.getFullYear() + 1
+      endDate.getFullYear() + 3
     );
 
     /* ========================================================
