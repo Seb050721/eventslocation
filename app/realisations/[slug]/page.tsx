@@ -3,12 +3,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { realisations } from "@/data/realisations";
+import {
+  realisations,
+  type Realisation,
+} from "@/data/realisations";
 
 interface PageProps {
   params: Promise<{
     slug: string;
   }>;
+}
+
+interface RealisationService {
+  id: string;
+  label: string;
 }
 
 const SITE_URL = "https://www.eventslocation.fr";
@@ -18,9 +26,11 @@ const SITE_URL = "https://www.eventslocation.fr";
 ============================================================ */
 
 export async function generateStaticParams() {
-  return realisations.map((realisation) => ({
-    slug: realisation.id,
-  }));
+  return realisations.map(
+    (realisation: Realisation) => ({
+      slug: realisation.id,
+    })
+  );
 }
 
 /* ============================================================
@@ -33,12 +43,14 @@ export async function generateMetadata({
   const { slug } = await params;
 
   const realisation = realisations.find(
-    (item) => item.id === slug
+    (item: Realisation) =>
+      item.id === slug
   );
 
   if (!realisation) {
     return {
       title: "Réalisation introuvable",
+
       robots: {
         index: false,
         follow: false,
@@ -50,27 +62,43 @@ export async function generateMetadata({
     `${SITE_URL}/realisations/${realisation.id}`;
 
   return {
-    title: realisation.seo.title,
+    title:
+      realisation.seo.title,
 
     description:
       realisation.seo.description,
 
     alternates: {
-      canonical: canonicalUrl,
+      canonical:
+        canonicalUrl,
     },
 
     openGraph: {
-      type: "article",
-      locale: "fr_FR",
-      url: canonicalUrl,
-      siteName: "Event'S Location",
-      title: realisation.seo.title,
+      type:
+        "article",
+
+      locale:
+        "fr_FR",
+
+      url:
+        canonicalUrl,
+
+      siteName:
+        "Event'S Location",
+
+      title:
+        realisation.seo.title,
+
       description:
         realisation.seo.description,
+
       images: [
         {
-          url: realisation.coverImage,
-          alt: realisation.title,
+          url:
+            realisation.coverImage,
+
+          alt:
+            realisation.title,
         },
       ],
     },
@@ -92,7 +120,8 @@ export default async function RealisationPage({
   const { slug } = await params;
 
   const realisation = realisations.find(
-    (item) => item.id === slug
+    (item: Realisation) =>
+      item.id === slug
   );
 
   if (!realisation) {
@@ -104,24 +133,32 @@ export default async function RealisationPage({
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
-        {/* RETOUR */}
+        {/* =====================================================
+            RETOUR
+        ===================================================== */}
 
         <Link
           href="/#realisations"
-          className="text-sm font-semibold text-green-400 hover:text-green-300"
+          className="text-sm font-semibold text-green-400 transition hover:text-green-300"
         >
           ← Retour aux réalisations
         </Link>
 
-        {/* HERO */}
+        {/* =====================================================
+            HERO
+        ===================================================== */}
 
         <section className="mt-6 overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.04]">
 
           <div className="relative aspect-[16/9] w-full overflow-hidden">
 
             <Image
-              src={realisation.coverImage}
-              alt={realisation.title}
+              src={
+                realisation.coverImage
+              }
+              alt={
+                realisation.title
+              }
               fill
               priority
               className="object-cover"
@@ -151,7 +188,9 @@ export default async function RealisationPage({
 
         </section>
 
-        {/* DESCRIPTION */}
+        {/* =====================================================
+            DESCRIPTION
+        ===================================================== */}
 
         <section className="mt-8 rounded-[24px] border border-white/10 bg-white/[0.04] p-5 sm:p-7 lg:p-8">
 
@@ -166,7 +205,9 @@ export default async function RealisationPage({
 
         </section>
 
-        {/* PRESTATIONS */}
+        {/* =====================================================
+            PRESTATIONS
+        ===================================================== */}
 
         <section className="mt-8 rounded-[24px] border border-white/10 bg-white/[0.04] p-5 sm:p-7 lg:p-8">
 
@@ -175,8 +216,12 @@ export default async function RealisationPage({
           </h2>
 
           <div className="mt-5 flex flex-wrap gap-3">
+
             {realisation.services.map(
-              (service, index) => (
+              (
+                service: RealisationService,
+                index: number
+              ) => (
                 <Link
                   key={`${service.id}-${index}`}
                   href={`/prestations/${service.id}`}
@@ -186,11 +231,14 @@ export default async function RealisationPage({
                 </Link>
               )
             )}
+
           </div>
 
         </section>
 
-        {/* GALERIE */}
+        {/* =====================================================
+            GALERIE
+        ===================================================== */}
 
         {realisation.images.length > 0 && (
           <section className="mt-8">
@@ -198,7 +246,7 @@ export default async function RealisationPage({
             <div className="mb-5">
 
               <h2 className="text-2xl font-black sm:text-3xl">
-                Photos de l'événement
+                Photos de l&apos;événement
               </h2>
 
               <p className="mt-2 text-sm text-gray-400">
@@ -211,9 +259,12 @@ export default async function RealisationPage({
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 
               {realisation.images.map(
-                (image, index) => (
+                (
+                  image: string,
+                  index: number
+                ) => (
                   <div
-                    key={image}
+                    key={`${image}-${index}`}
                     className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-white/10"
                   >
 
@@ -234,7 +285,9 @@ export default async function RealisationPage({
           </section>
         )}
 
-        {/* CTA */}
+        {/* =====================================================
+            CTA
+        ===================================================== */}
 
         <section className="mt-10 overflow-hidden rounded-[28px] border border-green-500/20 bg-gradient-to-br from-green-600 via-green-500 to-green-700 p-6 sm:p-8 lg:p-10">
 

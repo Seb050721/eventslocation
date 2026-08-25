@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
-
 import "./globals.css";
+
+/* ============================================================
+   POLICE
+============================================================ */
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -16,8 +19,15 @@ const poppins = Poppins({
   display: "swap",
 });
 
-const SITE_URL =
-  "https://www.eventslocation.fr";
+/* ============================================================
+   CONFIGURATION DU SITE
+============================================================ */
+
+const SITE_URL = "https://www.eventslocation.fr";
+
+/* ============================================================
+   METADATA SEO
+============================================================ */
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -31,18 +41,12 @@ export const metadata: Metadata = {
   title: {
     default:
       "Event'S Location | Location de matériel événementiel en Nièvre",
-    template:
-      "%s | Event'S Location",
+    template: "%s | Event'S Location",
   },
 
   description:
     "Location de Photo Booth, mobilier, sonorisation, vidéoprojecteur, machines à effets et Smoke Puff pour mariages, anniversaires et événements en Nièvre, Yonne et Cher.",
 
-  /*
-    Google n'utilise pratiquement plus
-    la balise meta keywords pour le classement,
-    mais elle ne pose pas de problème.
-  */
   keywords: [
     "Event'S Location",
     "location matériel événementiel",
@@ -70,15 +74,20 @@ export const metadata: Metadata = {
     },
   ],
 
-  creator:
-    "Event'S Location",
+  creator: "Event'S Location",
+  publisher: "Event'S Location",
 
-  publisher:
-    "Event'S Location",
+  /* ==========================================================
+     URL CANONIQUE
+  ========================================================== */
 
   alternates: {
     canonical: SITE_URL,
   },
+
+  /* ==========================================================
+     OPEN GRAPH
+  ========================================================== */
 
   openGraph: {
     type: "website",
@@ -86,8 +95,7 @@ export const metadata: Metadata = {
 
     url: SITE_URL,
 
-    siteName:
-      "Event'S Location",
+    siteName: "Event'S Location",
 
     title:
       "Event'S Location | Location de matériel événementiel",
@@ -106,9 +114,12 @@ export const metadata: Metadata = {
     ],
   },
 
+  /* ==========================================================
+     TWITTER / PARTAGE
+  ========================================================== */
+
   twitter: {
-    card:
-      "summary_large_image",
+    card: "summary_large_image",
 
     title:
       "Event'S Location | Location de matériel événementiel",
@@ -121,6 +132,10 @@ export const metadata: Metadata = {
     ],
   },
 
+  /* ==========================================================
+     ROBOTS GOOGLE
+  ========================================================== */
+
   robots: {
     index: true,
     follow: true,
@@ -129,41 +144,32 @@ export const metadata: Metadata = {
       index: true,
       follow: true,
 
-      "max-image-preview":
-        "large",
-
+      "max-image-preview": "large",
       "max-snippet": -1,
-
       "max-video-preview": -1,
     },
   },
 
-  category:
-    "Événementiel",
+  category: "Événementiel",
 };
 
 /* ============================================================
-   DONNÉES STRUCTURÉES LOCAL BUSINESS
+   DONNÉES STRUCTURÉES
+   LOCAL BUSINESS
 ============================================================ */
 
 const localBusinessSchema = {
-  "@context":
-    "https://schema.org",
+  "@context": "https://schema.org",
 
-  "@type":
-    "LocalBusiness",
+  "@type": "LocalBusiness",
 
-  "@id":
-    `${SITE_URL}/#business`,
+  "@id": `${SITE_URL}/#business`,
 
-  name:
-    "Event'S Location",
+  name: "Event'S Location",
 
-  legalName:
-    "Event'S Location",
+  legalName: "Event'S Location",
 
-  url:
-    SITE_URL,
+  url: SITE_URL,
 
   logo:
     `${SITE_URL}/Logo/Logo.png`,
@@ -183,9 +189,12 @@ const localBusinessSchema = {
   priceRange:
     "€€",
 
+  /* ==========================================================
+     ADRESSE
+  ========================================================== */
+
   address: {
-    "@type":
-      "PostalAddress",
+    "@type": "PostalAddress",
 
     streetAddress:
       "17 Boulevard Dupin",
@@ -203,9 +212,12 @@ const localBusinessSchema = {
       "FR",
   },
 
+  /* ==========================================================
+     CONTACT
+  ========================================================== */
+
   contactPoint: {
-    "@type":
-      "ContactPoint",
+    "@type": "ContactPoint",
 
     telephone:
       "+33643894570",
@@ -220,68 +232,67 @@ const localBusinessSchema = {
       "fr",
   },
 
+  /* ==========================================================
+     ZONES D'INTERVENTION
+  ========================================================== */
+
   areaServed: [
     {
-      "@type":
-        "AdministrativeArea",
-      name:
-        "Nièvre",
+      "@type": "AdministrativeArea",
+      name: "Nièvre",
     },
+
     {
-      "@type":
-        "AdministrativeArea",
-      name:
-        "Yonne",
+      "@type": "AdministrativeArea",
+      name: "Yonne",
     },
+
     {
-      "@type":
-        "AdministrativeArea",
-      name:
-        "Cher",
+      "@type": "AdministrativeArea",
+      name: "Cher",
     },
   ],
 
+  /* ==========================================================
+     PRESTATIONS
+  ========================================================== */
+
   hasOfferCatalog: {
-    "@type":
-      "OfferCatalog",
+    "@type": "OfferCatalog",
 
     name:
       "Prestations Event'S Location",
 
     itemListElement: [
       {
-        "@type":
-          "OfferCatalog",
+        "@type": "OfferCatalog",
 
-        name:
-          "Photo Booth",
+        name: "Photo Booth",
 
         url:
           `${SITE_URL}/prestations/photobooth`,
       },
-      {
-        "@type":
-          "OfferCatalog",
 
-        name:
-          "Sonorisation",
+      {
+        "@type": "OfferCatalog",
+
+        name: "Sonorisation",
 
         url:
           `${SITE_URL}/prestations/sonorisation`,
       },
-      {
-        "@type":
-          "OfferCatalog",
 
-        name:
-          "Projection vidéo",
+      {
+        "@type": "OfferCatalog",
+
+        name: "Projection vidéo",
 
         url:
           `${SITE_URL}/prestations/projection`,
       },
+
       {
-        "@type":
-          "OfferCatalog",
+        "@type": "OfferCatalog",
 
         name:
           "Mobilier événementiel",
@@ -289,9 +300,9 @@ const localBusinessSchema = {
         url:
           `${SITE_URL}/prestations/mobilier`,
       },
+
       {
-        "@type":
-          "OfferCatalog",
+        "@type": "OfferCatalog",
 
         name:
           "Machines à effets",
@@ -299,18 +310,21 @@ const localBusinessSchema = {
         url:
           `${SITE_URL}/prestations/effets`,
       },
-      {
-        "@type":
-          "OfferCatalog",
 
-        name:
-          "Smoke Puff",
+      {
+        "@type": "OfferCatalog",
+
+        name: "Smoke Puff",
 
         url:
           `${SITE_URL}/prestations/feux`,
       },
     ],
   },
+
+  /* ==========================================================
+     RÉSEAUX SOCIAUX
+  ========================================================== */
 
   sameAs: [
     "https://www.instagram.com/events_location__/",
@@ -319,15 +333,14 @@ const localBusinessSchema = {
 };
 
 /* ============================================================
-   LAYOUT
+   ROOT LAYOUT
 ============================================================ */
 
 export default function RootLayout({
   children,
-}: {
-  children:
-    React.ReactNode;
-}) {
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="fr">
 
@@ -336,6 +349,10 @@ export default function RootLayout({
       >
 
         {children}
+
+        {/* ====================================================
+            DONNÉES STRUCTURÉES GOOGLE
+        ==================================================== */}
 
         <script
           type="application/ld+json"
