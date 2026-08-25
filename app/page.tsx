@@ -1,50 +1,112 @@
 import Header from "@/components/Header/Header";
 import Hero from "@/components/Hero/Hero";
-import Stats from "@/components/Stats";
+
 import Services from "@/components/Services";
-import Gallery from "@/components/Gallery";
-import WhyChooseUs from "@/components/WhyChooseUs";
-import EventTypes from "@/components/EventTypes";
-import Packs from "@/components/Packs";
-import QuoteForm from "@/components/QuoteForm";
-import TrustBar from "@/components/TrustBar";
-import Testimonials from "@/components/Testimonials";
-import Footer from "@/components/Footer/Footer";
 import LocalSEO from "@/components/LocalSEO";
+import WhyChooseUs from "@/components/WhyChooseUs";
+import Packs from "@/components/Packs";
+import Stats from "@/components/Stats";
+
+import Gallery from "@/components/Gallery";
+
+import TrustBar from "@/components/TrustBar";
+import EventTypes from "@/components/EventTypes";
+import Testimonials from "@/components/Testimonials";
+
+import QuoteForm from "@/components/QuoteForm";
+import Footer from "@/components/Footer/Footer";
+
+import { Realisations } from "@/components/realisation/Realisations";
 
 export default function Home() {
   return (
     <>
+      {/* =====================================================
+          HEADER
+      ===================================================== */}
+
       <Header />
 
-      <Hero />
+      <main>
+        {/* =====================================================
+            HERO
+        ===================================================== */}
 
-      <section id="services">
-        <Services />
-        <LocalSEO />
-      </section>
+        <Hero />
 
-      <WhyChooseUs />
+        {/* =====================================================
+            PRESTATIONS
+        ===================================================== */}
 
-      <section id="packs">
-        <Packs />
-      </section>
+        <section id="services">
+          <Services />
+          <LocalSEO />
+        </section>
 
-      <Stats />
+        {/* =====================================================
+            POURQUOI NOUS CHOISIR
+        ===================================================== */}
 
-      <section id="gallery">
-        <Gallery />
-      </section>
+        <WhyChooseUs />
 
-      <TrustBar />
+        {/* =====================================================
+            PACKS
+        ===================================================== */}
 
-      <EventTypes />
+        <section id="packs">
+          <Packs />
+        </section>
 
-      <Testimonials />
+        {/* =====================================================
+            CHIFFRES CLÉS
+        ===================================================== */}
 
-      <section id="contact">
-        <QuoteForm />
-      </section>
+        <Stats />
+
+        {/* =====================================================
+            NOS RÉALISATIONS
+        ===================================================== */}
+
+        <Realisations />
+
+        {/* =====================================================
+            GALERIE
+        ===================================================== */}
+
+        <section id="gallery">
+          <Gallery />
+        </section>
+
+        {/* =====================================================
+            ÉLÉMENTS DE CONFIANCE
+        ===================================================== */}
+
+        <TrustBar />
+
+        {/* =====================================================
+            TYPES D'ÉVÉNEMENTS
+        ===================================================== */}
+
+        <EventTypes />
+
+        {/* =====================================================
+            AVIS CLIENTS
+        ===================================================== */}
+
+        <Testimonials />
+
+        {/* =====================================================
+            DEMANDE DE DEVIS
+        ===================================================== */}
+
+        <section id="contact">
+          <QuoteForm />
+        </section>
+      </main>
+
+      {/* =====================================================
+          FOOTER
+      ===================================================== */}
 
       <Footer />
     </>
