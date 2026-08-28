@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -20,6 +21,13 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  const pathname = usePathname();
+  const router = useRouter();
+
+  /* ============================================================
+     SCROLL HEADER
+  ============================================================ */
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 30);
@@ -27,17 +35,100 @@ export default function Header() {
 
     handleScroll();
 
-    window.addEventListener("scroll", handleScroll, {
-      passive: true,
-    });
+    window.addEventListener(
+      "scroll",
+      handleScroll,
+      { passive: true }
+    );
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener(
+        "scroll",
+        handleScroll
+      );
     };
   }, []);
 
+  /* ============================================================
+     FERMETURE AUTOMATIQUE SI LA ROUTE CHANGE
+  ============================================================ */
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  /* ============================================================
+     BLOQUER LE SCROLL DERRIÈRE LE MENU MOBILE
+  ============================================================ */
+
+  useEffect(() => {
+    if (!open) {
+      document.body.style.overflow = "";
+      return;
+    }
+
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  /* ============================================================
+     FERMETURE MENU
+  ============================================================ */
+
   const closeMenu = () => {
     setOpen(false);
+  };
+
+  /* ============================================================
+     NAVIGATION VERS UNE SECTION
+  ============================================================ */
+
+  const goToSection = (sectionId: string) => {
+    // On ferme immédiatement le menu.
+    setOpen(false);
+
+    /*
+     * Si nous sommes déjà sur l'accueil,
+     * pas besoin de demander à Next.js
+     * de recharger/naviguer vers la même page.
+     */
+    if (pathname === "/") {
+      window.history.replaceState(
+        null,
+        "",
+        `#${sectionId}`
+      );
+
+      /*
+       * requestAnimationFrame permet au menu
+       * de commencer à se fermer avant le scroll.
+       */
+      requestAnimationFrame(() => {
+        const element =
+          document.getElementById(sectionId);
+
+        if (!element) {
+          return;
+        }
+
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      });
+
+      return;
+    }
+
+    /*
+     * Si nous sommes sur une page prestation,
+     * réalisation, disponibilités, etc.
+     * on revient sur l'accueil.
+     */
+    router.push(`/#${sectionId}`);
   };
 
   return (
@@ -45,6 +136,7 @@ export default function Header() {
       {/* =====================================================
           HEADER
       ===================================================== */}
+
       <header
         className={`fixed left-0 right-0 top-0 z-[100] h-[80px] transition-colors duration-200 ${
           scrolled
@@ -57,6 +149,7 @@ export default function Header() {
           {/* =================================================
               LOGO
           ================================================= */}
+
           <Link
             href="/"
             onClick={closeMenu}
@@ -81,7 +174,6 @@ export default function Header() {
             </div>
 
             <div className="flex flex-col leading-none">
-
               <span
                 className={`text-lg font-black tracking-tight transition-colors duration-200 sm:text-xl ${
                   scrolled
@@ -95,13 +187,13 @@ export default function Header() {
               <span className="mt-1 text-sm font-bold tracking-[0.12em] text-green-500 sm:text-base">
                 LOCATION
               </span>
-
             </div>
           </Link>
 
           {/* =================================================
               MENU DESKTOP
           ================================================= */}
+
           <nav
             className={`hidden items-center gap-6 lg:flex ${
               scrolled
@@ -109,7 +201,6 @@ export default function Header() {
                 : "text-white"
             }`}
           >
-
             <Link
               href="/"
               className="transition-colors hover:text-green-500"
@@ -117,58 +208,63 @@ export default function Header() {
               Accueil
             </Link>
 
-            <Link
-              href="/#services"
+            <button
+              type="button"
+              onClick={() => goToSection("services")}
               className="transition-colors hover:text-green-500"
             >
               Prestations
-            </Link>
+            </button>
 
             <Link
               href="/disponibilites"
               className="flex items-center gap-1.5 transition-colors hover:text-green-500"
             >
               <CalendarDays size={16} />
-
               Disponibilités
             </Link>
 
-            <Link
-              href="/#gallery"
+            <button
+              type="button"
+              onClick={() => goToSection("gallery")}
               className="transition-colors hover:text-green-500"
             >
               Galerie
-            </Link>
+            </button>
 
-            <Link
-              href="/#packs"
+            <button
+              type="button"
+              onClick={() => goToSection("packs")}
               className="transition-colors hover:text-green-500"
             >
               Tarifs
-            </Link>
+            </button>
 
-            <Link
-              href="/#testimonials"
+            <button
+              type="button"
+              onClick={() =>
+                goToSection("testimonials")
+              }
               className="transition-colors hover:text-green-500"
             >
               Avis
-            </Link>
+            </button>
 
-            <Link
-              href="/#contact"
+            <button
+              type="button"
+              onClick={() => goToSection("contact")}
               className="transition-colors hover:text-green-500"
             >
               Contact
-            </Link>
-
+            </button>
           </nav>
 
           {/* =================================================
               ACTIONS DESKTOP
           ================================================= */}
+
           <div className="hidden items-center gap-3 lg:flex">
 
-            {/* INSTAGRAM */}
             <a
               href="https://www.instagram.com/events_location__/"
               target="_blank"
@@ -184,7 +280,6 @@ export default function Header() {
               <FaInstagram size={19} />
             </a>
 
-            {/* FACEBOOK */}
             <a
               href="https://www.facebook.com/share/1H7nS1AuH4/"
               target="_blank"
@@ -200,7 +295,6 @@ export default function Header() {
               <FaFacebookF size={18} />
             </a>
 
-            {/* TÉLÉPHONE */}
             <a
               href="tel:+33643894570"
               className={`flex shrink-0 items-center gap-2 whitespace-nowrap font-semibold ${
@@ -210,7 +304,6 @@ export default function Header() {
               }`}
             >
               <Phone size={18} />
-
               06 43 89 45 70
             </a>
 
@@ -219,6 +312,7 @@ export default function Header() {
           {/* =================================================
               BOUTON MOBILE
           ================================================= */}
+
           <button
             type="button"
             aria-label={
@@ -227,7 +321,9 @@ export default function Header() {
                 : "Ouvrir le menu"
             }
             aria-expanded={open}
-            onClick={() => setOpen((current) => !current)}
+            onClick={() =>
+              setOpen((current) => !current)
+            }
             className={`relative z-[110] flex h-12 w-12 shrink-0 touch-manipulation items-center justify-center rounded-xl transition-colors duration-150 lg:hidden ${
               scrolled
                 ? "bg-gray-100 text-gray-900"
@@ -259,11 +355,12 @@ export default function Header() {
       {/* =====================================================
           FOND MOBILE
       ===================================================== */}
+
       <button
         type="button"
         aria-label="Fermer le menu"
         onClick={closeMenu}
-        className={`fixed inset-x-0 bottom-0 top-[80px] z-[80] bg-black/30 transition-opacity duration-200 lg:hidden ${
+        className={`fixed inset-x-0 bottom-0 top-[80px] z-[80] bg-black/40 transition-opacity duration-150 lg:hidden ${
           open
             ? "pointer-events-auto opacity-100"
             : "pointer-events-none opacity-0"
@@ -273,16 +370,18 @@ export default function Header() {
       {/* =====================================================
           MENU MOBILE
       ===================================================== */}
+
       <div
-        className={`fixed left-0 right-0 top-[80px] z-[90] max-h-[calc(100vh-80px)] overflow-y-auto overscroll-contain bg-white shadow-2xl transition-all duration-200 ease-out lg:hidden ${
+        className={`fixed left-0 right-0 top-[80px] z-[90] max-h-[calc(100dvh-80px)] overflow-y-auto overscroll-contain bg-white shadow-2xl transition-all duration-150 ease-out lg:hidden ${
           open
             ? "pointer-events-auto translate-y-0 opacity-100"
-            : "pointer-events-none -translate-y-4 opacity-0"
+            : "pointer-events-none -translate-y-2 opacity-0"
         }`}
       >
         <nav className="flex flex-col px-5 py-4">
 
           {/* ACCUEIL */}
+
           <Link
             href="/"
             onClick={closeMenu}
@@ -292,64 +391,80 @@ export default function Header() {
           </Link>
 
           {/* PRESTATIONS */}
-          <Link
-            href="/#services"
-            onClick={closeMenu}
-            className="border-b border-gray-100 py-4 text-lg font-semibold"
+
+          <button
+            type="button"
+            onClick={() =>
+              goToSection("services")
+            }
+            className="border-b border-gray-100 py-4 text-left text-lg font-semibold"
           >
             Prestations
-          </Link>
+          </button>
 
           {/* DISPONIBILITÉS */}
+
           <Link
             href="/disponibilites"
             onClick={closeMenu}
             className="flex items-center gap-2 border-b border-gray-100 py-4 text-lg font-bold text-green-700"
           >
             <CalendarDays size={20} />
-
             Disponibilités
           </Link>
 
           {/* GALERIE */}
-          <Link
-            href="/#gallery"
-            onClick={closeMenu}
-            className="border-b border-gray-100 py-4 text-lg font-semibold"
+
+          <button
+            type="button"
+            onClick={() =>
+              goToSection("gallery")
+            }
+            className="border-b border-gray-100 py-4 text-left text-lg font-semibold"
           >
             Galerie
-          </Link>
+          </button>
 
           {/* TARIFS */}
-          <Link
-            href="/#packs"
-            onClick={closeMenu}
-            className="border-b border-gray-100 py-4 text-lg font-semibold"
+
+          <button
+            type="button"
+            onClick={() =>
+              goToSection("packs")
+            }
+            className="border-b border-gray-100 py-4 text-left text-lg font-semibold"
           >
             Tarifs
-          </Link>
+          </button>
 
           {/* AVIS */}
-          <Link
-            href="/#testimonials"
-            onClick={closeMenu}
-            className="border-b border-gray-100 py-4 text-lg font-semibold"
+
+          <button
+            type="button"
+            onClick={() =>
+              goToSection("testimonials")
+            }
+            className="border-b border-gray-100 py-4 text-left text-lg font-semibold"
           >
             Avis
-          </Link>
+          </button>
 
           {/* CONTACT */}
-          <Link
-            href="/#contact"
-            onClick={closeMenu}
-            className="border-b border-gray-100 py-4 text-lg font-semibold"
+
+          <button
+            type="button"
+            onClick={() =>
+              goToSection("contact")
+            }
+            className="border-b border-gray-100 py-4 text-left text-lg font-semibold"
           >
             Contact
-          </Link>
+          </button>
 
           {/* =================================================
               RÉSEAUX
           ================================================= */}
+
           <div className="mt-5">
 
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-gray-400">
@@ -379,31 +494,34 @@ export default function Header() {
               </a>
 
             </div>
-
           </div>
 
           {/* =================================================
               TÉLÉPHONE
           ================================================= */}
+
           <a
             href="tel:+33643894570"
+            onClick={closeMenu}
             className="mt-5 flex items-center justify-center gap-2 rounded-xl border-2 border-green-600 py-3 font-bold text-green-700"
           >
             <Phone size={18} />
-
             06 43 89 45 70
           </a>
 
           {/* =================================================
               DEVIS
           ================================================= */}
-          <Link
-            href="/#contact"
-            onClick={closeMenu}
+
+          <button
+            type="button"
+            onClick={() =>
+              goToSection("contact")
+            }
             className="mt-3 rounded-xl bg-green-600 py-4 text-center font-bold text-white"
           >
             Demander un devis
-          </Link>
+          </button>
 
         </nav>
       </div>

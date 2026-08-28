@@ -5,11 +5,9 @@ import Services from "@/components/Services";
 import LocalSEO from "@/components/LocalSEO";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import Packs from "@/components/Packs";
-import Stats from "@/components/Stats";
 
 import Gallery from "@/components/Gallery";
 
-import TrustBar from "@/components/TrustBar";
 import EventTypes from "@/components/EventTypes";
 import Testimonials from "@/components/Testimonials";
 
@@ -57,13 +55,7 @@ export default function Home() {
           <Packs />
         </section>
 
-        {/* =====================================================
-            CHIFFRES CLÉS
-        ===================================================== */}
-
-        <Stats />
-
-        {/* =====================================================
+          {/* =====================================================
             NOS RÉALISATIONS
         ===================================================== */}
 
@@ -76,12 +68,6 @@ export default function Home() {
         <section id="gallery">
           <Gallery />
         </section>
-
-        {/* =====================================================
-            ÉLÉMENTS DE CONFIANCE
-        ===================================================== */}
-
-        <TrustBar />
 
         {/* =====================================================
             TYPES D'ÉVÉNEMENTS

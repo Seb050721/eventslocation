@@ -19,7 +19,7 @@ export const mobilier: Service = {
     "Location de tables, chaises, mange-debout, tabourets et tente pour vos événements en Nièvre, Yonne et Cher.",
 
   description:
-    "Pour votre mariage, anniversaire, réception ou événement professionnel, nous proposons à la location du mobilier événementiel propre, robuste et prêt à l'emploi : tables rondes, tables rectangulaires, tables hautes, chaises, tabourets et tente 4 × 8 m. Nous intervenons notamment autour de Varzy, Nevers et plus largement en Nièvre, Yonne et Cher.",
+    "Pour votre mariage, anniversaire, réception ou événement professionnel, nous proposons à la location du mobilier événementiel propre, robuste et prêt à l'emploi : tables rondes, tables rectangulaires, tables hautes, chaises, tabourets et tente 4 × 8 m. Nous intervenons notamment autour de Varzy, Auxerre, Nevers et plus largement en Nièvre, Yonne et Cher.",
 
   /* ============================================================
      SEO
@@ -27,7 +27,7 @@ export const mobilier: Service = {
 
   seo: {
     title:
-      "Location mobilier événementiel Nièvre, Nevers, Yonne et Cher",
+      "Location mobilier événementiel Nièvre, Auxerre, Nevers, Yonne et Cher",
 
     description:
       "Location de mobilier événementiel en Nièvre, Yonne et Cher : tables, chaises, mange-debout, tabourets, housses et tente 4 × 8 m pour mariages, anniversaires et réceptions.",
@@ -92,8 +92,8 @@ export const mobilier: Service = {
 
   options: [
     {
-      name: "Housse de table",
-      price: 5,
+      name: "Nappe de table",
+      price: 7,
       description:
         "Disponible en blanc ou en noir.",
     },
@@ -104,7 +104,99 @@ export const mobilier: Service = {
     },
   ],
 
-  gallery: [],
+  /* ============================================================
+     GALERIE
+  ============================================================ */
+
+  gallery: [
+    {
+      src:
+        "/images/services/mobilier/table-ronde.webp",
+
+      alt:
+        "Table ronde de 152 cm disponible à la location pour mariage et réception",
+
+      label:
+        "Table ronde Ø152 cm",
+    },
+
+    {
+      src:
+        "/images/services/mobilier/table-rectangulaire.webp",
+
+      alt:
+        "Table rectangulaire disponible à la location pour événement",
+
+      label:
+        "Table rectangulaire",
+    },
+
+    {
+      src:
+        "/images/services/mobilier/mange-debout.webp",
+
+      alt:
+        "Mange-debout disponible à la location pour cocktail et réception",
+
+      label:
+        "Mange-debout",
+    },
+
+    {
+      src:
+        "/images/services/mobilier/chaise.webp",
+
+      alt:
+        "Chaise disponible à la location pour mariage et événement",
+
+      label:
+        "Chaise",
+    },
+
+    {
+      src:
+        "/images/services/mobilier/tabouret.webp",
+
+      alt:
+        "Tabouret disponible à la location pour événement",
+
+      label:
+        "Tabouret",
+    },
+
+    {
+      src:
+        "/images/services/mobilier/nappe.webp",
+
+      alt:
+        "Table avec nappe disponible pour réception et événement",
+
+      label:
+        "Nappe de table",
+    },
+
+    {
+      src:
+        "/images/services/mobilier/housse-chaise.webp",
+
+      alt:
+        "Chaise avec housse disponible pour mariage et réception",
+
+      label:
+        "Housse de chaise",
+    },
+
+    {
+      src:
+        "/images/services/mobilier/tente-4x8.webp",
+
+      alt:
+        "Tente 4 par 8 mètres installée pour une réception",
+
+      label:
+        "Tente 4 × 8 m",
+    },
+  ],
 
   /* ============================================================
      FAQ
@@ -156,7 +248,7 @@ export const mobilier: Service = {
         "Dans quelles zones proposez-vous la location de mobilier événementiel ?",
 
       answer:
-        "Nous intervenons principalement en Nièvre, dans l'Yonne et dans le Cher, notamment autour de Varzy et Nevers. Les déplacements plus éloignés peuvent être étudiés sur devis.",
+        "Nous intervenons principalement en Nièvre, dans l'Yonne et dans le Cher, notamment autour de Varzy, Auxerre et Nevers. Les déplacements plus éloignés peuvent être étudiés sur devis.",
     },
   ],
 };

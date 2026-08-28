@@ -30,6 +30,20 @@ export interface SeoContent {
   paragraphs: string[];
 }
 
+/* ============================================================
+   IMAGE DE GALERIE
+============================================================ */
+
+export interface GalleryImage {
+  src: string;
+  alt: string;
+  label?: string;
+}
+
+/* ============================================================
+   SERVICE
+============================================================ */
+
 export interface Service {
   id: string;
   title: string;
@@ -51,7 +65,7 @@ export interface Service {
 
   equipments?: EquipmentItem[];
 
-  gallery: string[];
+  gallery: GalleryImage[];
 
   faq: FAQItem[];
 

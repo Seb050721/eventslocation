@@ -7,6 +7,7 @@ import ServiceHero from "@/components/service/ServiceHero";
 import PriceTable from "@/components/service/PriceTable";
 import OptionsGrid from "@/components/service/OptionsGrid";
 import EquipmentTable from "@/components/service/EquipmentTable";
+import EquipmentGallery from "@/components/service/EquipmentGallery";
 import FAQAccordion from "@/components/service/FAQAccordion";
 import ServiceHighlights from "@/components/service/ServiceHighlights";
 import RelatedServices from "@/components/service/RelatedServices";
@@ -23,7 +24,8 @@ interface PageProps {
    CONFIGURATION
 ============================================================ */
 
-const SITE_URL = "https://www.eventslocation.fr";
+const SITE_URL =
+  "https://www.eventslocation.fr";
 
 /* ============================================================
    GÉNÉRATION DES PAGES STATIQUES
@@ -45,12 +47,14 @@ export async function generateMetadata({
   const { slug } = await params;
 
   const service = services.find(
-    (item) => item.id === slug
+    (item) =>
+      item.id === slug
   );
 
   if (!service) {
     return {
-      title: "Prestation introuvable",
+      title:
+        "Prestation introuvable",
 
       robots: {
         index: false,
@@ -78,24 +82,24 @@ export async function generateMetadata({
 
     description,
 
-    /* ========================================================
-       CANONICAL
-    ======================================================== */
+    /* CANONICAL */
 
     alternates: {
-      canonical: canonicalUrl,
+      canonical:
+        canonicalUrl,
     },
 
-    /* ========================================================
-       OPEN GRAPH
-    ======================================================== */
+    /* OPEN GRAPH */
 
     openGraph: {
-      type: "website",
+      type:
+        "website",
 
-      locale: "fr_FR",
+      locale:
+        "fr_FR",
 
-      url: canonicalUrl,
+      url:
+        canonicalUrl,
 
       title,
 
@@ -106,7 +110,8 @@ export async function generateMetadata({
 
       images: [
         {
-          url: image,
+          url:
+            `${SITE_URL}${image}`,
 
           alt:
             `${service.title} - Event'S Location`,
@@ -114,9 +119,7 @@ export async function generateMetadata({
       ],
     },
 
-    /* ========================================================
-       TWITTER / PARTAGE
-    ======================================================== */
+    /* TWITTER */
 
     twitter: {
       card:
@@ -127,13 +130,11 @@ export async function generateMetadata({
       description,
 
       images: [
-        image,
+        `${SITE_URL}${image}`,
       ],
     },
 
-    /* ========================================================
-       INDEXATION
-    ======================================================== */
+    /* INDEXATION */
 
     robots: {
       index: true,
@@ -166,7 +167,8 @@ export default async function ServicePage({
   const { slug } = await params;
 
   const service = services.find(
-    (item) => item.id === slug
+    (item) =>
+      item.id === slug
   );
 
   if (!service) {
@@ -358,7 +360,7 @@ export default async function ServicePage({
     <main className="relative min-h-screen overflow-hidden bg-[#050505] pb-16 pt-24 sm:pb-20 sm:pt-28 lg:pb-24 lg:pt-32">
 
       {/* =====================================================
-          DONNÉES STRUCTURÉES SERVICE
+          DONNÉES STRUCTURÉES
       ===================================================== */}
 
       <script
@@ -371,10 +373,6 @@ export default async function ServicePage({
         }}
       />
 
-      {/* =====================================================
-          FIL D'ARIANE GOOGLE
-      ===================================================== */}
-
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -384,10 +382,6 @@ export default async function ServicePage({
             ),
         }}
       />
-
-      {/* =====================================================
-          FAQ SCHEMA
-      ===================================================== */}
 
       {faqSchema && (
         <script
@@ -446,13 +440,18 @@ export default async function ServicePage({
           }
         />
 
-        {/* COMPARATIF FLASH PHOTOBOOTH */}
+        {/* ===================================================
+            COMPARATIF FLASH PHOTOBOOTH
+        =================================================== */}
 
-        {service.id === "photobooth" && (
+        {service.id ===
+          "photobooth" && (
           <FlashComparison />
         )}
 
-        {/* MATÉRIEL À L'UNITÉ */}
+        {/* ===================================================
+            MATÉRIEL À L'UNITÉ
+        =================================================== */}
 
         <EquipmentTable
           equipments={
@@ -460,15 +459,32 @@ export default async function ServicePage({
           }
         />
 
-        {/* CONTENU SEO LOCAL */}
+        {/* ===================================================
+            GALERIE DU SERVICE
+        =================================================== */}
+
+        {service.gallery.length >
+          0 && (
+          <EquipmentGallery
+            images={
+              service.gallery
+            }
+          />
+        )}
+
+        {/* ===================================================
+            CONTENU SEO LOCAL
+        =================================================== */}
 
         {service.seoContent && (
           <SeoContent
             title={
-              service.seoContent.title
+              service.seoContent
+                .title
             }
             paragraphs={
-              service.seoContent.paragraphs
+              service.seoContent
+                .paragraphs
             }
           />
         )}
@@ -499,21 +515,21 @@ export default async function ServicePage({
 
             <div className="max-w-2xl">
 
-              <span className="inline-flex rounded-full bg-white/20 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white sm:px-4 sm:py-2 sm:text-xs sm:tracking-[0.25em] lg:text-sm lg:tracking-[0.3em]">
+              <span className="inline-flex rounded-full bg-white/20 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white sm:px-4 sm:py-2 sm:text-xs">
                 Demande de devis
               </span>
 
-              <h2 className="mt-4 text-2xl font-black leading-tight tracking-tight text-white sm:mt-5 sm:text-3xl lg:mt-6 lg:text-4xl">
+              <h2 className="mt-4 text-2xl font-black leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl">
                 Vous souhaitez réserver{" "}
                 {service.title} ?
               </h2>
 
-              <p className="mt-4 text-sm leading-6 text-green-50 sm:text-base sm:leading-7 lg:mt-5 lg:text-lg lg:leading-8">
+              <p className="mt-4 text-sm leading-6 text-green-50 sm:text-base sm:leading-7">
                 Vérifiez la disponibilité
-                de votre date et obtenez
-                un devis personnalisé pour
-                votre événement en Nièvre,
-                Yonne ou Cher.
+                de votre date et obtenez un
+                devis personnalisé pour votre
+                événement en Nièvre, Yonne
+                ou Cher.
               </p>
 
             </div>
@@ -522,14 +538,14 @@ export default async function ServicePage({
 
               <a
                 href="/#contact"
-                className="inline-flex min-h-[52px] items-center justify-center rounded-xl bg-white px-5 py-3.5 text-center text-sm font-bold text-green-700 transition hover:scale-[1.02] sm:text-base lg:rounded-2xl lg:px-6 lg:py-4 lg:text-lg"
+                className="inline-flex min-h-[52px] items-center justify-center rounded-xl bg-white px-5 py-3.5 text-center text-sm font-bold text-green-700 transition hover:scale-[1.02] sm:text-base"
               >
                 Demander un devis
               </a>
 
               <a
                 href="tel:+33643894570"
-                className="inline-flex min-h-[52px] items-center justify-center rounded-xl border border-white/40 px-5 py-3.5 text-center text-sm font-semibold text-white transition hover:bg-white/10 sm:text-base lg:rounded-2xl lg:px-6 lg:py-4 lg:text-lg"
+                className="inline-flex min-h-[52px] items-center justify-center rounded-xl border border-white/40 px-5 py-3.5 text-center text-sm font-semibold text-white transition hover:bg-white/10 sm:text-base"
               >
                 📞 06 43 89 45 70
               </a>

@@ -77,10 +77,8 @@ export default function LocalSEO() {
             </p>
 
             <p className="mt-5 max-w-2xl leading-8 text-gray-400">
-              Basés à Varzy dans la Nièvre, nous proposons notamment la
-              location de Photo Booth, mobilier, sonorisation,
-              vidéoprojecteur, machines à effets et Smoke Puff. Nous
-              intervenons dans la Nièvre, l&apos;Yonne et le Cher, ainsi que
+              Basés à Varzy dans la Nièvre, nous intervenons dans la Nièvre, 
+              l&apos;Yonne et le Cher, ainsi que
               plus loin sur devis.
             </p>
 

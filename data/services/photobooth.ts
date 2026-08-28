@@ -11,7 +11,7 @@ export const photobooth: Service = {
     "/images/services/photobooth-hero.webp",
 
   cardImage:
-    "/images/services/photobooth.webp",
+    "/images/services/photobooth-hero.webp",
 
   startingPrice: 169,
 
