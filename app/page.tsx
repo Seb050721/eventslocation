@@ -6,7 +6,6 @@ import LocalSEO from "@/components/LocalSEO";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import Packs from "@/components/Packs";
 
-import Gallery from "@/components/Gallery";
 
 import EventTypes from "@/components/EventTypes";
 import Testimonials from "@/components/Testimonials";
@@ -61,14 +60,7 @@ export default function Home() {
 
         <Realisations />
 
-        {/* =====================================================
-            GALERIE
-        ===================================================== */}
-
-        <section id="gallery">
-          <Gallery />
-        </section>
-
+        
         {/* =====================================================
             TYPES D'ÉVÉNEMENTS
         ===================================================== */}
