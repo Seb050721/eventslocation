@@ -5,17 +5,28 @@ import { Resend } from "resend";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-const WEBSITE_URL =
-  "https://www.eventslocation.fr";
+const WEBSITE_URL = "https://www.eventslocation.fr";
+const LOGO_URL = "https://www.eventslocation.fr/Logo/Logo.png";
 
-const LOGO_URL =
-  "https://www.eventslocation.fr/Logo/Logo.png";
+const BUSINESS_EMAIL = "events.location@outlook.com";
+const BUSINESS_PHONE = "06 43 89 45 70";
 
-const BUSINESS_EMAIL =
-  "events.location@outlook.com";
-
-const BUSINESS_PHONE =
-  "06 43 89 45 70";
+const INVENTORY_NAMES = [
+  "Photo Booth",
+  "Kit Sonorisation",
+  "Micro HF",
+  "Videoprojecteur",
+  "Ecran",
+  "Smoke Puff",
+  "Machine a fumee",
+  "Machine a bulles",
+  "Tente 4x8",
+  "Table ronde 152",
+  "Table rectangulaire",
+  "Mange debout",
+  "Chaise",
+  "Tabouret",
+];
 
 /* ============================================================
    OUTILS
@@ -30,64 +41,68 @@ function escapeHtml(value: unknown) {
     .replaceAll("'", "&#039;");
 }
 
-function extractField(
-  description: string,
-  fieldName: string
-) {
-  const regex = new RegExp(
-    `^${fieldName}\\s*:\\s*(.+)$`,
-    "im"
-  );
-
-  const match =
-    description.match(regex);
+function extractField(description: string, fieldName: string) {
+  const regex = new RegExp(`^${fieldName}\\s*:\\s*(.+)$`, "im");
+  const match = description.match(regex);
 
   return match?.[1]?.trim() ?? "";
 }
 
-function extractEmail(
-  description: string
-) {
-  return extractField(
-    description,
-    "Email"
-  );
+function extractEmail(description: string) {
+  return extractField(description, "Email");
 }
 
-function extractClientName(
-  description: string
-) {
-  return extractField(
-    description,
-    "Client"
-  );
+function extractClientName(description: string) {
+  return extractField(description, "Client");
 }
 
 function isValidEmail(value: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-    value
-  );
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
-function hasReviewAlreadyBeenSent(
-  description: string
-) {
-  return /Avis Google envoye\s*:/i.test(
-    description
-  );
+function hasReviewAlreadyBeenSent(description: string) {
+  return /Avis Google envoye\s*:/i.test(description);
 }
 
-function formatFrenchDate(
-  value: Date
-) {
-  return new Intl.DateTimeFormat(
-    "fr-FR",
-    {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
+function normalizeText(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[’']/g, "'")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
+function hasRecognizedEquipment(description: string) {
+  const lines = description.split(/\r?\n/);
+
+  return lines.some((line) => {
+    const match = line.match(/^(.+?)\s*:\s*(\d+)\s*$/);
+
+    if (!match) {
+      return false;
     }
-  ).format(value);
+
+    const equipmentName = normalizeText(match[1]);
+    const quantity = Number(match[2]);
+
+    if (!Number.isFinite(quantity) || quantity <= 0) {
+      return false;
+    }
+
+    return INVENTORY_NAMES.some(
+      (name) => normalizeText(name) === equipmentName
+    );
+  });
+}
+
+function formatFrenchDate(value: Date) {
+  return new Intl.DateTimeFormat("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(value);
 }
 
 /* ============================================================
@@ -95,41 +110,35 @@ function formatFrenchDate(
 ============================================================ */
 
 function getTargetDayRange() {
-  const now =
-    new Date();
+  const now = new Date();
 
-  const target =
-    new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate()
-    );
-
-  target.setDate(
-    target.getDate() - 2
+  const target = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate()
   );
 
-  const start =
-    new Date(
-      target.getFullYear(),
-      target.getMonth(),
-      target.getDate(),
-      0,
-      0,
-      0,
-      0
-    );
+  target.setDate(target.getDate() - 2);
 
-  const end =
-    new Date(
-      target.getFullYear(),
-      target.getMonth(),
-      target.getDate(),
-      23,
-      59,
-      59,
-      999
-    );
+  const start = new Date(
+    target.getFullYear(),
+    target.getMonth(),
+    target.getDate(),
+    0,
+    0,
+    0,
+    0
+  );
+
+  const end = new Date(
+    target.getFullYear(),
+    target.getMonth(),
+    target.getDate(),
+    23,
+    59,
+    59,
+    999
+  );
 
   return {
     target,
@@ -142,27 +151,21 @@ function getTargetDayRange() {
    GET /api/avis-google
 ============================================================ */
 
-export async function GET(
-  request: Request
-) {
+export async function GET(request: Request) {
   try {
     /* ========================================================
        SÉCURITÉ CRON
     ======================================================== */
 
-    const cronSecret =
-      process.env.CRON_SECRET;
+    const cronSecret = process.env.CRON_SECRET;
 
     if (!cronSecret) {
-      console.error(
-        "CRON_SECRET absente"
-      );
+      console.error("CRON_SECRET absente");
 
       return NextResponse.json(
         {
           success: false,
-          error:
-            "Configuration CRON_SECRET absente.",
+          error: "Configuration CRON_SECRET absente.",
         },
         {
           status: 500,
@@ -170,20 +173,13 @@ export async function GET(
       );
     }
 
-    const authorization =
-      request.headers.get(
-        "authorization"
-      );
+    const authorization = request.headers.get("authorization");
 
-    if (
-      authorization !==
-      `Bearer ${cronSecret}`
-    ) {
+    if (authorization !== `Bearer ${cronSecret}`) {
       return NextResponse.json(
         {
           success: false,
-          error:
-            "Accès non autorisé.",
+          error: "Accès non autorisé.",
         },
         {
           status: 401,
@@ -192,38 +188,27 @@ export async function GET(
     }
 
     /* ========================================================
-       VARIABLES
+       VARIABLES D'ENVIRONNEMENT
     ======================================================== */
 
-    const calendarId =
-      process.env.GOOGLE_CALENDAR_ID;
+    const calendarId = process.env.GOOGLE_CALENDAR_ID;
 
     const serviceAccountEmail =
-      process.env
-        .GOOGLE_SERVICE_ACCOUNT_EMAIL;
+      process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
 
-    const privateKey =
-      process.env.GOOGLE_PRIVATE_KEY?.replace(
-        /\\n/g,
-        "\n"
-      );
+    const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(
+      /\\n/g,
+      "\n"
+    );
 
-    const resendApiKey =
-      process.env.RESEND_API_KEY;
+    const resendApiKey = process.env.RESEND_API_KEY;
+    const reviewUrl = process.env.GOOGLE_REVIEW_URL;
 
-    const reviewUrl =
-      process.env.GOOGLE_REVIEW_URL;
-
-    if (
-      !calendarId ||
-      !serviceAccountEmail ||
-      !privateKey
-    ) {
+    if (!calendarId || !serviceAccountEmail || !privateKey) {
       return NextResponse.json(
         {
           success: false,
-          error:
-            "Configuration Google Calendar incomplète.",
+          error: "Configuration Google Calendar incomplète.",
         },
         {
           status: 500,
@@ -235,8 +220,7 @@ export async function GET(
       return NextResponse.json(
         {
           success: false,
-          error:
-            "Configuration Resend incomplète.",
+          error: "Configuration Resend incomplète.",
         },
         {
           status: 500,
@@ -248,8 +232,7 @@ export async function GET(
       return NextResponse.json(
         {
           success: false,
-          error:
-            "GOOGLE_REVIEW_URL absente.",
+          error: "GOOGLE_REVIEW_URL absente.",
         },
         {
           status: 500,
@@ -261,67 +244,42 @@ export async function GET(
        GOOGLE AUTH
     ======================================================== */
 
-    const auth =
-      new google.auth.JWT({
-        email:
-          serviceAccountEmail,
+    const auth = new google.auth.JWT({
+      email: serviceAccountEmail,
+      key: privateKey,
+      scopes: [
+        "https://www.googleapis.com/auth/calendar",
+      ],
+    });
 
-        key:
-          privateKey,
-
-        scopes: [
-          "https://www.googleapis.com/auth/calendar",
-        ],
-      });
-
-    const calendar =
-      google.calendar({
-        version: "v3",
-        auth,
-      });
+    const calendar = google.calendar({
+      version: "v3",
+      auth,
+    });
 
     /* ========================================================
        DATE J-2
     ======================================================== */
 
-    const {
-      target,
-      start,
-      end,
-    } =
-      getTargetDayRange();
+    const { target, start, end } = getTargetDayRange();
 
     /* ========================================================
        RÉCUPÉRATION DES ÉVÉNEMENTS
     ======================================================== */
 
-    const response =
-      await calendar.events.list({
-        calendarId,
+    const response = await calendar.events.list({
+      calendarId,
+      timeMin: start.toISOString(),
+      timeMax: end.toISOString(),
+      singleEvents: true,
+      orderBy: "startTime",
+      showDeleted: false,
+      maxResults: 250,
+    });
 
-        timeMin:
-          start.toISOString(),
+    const events = response.data.items ?? [];
 
-        timeMax:
-          end.toISOString(),
-
-        singleEvents: true,
-
-        orderBy:
-          "startTime",
-
-        showDeleted: false,
-
-        maxResults: 250,
-      });
-
-    const events =
-      response.data.items ?? [];
-
-    const resend =
-      new Resend(
-        resendApiKey
-      );
+    const resend = new Resend(resendApiKey);
 
     let sentCount = 0;
     let ignoredCount = 0;
@@ -339,108 +297,87 @@ export async function GET(
     ======================================================== */
 
     for (const event of events) {
-      if (
-        event.status ===
-        "cancelled"
-      ) {
+      if (event.status === "cancelled") {
         ignoredCount++;
-
         continue;
       }
 
-      const eventId =
-        event.id;
+      const eventId = event.id;
 
       if (!eventId) {
         ignoredCount++;
-
         continue;
       }
 
-      const description =
-        event.description ?? "";
-
-      if (
-        hasReviewAlreadyBeenSent(
-          description
-        )
-      ) {
-        ignoredCount++;
-
-        results.push({
-          eventId,
-          title:
-            event.summary ??
-            "Sans titre",
-          status:
-            "Déjà envoyé",
-        });
-
-        continue;
-      }
-
-      const clientEmail =
-        extractEmail(
-          description
-        );
-
-      if (
-        !clientEmail ||
-        !isValidEmail(
-          clientEmail
-        )
-      ) {
-        ignoredCount++;
-
-        results.push({
-          eventId,
-          title:
-            event.summary ??
-            "Sans titre",
-          status:
-            "Aucun e-mail valide",
-        });
-
-        continue;
-      }
-
-      const clientName =
-        extractClientName(
-          description
-        );
-
-      const safeClientName =
-        escapeHtml(
-          clientName ||
-            "Bonjour"
-        );
-
-      const safeEventTitle =
-        escapeHtml(
-          event.summary ??
-            "votre événement"
-        );
+      const description = event.description ?? "";
+      const title = event.summary ?? "Sans titre";
 
       /* ======================================================
-         MAIL
+         SÉCURITÉ : AU MOINS UN MATÉRIEL RECONNU
       ====================================================== */
 
-      const mail =
-        await resend.emails.send({
-          from:
-            "Event'S Location <devis@eventslocation.fr>",
+      if (!hasRecognizedEquipment(description)) {
+        ignoredCount++;
 
-          to: [
-            clientEmail,
-          ],
+        results.push({
+          eventId,
+          title,
+          status: "Aucun matériel reconnu",
+        });
 
-          replyTo:
-            BUSINESS_EMAIL,
+        continue;
+      }
 
-          subject:
-            "Votre avis compte pour Event'S Location",
+      /* ======================================================
+         ANTI-DOUBLON
+      ====================================================== */
 
-          html: `
+      if (hasReviewAlreadyBeenSent(description)) {
+        ignoredCount++;
+
+        results.push({
+          eventId,
+          title,
+          status: "Déjà envoyé",
+        });
+
+        continue;
+      }
+
+      /* ======================================================
+         EMAIL CLIENT
+      ====================================================== */
+
+      const clientEmail = extractEmail(description);
+
+      if (!clientEmail || !isValidEmail(clientEmail)) {
+        ignoredCount++;
+
+        results.push({
+          eventId,
+          title,
+          status: "Aucun e-mail valide",
+        });
+
+        continue;
+      }
+
+      const clientName = extractClientName(description);
+
+      const safeClientName = escapeHtml(clientName);
+      const safeEventTitle = escapeHtml(title);
+
+      /* ======================================================
+         ENVOI DU MAIL
+      ====================================================== */
+
+      const mail = await resend.emails.send({
+        from: "Event'S Location <devis@eventslocation.fr>",
+        to: [clientEmail],
+        replyTo: BUSINESS_EMAIL,
+        subject: "Votre avis compte pour Event'S Location",
+
+        html: `
 <!doctype html>
 <html lang="fr">
 
@@ -552,9 +489,7 @@ export async function GET(
         ">
           Nous espérons que vous avez passé
           un excellent moment lors de
-          <strong style="
-            color:#1D1B1C;
-          ">
+          <strong style="color:#1D1B1C;">
             ${safeEventTitle}
           </strong>.
         </p>
@@ -566,13 +501,12 @@ export async function GET(
           line-height:1.75;
           color:#716A6C;
         ">
-          Votre retour nous aide à faire
-          connaître Event'S Location et permet
-          aux futurs clients de découvrir
-          votre expérience.
+          Votre retour nous aide à faire connaître
+          Event'S Location et permet aux futurs clients
+          de découvrir votre expérience.
         </p>
 
-        <!-- AVIS -->
+        <!-- AVIS GOOGLE -->
 
         <div style="
           padding:22px 18px;
@@ -594,8 +528,7 @@ export async function GET(
             line-height:1.6;
             color:#716A6C;
           ">
-            Quelques mots suffisent
-            et cela nous aide énormément.
+            Quelques mots suffisent et cela nous aide énormément.
           </p>
 
           <a
@@ -732,8 +665,12 @@ export async function GET(
 
 </body>
 </html>
-          `,
-        });
+        `,
+      });
+
+      /* ======================================================
+         ERREUR RESEND
+      ====================================================== */
 
       if (mail.error) {
         console.error(
@@ -745,13 +682,9 @@ export async function GET(
 
         results.push({
           eventId,
-          title:
-            event.summary ??
-            "Sans titre",
-          email:
-            clientEmail,
-          status:
-            "Erreur d'envoi",
+          title,
+          email: clientEmail,
+          status: "Erreur d'envoi",
         });
 
         continue;
@@ -761,27 +694,23 @@ export async function GET(
          MARQUAGE GOOGLE CALENDAR
       ====================================================== */
 
-      const sentDate =
-        new Date();
+      const sentDate = new Date();
 
       const marker =
         `Avis Google envoye: ${sentDate
           .toISOString()
           .slice(0, 10)}`;
 
-      const updatedDescription =
-        description.trim()
-          ? `${description.trim()}\n\n${marker}`
-          : marker;
+      const updatedDescription = description.trim()
+        ? `${description.trim()}\n\n${marker}`
+        : marker;
 
       await calendar.events.patch({
         calendarId,
-
         eventId,
 
         requestBody: {
-          description:
-            updatedDescription,
+          description: updatedDescription,
         },
       });
 
@@ -789,13 +718,9 @@ export async function GET(
 
       results.push({
         eventId,
-        title:
-          event.summary ??
-          "Sans titre",
-        email:
-          clientEmail,
-        status:
-          "Envoyé",
+        title,
+        email: clientEmail,
+        status: "Envoyé",
       });
     }
 
@@ -806,22 +731,13 @@ export async function GET(
     return NextResponse.json({
       success: true,
 
-      targetDate:
-        formatFrenchDate(
-          target
-        ),
+      targetDate: formatFrenchDate(target),
 
-      totalEvents:
-        events.length,
+      totalEvents: events.length,
 
-      sent:
-        sentCount,
-
-      ignored:
-        ignoredCount,
-
-      errors:
-        errorCount,
+      sent: sentCount,
+      ignored: ignoredCount,
+      errors: errorCount,
 
       results,
     });
