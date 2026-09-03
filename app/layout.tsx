@@ -23,7 +23,8 @@ const poppins = Poppins({
    CONFIGURATION DU SITE
 ============================================================ */
 
-const SITE_URL = "https://www.eventslocation.fr";
+const SITE_URL =
+  "https://www.eventslocation.fr";
 
 /* ============================================================
    METADATA SEO
@@ -33,15 +34,24 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
 
   icons: {
-    icon: "/Logo/Logo.png",
-    shortcut: "/Logo/Logo.png",
-    apple: "/Logo/Logo.png",
+    icon: [
+      {
+        url: "/Logo/Icon.png",
+        type: "image/png",
+      },
+    ],
+
+    shortcut: "/Logo/Icon.png",
+
+    apple: "/Logo/Icon.png",
   },
 
   title: {
     default:
       "Event'S Location | Location de matériel événementiel en Nièvre",
-    template: "%s | Event'S Location",
+
+    template:
+      "%s | Event'S Location",
   },
 
   description:
@@ -74,15 +84,19 @@ export const metadata: Metadata = {
     },
   ],
 
-  creator: "Event'S Location",
-  publisher: "Event'S Location",
+  creator:
+    "Event'S Location",
+
+  publisher:
+    "Event'S Location",
 
   /* ==========================================================
      URL CANONIQUE
   ========================================================== */
 
   alternates: {
-    canonical: SITE_URL,
+    canonical:
+      SITE_URL,
   },
 
   /* ==========================================================
@@ -91,11 +105,13 @@ export const metadata: Metadata = {
 
   openGraph: {
     type: "website",
+
     locale: "fr_FR",
 
     url: SITE_URL,
 
-    siteName: "Event'S Location",
+    siteName:
+      "Event'S Location",
 
     title:
       "Event'S Location | Location de matériel événementiel",
@@ -105,9 +121,13 @@ export const metadata: Metadata = {
 
     images: [
       {
-        url: "/images/hero-photobooth.jpg",
+        url:
+          "/images/hero-photobooth.jpg",
+
         width: 1200,
+
         height: 630,
+
         alt:
           "Event'S Location - Location de matériel événementiel",
       },
@@ -119,7 +139,8 @@ export const metadata: Metadata = {
   ========================================================== */
 
   twitter: {
-    card: "summary_large_image",
+    card:
+      "summary_large_image",
 
     title:
       "Event'S Location | Location de matériel événementiel",
@@ -144,13 +165,17 @@ export const metadata: Metadata = {
       index: true,
       follow: true,
 
-      "max-image-preview": "large",
+      "max-image-preview":
+        "large",
+
       "max-snippet": -1,
+
       "max-video-preview": -1,
     },
   },
 
-  category: "Événementiel",
+  category:
+    "Événementiel",
 };
 
 /* ============================================================
@@ -159,20 +184,26 @@ export const metadata: Metadata = {
 ============================================================ */
 
 const localBusinessSchema = {
-  "@context": "https://schema.org",
+  "@context":
+    "https://schema.org",
 
-  "@type": "LocalBusiness",
+  "@type":
+    "LocalBusiness",
 
-  "@id": `${SITE_URL}/#business`,
+  "@id":
+    `${SITE_URL}/#business`,
 
-  name: "Event'S Location",
+  name:
+    "Event'S Location",
 
-  legalName: "Event'S Location",
+  legalName:
+    "Event'S Location",
 
-  url: SITE_URL,
+  url:
+    SITE_URL,
 
   logo:
-    `${SITE_URL}/Logo/Icon.png`,
+    `${SITE_URL}/Logo/LogoRond.png`,
 
   image:
     `${SITE_URL}/images/hero-photobooth.jpg`,
@@ -194,7 +225,8 @@ const localBusinessSchema = {
   ========================================================== */
 
   address: {
-    "@type": "PostalAddress",
+    "@type":
+      "PostalAddress",
 
     streetAddress:
       "17 Boulevard Dupin",
@@ -217,7 +249,8 @@ const localBusinessSchema = {
   ========================================================== */
 
   contactPoint: {
-    "@type": "ContactPoint",
+    "@type":
+      "ContactPoint",
 
     telephone:
       "+33643894570",
@@ -238,18 +271,27 @@ const localBusinessSchema = {
 
   areaServed: [
     {
-      "@type": "AdministrativeArea",
-      name: "Nièvre",
+      "@type":
+        "AdministrativeArea",
+
+      name:
+        "Nièvre",
     },
 
     {
-      "@type": "AdministrativeArea",
-      name: "Yonne",
+      "@type":
+        "AdministrativeArea",
+
+      name:
+        "Yonne",
     },
 
     {
-      "@type": "AdministrativeArea",
-      name: "Cher",
+      "@type":
+        "AdministrativeArea",
+
+      name:
+        "Cher",
     },
   ],
 
@@ -258,41 +300,49 @@ const localBusinessSchema = {
   ========================================================== */
 
   hasOfferCatalog: {
-    "@type": "OfferCatalog",
+    "@type":
+      "OfferCatalog",
 
     name:
       "Prestations Event'S Location",
 
     itemListElement: [
       {
-        "@type": "OfferCatalog",
+        "@type":
+          "OfferCatalog",
 
-        name: "Photo Booth",
+        name:
+          "Photo Booth",
 
         url:
           `${SITE_URL}/prestations/photobooth`,
       },
 
       {
-        "@type": "OfferCatalog",
+        "@type":
+          "OfferCatalog",
 
-        name: "Sonorisation",
+        name:
+          "Sonorisation",
 
         url:
           `${SITE_URL}/prestations/sonorisation`,
       },
 
       {
-        "@type": "OfferCatalog",
+        "@type":
+          "OfferCatalog",
 
-        name: "Projection vidéo",
+        name:
+          "Projection vidéo",
 
         url:
           `${SITE_URL}/prestations/projection`,
       },
 
       {
-        "@type": "OfferCatalog",
+        "@type":
+          "OfferCatalog",
 
         name:
           "Mobilier événementiel",
@@ -302,7 +352,8 @@ const localBusinessSchema = {
       },
 
       {
-        "@type": "OfferCatalog",
+        "@type":
+          "OfferCatalog",
 
         name:
           "Machines à effets",
@@ -312,9 +363,11 @@ const localBusinessSchema = {
       },
 
       {
-        "@type": "OfferCatalog",
+        "@type":
+          "OfferCatalog",
 
-        name: "Smoke Puff",
+        name:
+          "Smoke Puff",
 
         url:
           `${SITE_URL}/prestations/feux`,
@@ -339,7 +392,8 @@ const localBusinessSchema = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children:
+    React.ReactNode;
 }>) {
   return (
     <html lang="fr">
@@ -349,10 +403,6 @@ export default function RootLayout({
       >
 
         {children}
-
-        {/* ====================================================
-            DONNÉES STRUCTURÉES GOOGLE
-        ==================================================== */}
 
         <script
           type="application/ld+json"

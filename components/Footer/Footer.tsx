@@ -137,7 +137,7 @@ export default function Footer() {
             >
               <div className="relative h-[74px] w-[150px]">
                 <Image
-                  src="/Logo/LogoFooterTransparent.png"
+                  src="/Logo/LogoRond.png"
                   alt="Logo Event'S Location"
                   fill
                   sizes="150px"
