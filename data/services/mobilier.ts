@@ -63,7 +63,7 @@ export const mobilier: Service = {
 
     {
       label: "Table haute",
-      price: 5,
+      price: 6,
       description:
         "Parfaite pour cocktails, apéritifs et espaces conviviaux.",
     },

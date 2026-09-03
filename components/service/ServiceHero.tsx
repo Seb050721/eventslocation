@@ -17,53 +17,53 @@ export default function ServiceHero({
   service,
 }: Props) {
   return (
-    <section className="relative overflow-hidden rounded-[24px] sm:rounded-[28px] lg:rounded-[32px]">
+    <section className="relative overflow-hidden rounded-[24px] border border-[#E9E2DD] bg-[#FBFAF8] shadow-[0_18px_55px_rgba(31,25,27,0.08)] sm:rounded-[28px] lg:rounded-[32px]">
 
-      <div className="relative min-h-[680px] sm:min-h-[620px] lg:h-[620px]">
+      <div className="grid lg:min-h-[560px] lg:grid-cols-[1.05fr_0.95fr]">
 
         {/* =====================================================
             IMAGE
         ===================================================== */}
 
-        <Image
-          src={service.heroImage}
-          alt={service.title}
-          fill
-          priority
-          sizes="(max-width: 768px) 100vw, 1200px"
-          className="object-cover"
-        />
+        <div className="relative min-h-[330px] overflow-hidden sm:min-h-[420px] lg:min-h-full">
 
-        {/* =====================================================
-            OVERLAYS
+          <Image
+            src={service.heroImage}
+            alt={service.title}
+            fill
+            priority
+            sizes="(max-width: 1024px) 100vw, 55vw"
+            className="object-cover"
+          />
 
-            Plus clair pour mieux voir la photo,
-            tout en gardant le texte lisible.
-        ===================================================== */}
+          {/* léger dégradé pour garder l'image lisible */}
 
-        {/* Assombrissement général léger */}
-        <div className="absolute inset-0 bg-black/20 sm:bg-black/15" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
 
-        {/* Assombrissement principalement derrière le texte */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/40 to-black/5" />
+          {/* RETOUR */}
 
-        {/* Dégradé bas pour conserver la lisibilité */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent" />
+          <div className="absolute left-4 top-4 z-10 sm:left-6 sm:top-6">
 
-        {/* =====================================================
-            RETOUR
-        ===================================================== */}
+            <Link
+              href="/#services"
+              className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/90 px-4 py-2.5 text-sm font-semibold text-[#3F3A3C] shadow-[0_8px_24px_rgba(31,25,27,0.10)] backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:bg-white hover:text-[#EF5A4F]"
+            >
+              <ArrowLeft size={17} />
 
-        <div className="absolute left-4 top-4 z-20 sm:left-6 sm:top-6 lg:left-8 lg:top-8">
+              Retour
+            </Link>
 
-          <Link
-            href="/#services"
-            className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/50 px-4 py-2.5 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-black/70 sm:px-5 sm:py-3 sm:text-base"
-          >
-            <ArrowLeft size={17} />
+          </div>
 
-            Retour
-          </Link>
+          {/* PETIT BADGE IMAGE */}
+
+          <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6">
+
+            <span className="inline-flex rounded-full border border-white/70 bg-white/90 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#347A77] shadow-md backdrop-blur-md sm:text-xs">
+              {service.category}
+            </span>
+
+          </div>
 
         </div>
 
@@ -71,72 +71,106 @@ export default function ServiceHero({
             CONTENU
         ===================================================== */}
 
-        <div className="absolute inset-x-0 bottom-0 z-10 px-5 pb-6 pt-28 sm:px-7 sm:pb-8 lg:left-10 lg:right-10 lg:bottom-12 lg:px-0 lg:pb-0 lg:pt-0">
+        <div className="relative flex items-center bg-[#FBFAF8] px-5 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12 xl:px-12">
 
-          <div className="max-w-3xl">
+          {/* halos */}
 
-            {/* CATÉGORIE */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-20 top-10 h-[180px] w-[180px] rounded-full bg-[#EF5A4F]/8 blur-[90px]"
+          />
 
-            <span className="inline-flex rounded-full border border-green-400/30 bg-green-500/15 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-green-400 backdrop-blur-sm sm:px-4 sm:py-2 sm:text-xs sm:tracking-[0.25em]">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -left-12 bottom-10 h-[160px] w-[160px] rounded-full bg-[#4A9692]/8 blur-[90px]"
+          />
+
+          <div className="relative w-full">
+
+            {/* BADGE */}
+
+            <span className="inline-flex items-center rounded-full border border-[#EF5A4F]/20 bg-[#FFF0ED] px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#D94A41] sm:px-4 sm:py-2 sm:text-xs">
               {service.category}
             </span>
 
             {/* TITRE */}
 
-            <h1 className="mt-4 text-4xl font-black leading-[1.02] tracking-tight text-white drop-shadow-[0_3px_10px_rgba(0,0,0,0.8)] sm:mt-5 sm:text-5xl lg:mt-6 lg:text-7xl">
+            <h1 className="mt-4 text-4xl font-black leading-[1.02] tracking-tight text-[#1D1B1C] sm:text-5xl lg:text-6xl">
               {service.title}
             </h1>
 
             {/* DESCRIPTION */}
 
-            <p className="mt-5 max-w-2xl text-base leading-7 text-gray-100 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] sm:text-lg sm:leading-8 lg:mt-7 lg:text-xl lg:leading-9">
+            <p className="mt-5 max-w-xl text-sm leading-7 text-[#716A6C] sm:text-base sm:leading-8 lg:text-lg">
               {service.description}
             </p>
+
+            {/* =================================================
+                PRIX
+            ================================================= */}
+
+            <div className="mt-7 rounded-2xl border border-[#E9E2DD] bg-white p-5 shadow-[0_8px_25px_rgba(31,25,27,0.04)] sm:p-6">
+
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#9A9395] sm:text-xs">
+                À partir de
+              </p>
+
+              <div className="mt-1 flex flex-wrap items-end gap-x-3 gap-y-1">
+
+                <p className="text-4xl font-black leading-none text-[#EF5A4F] sm:text-5xl">
+                  {service.startingPrice} €
+                </p>
+
+                <p className="pb-1 text-sm font-medium text-[#716A6C]">
+                  selon la formule choisie
+                </p>
+
+              </div>
+
+            </div>
 
             {/* =================================================
                 ACTIONS
             ================================================= */}
 
-            <div className="mt-7 flex flex-col gap-4 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-end lg:mt-10 lg:gap-5">
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
 
-              {/* PRIX */}
+              <Link
+                href="/#contact"
+                className="group inline-flex min-h-[52px] items-center justify-center gap-2 rounded-xl bg-[#EF5A4F] px-5 py-3.5 text-sm font-bold text-white shadow-[0_10px_25px_rgba(239,90,79,0.22)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#D94A41] sm:text-base"
+              >
+                <CalendarDays size={18} />
 
-              <div className="min-w-0">
+                Demander un devis
+              </Link>
 
-                <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-gray-200 drop-shadow-md sm:text-xs lg:text-sm">
-                  À partir de
-                </p>
+              <a
+                href="tel:+33643894570"
+                className="group inline-flex min-h-[52px] items-center justify-center gap-2 rounded-xl border border-[#DCD4CF] bg-white px-5 py-3.5 text-sm font-semibold text-[#3F3A3C] shadow-[0_8px_22px_rgba(31,25,27,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[#4A9692]/40 hover:bg-[#EDF7F6] hover:text-[#347A77] sm:text-base"
+              >
+                <Phone
+                  size={18}
+                  className="text-[#4A9692]"
+                />
 
-                <p className="mt-1 text-4xl font-black leading-none text-green-400 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] sm:text-5xl lg:text-6xl">
-                  {service.startingPrice} €
-                </p>
+                06 43 89 45 70
+              </a>
 
-              </div>
+            </div>
 
-              {/* BOUTONS */}
+            {/* =================================================
+                ACCENTS COULEURS LOGO
+            ================================================= */}
 
-              <div className="grid w-full gap-3 sm:w-auto sm:grid-cols-2 lg:flex lg:flex-wrap">
-
-                <Link
-                  href="/#contact"
-                  className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-green-500 to-green-600 px-5 py-3.5 text-sm font-bold text-white shadow-lg transition duration-300 hover:from-green-600 hover:to-green-700 sm:px-6 sm:text-base lg:rounded-full lg:px-8 lg:py-5"
-                >
-                  <CalendarDays size={19} />
-
-                  Demander un devis
-                </Link>
-
-                <a
-                  href="tel:+33643894570"
-                  className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-2xl border border-white/30 bg-black/40 px-5 py-3.5 text-sm font-semibold text-white backdrop-blur-md transition duration-300 hover:bg-black/55 sm:px-6 sm:text-base lg:rounded-full lg:px-8 lg:py-5"
-                >
-                  <Phone size={19} />
-
-                  06 43 89 45 70
-                </a>
-
-              </div>
-
+            <div
+              aria-hidden="true"
+              className="mt-7 flex items-center gap-2"
+            >
+              <span className="h-2 w-2 rounded-full bg-[#4A9692]" />
+              <span className="h-2 w-2 rounded-full bg-[#87954E]" />
+              <span className="h-2 w-2 rounded-full bg-[#EF5A4F]" />
+              <span className="h-2 w-2 rounded-full bg-[#C34F72]" />
+              <span className="h-2 w-2 rounded-full bg-[#F3A044]" />
             </div>
 
           </div>

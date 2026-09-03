@@ -172,7 +172,7 @@ const localBusinessSchema = {
   url: SITE_URL,
 
   logo:
-    `${SITE_URL}/Logo/Logo.png`,
+    `${SITE_URL}/Logo/Icon.png`,
 
   image:
     `${SITE_URL}/images/hero-photobooth.jpg`,

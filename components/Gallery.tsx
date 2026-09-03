@@ -2,7 +2,12 @@
 
 import { useMemo, useState } from "react";
 import Image from "next/image";
-import { Expand, Images, ChevronDown } from "lucide-react";
+
+import {
+  Expand,
+  Images,
+  ChevronDown,
+} from "lucide-react";
 
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
@@ -38,17 +43,6 @@ const images = [
     category: "Entreprise",
     alt: "Installation pour un événement professionnel",
   },
-
-  /*
-    Ajoute tes nouvelles photos ici
-    Exemple :
-
-    {
-      src: "/images/gallery/mariage2.jpg",
-      category: "Mariage",
-      alt: "Installation Event'S Location pour un mariage",
-    },
-  */
 ];
 
 const categories = [
@@ -62,7 +56,7 @@ const categories = [
   "Entreprise",
 ];
 
-const INITIAL_VISIBLE = 9;
+const INITIAL_VISIBLE = 6;
 
 export default function Gallery() {
   const [open, setOpen] = useState(false);
@@ -126,11 +120,21 @@ export default function Gallery() {
   return (
     <section
       id="gallery"
-      className="relative overflow-hidden bg-[#080808] py-20 sm:py-24 lg:py-28"
+      className="relative scroll-mt-[80px] overflow-hidden bg-[#F7F3EF] py-12 sm:py-14 lg:py-16"
     >
-      {/* HALO */}
+      {/* =====================================================
+          HALOS
+      ===================================================== */}
 
-      <div className="pointer-events-none absolute -left-52 top-1/4 h-[500px] w-[500px] rounded-full bg-green-500/10 blur-[170px]" />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-40 top-1/4 h-[300px] w-[300px] rounded-full bg-[#4A9692]/7 blur-[120px]"
+      />
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-40 bottom-0 h-[280px] w-[280px] rounded-full bg-[#C34F72]/7 blur-[120px]"
+      />
 
       <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
 
@@ -138,23 +142,24 @@ export default function Gallery() {
             TITRE
         ===================================================== */}
 
-        <div className="mx-auto mb-10 max-w-3xl text-center sm:mb-12 lg:mb-14">
+        <div className="mx-auto mb-7 max-w-3xl text-center">
 
-          <span className="inline-flex rounded-full border border-green-500/30 bg-green-500/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.25em] text-green-400 sm:px-5 sm:text-xs sm:tracking-[0.35em]">
-            Nos réalisations
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#C34F72]/20 bg-[#FAEEF2] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[#A93E61] sm:text-xs">
+            <Images size={14} />
+
+            Galerie
           </span>
 
-          <h2 className="mt-6 text-4xl font-black leading-tight tracking-tight text-white sm:text-5xl lg:mt-8 lg:text-6xl">
-            Découvrez quelques-uns de
-            <span className="block text-green-400">
-              nos événements
+          <h2 className="mt-4 text-3xl font-black tracking-tight text-[#1D1B1C] sm:text-4xl lg:text-[42px]">
+            Quelques moments
+            <span className="text-[#EF5A4F]">
+              {" "}en images
             </span>
           </h2>
 
-          <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-gray-400 sm:text-lg sm:leading-8">
-            Des installations et des moments
-            qui illustrent nos prestations lors
-            de différents événements.
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-[#716A6C] sm:text-base">
+            Découvrez quelques installations et ambiances réalisées
+            lors de mariages, anniversaires et événements professionnels.
           </p>
 
         </div>
@@ -163,7 +168,7 @@ export default function Gallery() {
             FILTRES
         ===================================================== */}
 
-        <div className="mb-8 flex flex-wrap justify-center gap-2 sm:mb-10 sm:gap-3">
+        <div className="mb-6 flex flex-wrap justify-center gap-2">
 
           {categories.map((category) => {
             const active =
@@ -176,10 +181,10 @@ export default function Gallery() {
                 onClick={() =>
                   changeCategory(category)
                 }
-                className={`rounded-full border px-4 py-2 text-xs font-bold transition sm:px-5 sm:text-sm ${
+                className={`rounded-full border px-3.5 py-2 text-[11px] font-bold transition-all duration-200 sm:px-4 sm:text-xs ${
                   active
-                    ? "border-green-500 bg-green-600 text-white"
-                    : "border-white/10 bg-white/[0.04] text-gray-300 hover:border-green-500/30 hover:text-green-400"
+                    ? "border-[#EF5A4F] bg-[#EF5A4F] text-white shadow-[0_6px_16px_rgba(239,90,79,0.16)]"
+                    : "border-[#E4DCD7] bg-white text-[#716A6C] hover:border-[#4A9692]/35 hover:bg-[#EDF7F6] hover:text-[#347A77]"
                 }`}
               >
                 {category}
@@ -193,7 +198,7 @@ export default function Gallery() {
             GALERIE
         ===================================================== */}
 
-        <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:gap-6">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3">
 
           {visibleImages.map(
             (image, imageIndex) => {
@@ -209,10 +214,10 @@ export default function Gallery() {
                     openImage(image.src)
                   }
                   aria-label={`Voir la photo : ${image.category}`}
-                  className={`group relative overflow-hidden rounded-[20px] border border-white/10 bg-white/5 text-left sm:rounded-[28px] ${
+                  className={`group relative overflow-hidden rounded-[18px] border border-[#E4DCD7] bg-white text-left shadow-[0_6px_20px_rgba(31,25,27,0.04)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(31,25,27,0.08)] ${
                     isFeatured
-                      ? "col-span-2 aspect-[16/10] md:col-span-2 md:row-span-2 md:aspect-auto"
-                      : "aspect-square"
+                      ? "col-span-2 aspect-[16/9] md:col-span-2 md:row-span-2 md:aspect-auto"
+                      : "aspect-[4/3]"
                   }`}
                 >
 
@@ -225,24 +230,22 @@ export default function Gallery() {
                         ? "(max-width: 768px) 100vw, 66vw"
                         : "(max-width: 768px) 50vw, 33vw"
                     }
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                   />
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent transition duration-300 group-hover:from-black/90" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/5 to-transparent" />
 
                   {/* ZOOM */}
 
-                  <div className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-black/40 text-white opacity-100 backdrop-blur-md transition sm:right-5 sm:top-5 sm:h-11 sm:w-11 md:opacity-0 md:group-hover:opacity-100">
-
-                    <Expand size={18} />
-
+                  <div className="absolute right-2.5 top-2.5 flex h-8 w-8 items-center justify-center rounded-full border border-white/40 bg-white/85 text-[#1D1B1C] shadow-sm backdrop-blur-md transition-all duration-200 sm:right-4 sm:top-4 sm:h-10 sm:w-10">
+                    <Expand size={16} />
                   </div>
 
                   {/* CATÉGORIE */}
 
-                  <div className="absolute bottom-3 left-3 sm:bottom-5 sm:left-5">
+                  <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4">
 
-                    <span className="inline-flex rounded-full bg-green-600 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.16em] text-white shadow-lg sm:px-4 sm:py-2 sm:text-xs">
+                    <span className="inline-flex rounded-full bg-[#EF5A4F] px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.14em] text-white shadow-sm sm:text-[10px]">
                       {image.category}
                     </span>
 
@@ -260,14 +263,14 @@ export default function Gallery() {
         ===================================================== */}
 
         {filteredImages.length === 0 && (
-          <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-8 text-center">
+          <div className="rounded-2xl border border-[#E4DCD7] bg-white p-8 text-center shadow-sm">
 
             <Images
               size={30}
-              className="mx-auto text-green-500"
+              className="mx-auto text-[#4A9692]"
             />
 
-            <p className="mt-4 font-semibold text-white">
+            <p className="mt-4 font-semibold text-[#1D1B1C]">
               Aucune photo dans cette catégorie pour le moment.
             </p>
 
@@ -279,7 +282,7 @@ export default function Gallery() {
         ===================================================== */}
 
         {hasMore && (
-          <div className="mt-8 flex justify-center sm:mt-10">
+          <div className="mt-7 flex justify-center">
 
             <button
               type="button"
@@ -290,11 +293,11 @@ export default function Gallery() {
                     INITIAL_VISIBLE
                 )
               }
-              className="inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-6 py-3 text-sm font-bold text-green-400 transition hover:border-green-500/50 hover:bg-green-500/20"
+              className="inline-flex items-center gap-2 rounded-full border border-[#E4DCD7] bg-white px-5 py-3 text-sm font-bold text-[#3F3A3C] transition-all duration-200 hover:border-[#EF5A4F]/30 hover:bg-[#FFF0ED] hover:text-[#D94A41]"
             >
-              Voir plus de réalisations
+              Voir plus de photos
 
-              <ChevronDown size={18} />
+              <ChevronDown size={17} />
             </button>
 
           </div>
@@ -304,16 +307,15 @@ export default function Gallery() {
             BAS DE GALERIE
         ===================================================== */}
 
-        <div className="mt-8 flex items-center justify-center gap-2 text-center text-xs text-gray-500 sm:text-sm">
+        <div className="mt-6 flex items-center justify-center gap-2 text-center text-xs text-[#8B8486]">
 
           <Images
-            size={17}
-            className="shrink-0 text-green-500"
+            size={16}
+            className="shrink-0 text-[#4A9692]"
           />
 
           <span>
-            Cliquez sur une photo pour
-            l&apos;agrandir
+            Cliquez sur une photo pour l&apos;agrandir
           </span>
 
         </div>

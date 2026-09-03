@@ -357,7 +357,7 @@ export default async function ServicePage({
       : null;
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#050505] pb-16 pt-24 sm:pb-20 sm:pt-28 lg:pb-24 lg:pt-32">
+    <main className="relative min-h-screen overflow-hidden bg-[#FBFAF8] pb-16 pt-24 sm:pb-20 sm:pt-28 lg:pb-24 lg:pt-32">
 
       {/* =====================================================
           DONNÉES STRUCTURÉES
@@ -399,9 +399,20 @@ export default async function ServicePage({
           HALOS
       ===================================================== */}
 
-      <div className="pointer-events-none absolute -left-40 top-0 h-[300px] w-[300px] rounded-full bg-green-500/10 blur-[130px] sm:-left-20 sm:h-[380px] sm:w-[380px] sm:blur-[160px] lg:left-0 lg:h-[450px] lg:w-[450px] lg:blur-[180px]" />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-40 top-0 h-[300px] w-[300px] rounded-full bg-[#4A9692]/8 blur-[130px] sm:-left-20 sm:h-[380px] sm:w-[380px] sm:blur-[160px] lg:left-0 lg:h-[450px] lg:w-[450px] lg:blur-[180px]"
+      />
 
-      <div className="pointer-events-none absolute -right-40 top-[420px] h-[300px] w-[300px] rounded-full bg-green-500/10 blur-[130px] sm:-right-20 sm:h-[380px] sm:w-[380px] sm:blur-[160px] lg:right-0 lg:top-[400px] lg:h-[450px] lg:w-[450px] lg:blur-[180px]" />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-40 top-[420px] h-[300px] w-[300px] rounded-full bg-[#EF5A4F]/8 blur-[130px] sm:-right-20 sm:h-[380px] sm:w-[380px] sm:blur-[160px] lg:right-0 lg:top-[400px] lg:h-[450px] lg:w-[450px] lg:blur-[180px]"
+      />
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute left-1/2 top-[1200px] h-[260px] w-[260px] -translate-x-1/2 rounded-full bg-[#F3A044]/6 blur-[130px]"
+      />
 
       {/* =====================================================
           CONTENU
@@ -506,48 +517,72 @@ export default async function ServicePage({
         />
 
         {/* ===================================================
-            CTA
+            CTA FINAL
         =================================================== */}
 
-        <section className="overflow-hidden rounded-[22px] border border-green-500/20 bg-gradient-to-br from-green-600 via-green-500 to-green-700 p-5 sm:rounded-[26px] sm:p-7 lg:rounded-[28px] lg:p-12">
+        <section className="relative overflow-hidden rounded-[24px] border border-[#EF5A4F]/20 bg-[#FFF0ED] p-5 shadow-[0_14px_40px_rgba(31,25,27,0.06)] sm:rounded-[28px] sm:p-7 lg:p-10">
 
-          <div className="flex flex-col gap-7 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
+          {/* HALOS CTA */}
+
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-16 -top-16 h-[180px] w-[180px] rounded-full bg-[#EF5A4F]/10 blur-[90px]"
+          />
+
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -bottom-20 left-20 h-[170px] w-[170px] rounded-full bg-[#4A9692]/10 blur-[90px]"
+          />
+
+          <div className="relative flex flex-col gap-7 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
 
             <div className="max-w-2xl">
 
-              <span className="inline-flex rounded-full bg-white/20 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white sm:px-4 sm:py-2 sm:text-xs">
+              <span className="inline-flex rounded-full border border-[#EF5A4F]/20 bg-white px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#D94A41] sm:px-4 sm:py-2 sm:text-xs">
                 Demande de devis
               </span>
 
-              <h2 className="mt-4 text-2xl font-black leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl">
+              <h2 className="mt-4 text-2xl font-black leading-tight tracking-tight text-[#1D1B1C] sm:text-3xl lg:text-4xl">
                 Vous souhaitez réserver{" "}
-                {service.title} ?
+                <span className="text-[#EF5A4F]">
+                  {service.title}
+                </span>
+                {" "}?
               </h2>
 
-              <p className="mt-4 text-sm leading-6 text-green-50 sm:text-base sm:leading-7">
-                Vérifiez la disponibilité
-                de votre date et obtenez un
-                devis personnalisé pour votre
-                événement en Nièvre, Yonne
-                ou Cher.
+              <p className="mt-4 text-sm leading-6 text-[#716A6C] sm:text-base sm:leading-7">
+                Vérifiez la disponibilité de votre date et obtenez un
+                devis personnalisé pour votre événement en Nièvre,
+                Yonne ou Cher.
               </p>
+
+              <div
+                aria-hidden="true"
+                className="mt-5 flex gap-2"
+              >
+                <span className="h-2 w-2 rounded-full bg-[#4A9692]" />
+                <span className="h-2 w-2 rounded-full bg-[#87954E]" />
+                <span className="h-2 w-2 rounded-full bg-[#EF5A4F]" />
+                <span className="h-2 w-2 rounded-full bg-[#C34F72]" />
+                <span className="h-2 w-2 rounded-full bg-[#F3A044]" />
+              </div>
 
             </div>
 
-            <div className="grid w-full gap-3 sm:grid-cols-2 lg:w-auto lg:min-w-[280px] lg:grid-cols-1">
+            <div className="grid w-full gap-3 sm:grid-cols-2 lg:w-auto lg:min-w-[300px] lg:grid-cols-1">
 
               <a
                 href="/#contact"
-                className="inline-flex min-h-[52px] items-center justify-center rounded-xl bg-white px-5 py-3.5 text-center text-sm font-bold text-green-700 transition hover:scale-[1.02] sm:text-base"
+                className="inline-flex min-h-[52px] items-center justify-center rounded-xl bg-[#EF5A4F] px-5 py-3.5 text-center text-sm font-bold text-white shadow-[0_10px_25px_rgba(239,90,79,0.22)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#D94A41] sm:text-base"
               >
                 Demander un devis
               </a>
 
               <a
                 href="tel:+33643894570"
-                className="inline-flex min-h-[52px] items-center justify-center rounded-xl border border-white/40 px-5 py-3.5 text-center text-sm font-semibold text-white transition hover:bg-white/10 sm:text-base"
+                className="inline-flex min-h-[52px] items-center justify-center rounded-xl border border-[#4A9692]/25 bg-white px-5 py-3.5 text-center text-sm font-semibold text-[#347A77] shadow-[0_8px_22px_rgba(31,25,27,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#EDF7F6] sm:text-base"
               >
-                📞 06 43 89 45 70
+                06 43 89 45 70
               </a>
 
             </div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import {
   ArrowRight,
   Sparkles,
@@ -18,37 +19,54 @@ export function Realisations() {
   return (
     <section
       id="realisations"
-      className="relative overflow-hidden bg-[#050505] py-10 sm:py-12 lg:py-16"
+      className="relative overflow-hidden bg-[#FBFAF8] py-12 sm:py-14 lg:py-16"
     >
-      {/* HALO */}
+      {/* =====================================================
+          HALOS
+      ===================================================== */}
 
-      <div className="pointer-events-none absolute -right-32 top-10 h-[280px] w-[280px] rounded-full bg-green-500/10 blur-[130px]" />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-32 top-10 h-[260px] w-[260px] rounded-full bg-[#4A9692]/7 blur-[120px]"
+      />
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-32 bottom-0 h-[280px] w-[280px] rounded-full bg-[#C34F72]/7 blur-[130px]"
+      />
 
-        {/* TITRE */}
+      <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
 
-        <div className="mx-auto mb-7 max-w-3xl text-center sm:mb-9">
+        {/* =====================================================
+            TITRE
+        ===================================================== */}
 
-          <span className="inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-green-400 sm:px-4 sm:py-2 sm:text-xs">
+        <div className="mx-auto mb-8 max-w-3xl text-center">
+
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#C34F72]/20 bg-[#FAEEF2] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[#A93E61] sm:text-xs">
             <Sparkles size={14} />
+
             Nos réalisations
           </span>
 
-          <h2 className="mt-4 text-2xl font-black tracking-tight text-white sm:text-3xl lg:text-4xl">
-            Découvrez quelques événements
+          <h2 className="mt-4 text-3xl font-black tracking-tight text-[#1D1B1C] sm:text-4xl lg:text-[42px]">
+            Découvrez quelques
+            <span className="text-[#EF5A4F]">
+              {" "}événements réalisés
+            </span>
           </h2>
 
-          <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-gray-400 sm:text-base">
-            Quelques installations réalisées par
-            Event&apos;S Location pour des anniversaires,
-            mariages et événements en Yonne, Nièvre
-            et dans les environs.
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-[#716A6C] sm:text-base">
+            Mariages, anniversaires et événements privés ou professionnels :
+            découvrez quelques installations réalisées par Event&apos;S Location
+            en Yonne, en Nièvre et dans les secteurs voisins.
           </p>
 
         </div>
 
-        {/* CARTES */}
+        {/* =====================================================
+            CARTES
+        ===================================================== */}
 
         <div
           className={`grid gap-5 ${
@@ -69,18 +87,23 @@ export function Realisations() {
           )}
         </div>
 
-        {/* VOIR TOUTES LES RÉALISATIONS */}
+        {/* =====================================================
+            VOIR TOUTES LES RÉALISATIONS
+        ===================================================== */}
 
         {realisations.length > 3 && (
           <div className="mt-7 flex justify-center">
 
             <Link
               href="/realisations"
-              className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.05] px-5 py-3 text-sm font-bold text-white transition hover:border-green-500/30 hover:bg-green-500/10 hover:text-green-400"
+              className="group inline-flex items-center gap-2 rounded-xl border border-[#E4DCD7] bg-white px-5 py-3 text-sm font-bold text-[#3F3A3C] shadow-[0_8px_24px_rgba(31,25,27,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[#EF5A4F]/30 hover:bg-[#FFF0ED] hover:text-[#D94A41]"
             >
               Voir toutes nos réalisations
 
-              <ArrowRight size={16} />
+              <ArrowRight
+                size={16}
+                className="transition-transform duration-200 group-hover:translate-x-1"
+              />
             </Link>
 
           </div>

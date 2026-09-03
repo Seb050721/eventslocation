@@ -52,9 +52,6 @@ interface AvailabilityApiResponse {
 
 /* ============================================================
    CORRESPONDANCE ENTRE inventory.ts ET GOOGLE CALENDAR
-
-   À gauche : ID utilisé dans data/inventory.ts
-   À droite : nom utilisé dans route.ts / Google Calendar
 ============================================================ */
 
 const apiEquipmentNames: Record<
@@ -248,7 +245,7 @@ export default function AvailabilityCalendar() {
     ) ?? null;
 
   /* ==========================================================
-     CHARGEMENT DES VRAIES DISPONIBILITÉS
+     CHARGEMENT DES DISPONIBILITÉS
   ========================================================== */
 
   async function loadAvailability() {
@@ -260,7 +257,6 @@ export default function AvailabilityCalendar() {
         "/api/disponibilites",
         {
           method: "GET",
-
           cache: "no-store",
         }
       );
@@ -349,14 +345,7 @@ export default function AvailabilityCalendar() {
   }, [year, month]);
 
   /* ==========================================================
-     RÉCUPÉRATION DU STOCK D'UNE DATE
-
-     IMPORTANT :
-     Si aucune réservation n'existe pour cette date,
-     l'API ne crée pas forcément cette date.
-
-     Donc :
-     date absente = stock totalement disponible.
+     DISPONIBILITÉ PAR DATE
   ========================================================== */
 
   function getAvailabilityForDate(
@@ -423,11 +412,6 @@ export default function AvailabilityCalendar() {
         1
       );
 
-    /*
-      Empêche de naviguer avant
-      le mois actuel.
-    */
-
     const currentMonthStart =
       new Date(
         today.getFullYear(),
@@ -470,14 +454,6 @@ export default function AvailabilityCalendar() {
     );
 
     setRequestedQuantity(1);
-
-    /*
-      On conserve volontairement
-      la date sélectionnée.
-
-      Cela permet de comparer plusieurs
-      matériels sur la même date.
-    */
   }
 
   /* ==========================================================
@@ -591,33 +567,31 @@ export default function AvailabilityCalendar() {
   ========================================================== */
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1.35fr_0.75fr] lg:gap-10">
+    <div className="grid gap-6 lg:grid-cols-[1.35fr_0.75fr] lg:gap-8">
 
       {/* =====================================================
           CALENDRIER
       ===================================================== */}
 
-      <div className="rounded-[28px] border border-white/10 bg-white/[0.05] p-4 backdrop-blur-xl sm:p-8">
+      <div className="rounded-[28px] border border-[#E9E2DD] bg-white p-4 shadow-[0_12px_35px_rgba(31,25,27,0.06)] sm:p-7 lg:p-8">
 
-        {/* =================================================
-            ERREUR API
-        ================================================= */}
+        {/* ERREUR API */}
 
         {apiError && (
-          <div className="mb-6 flex items-start gap-3 rounded-2xl border border-red-500/30 bg-red-500/10 p-4">
+          <div className="mb-6 flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4">
 
             <AlertCircle
               size={20}
-              className="mt-0.5 shrink-0 text-red-400"
+              className="mt-0.5 shrink-0 text-red-500"
             />
 
             <div className="flex-1">
 
-              <p className="font-bold text-red-200">
+              <p className="font-bold text-red-700">
                 Impossible de charger les disponibilités
               </p>
 
-              <p className="mt-1 text-sm leading-6 text-red-200/70">
+              <p className="mt-1 text-sm leading-6 text-red-600">
                 {apiError}
               </p>
 
@@ -626,12 +600,9 @@ export default function AvailabilityCalendar() {
                 onClick={
                   loadAvailability
                 }
-                className="mt-3 inline-flex items-center gap-2 text-sm font-bold text-red-200 transition hover:text-white"
+                className="mt-3 inline-flex items-center gap-2 text-sm font-bold text-red-600 transition hover:text-red-800"
               >
-                <RefreshCw
-                  size={15}
-                />
-
+                <RefreshCw size={15} />
                 Réessayer
               </button>
 
@@ -640,39 +611,35 @@ export default function AvailabilityCalendar() {
           </div>
         )}
 
-        {/* =================================================
-            CHARGEMENT
-        ================================================= */}
+        {/* CHARGEMENT */}
 
         {loading && (
-          <div className="mb-6 flex items-center gap-3 rounded-2xl border border-green-500/20 bg-green-500/10 p-4">
+          <div className="mb-6 flex items-center gap-3 rounded-2xl border border-[#4A9692]/20 bg-[#EDF7F6] p-4">
 
             <Loader2
               size={20}
-              className="animate-spin text-green-400"
+              className="animate-spin text-[#347A77]"
             />
 
-            <p className="text-sm text-green-100">
+            <p className="text-sm font-medium text-[#347A77]">
               Mise à jour des disponibilités...
             </p>
 
           </div>
         )}
 
-        {/* =================================================
-            AUCUN MATÉRIEL
-        ================================================= */}
+        {/* AUCUN MATÉRIEL */}
 
         {!selectedInventory &&
           !loading && (
-            <div className="mb-6 flex items-start gap-3 rounded-2xl border border-green-500/20 bg-green-500/10 p-4">
+            <div className="mb-6 flex items-start gap-3 rounded-2xl border border-[#4A9692]/20 bg-[#EDF7F6] p-4">
 
               <Info
                 size={20}
-                className="mt-0.5 shrink-0 text-green-400"
+                className="mt-0.5 shrink-0 text-[#347A77]"
               />
 
-              <p className="text-sm leading-6 text-green-100">
+              <p className="text-sm leading-6 text-[#3F6664]">
                 Sélectionnez d&apos;abord
                 le matériel souhaité pour
                 afficher ses disponibilités.
@@ -681,41 +648,36 @@ export default function AvailabilityCalendar() {
             </div>
           )}
 
-        {/* =================================================
-            MATÉRIEL ACTIF
-        ================================================= */}
+        {/* MATÉRIEL ACTIF */}
 
         {selectedInventory && (
-          <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-green-500/20 bg-green-500/10 px-4 py-3">
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#4A9692]/20 bg-[#EDF7F6] px-4 py-3">
 
             <div>
 
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-green-400">
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#347A77]">
                 Disponibilités affichées pour
               </p>
 
-              <p className="mt-1 font-bold text-white">
+              <p className="mt-1 font-bold text-[#1D1B1C]">
                 {selectedInventory.name}
               </p>
 
-              <p className="mt-1 text-xs text-gray-400">
+              <p className="mt-1 text-xs text-[#716A6C]">
                 Stock total :{" "}
                 {selectedInventory.stock}
               </p>
 
             </div>
 
-            <PackageCheck
-              size={22}
-              className="text-green-400"
-            />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-[#347A77]">
+              <PackageCheck size={21} />
+            </div>
 
           </div>
         )}
 
-        {/* =================================================
-            NAVIGATION
-        ================================================= */}
+        {/* NAVIGATION */}
 
         <div className="flex items-center justify-between gap-2 sm:gap-4">
 
@@ -726,20 +688,18 @@ export default function AvailabilityCalendar() {
               !canGoPreviousMonth
             }
             aria-label="Mois précédent"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition hover:border-green-500/40 hover:bg-green-500/10 disabled:cursor-not-allowed disabled:opacity-30 sm:h-11 sm:w-11"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#E9E2DD] bg-[#FBFAF8] text-[#3F3A3C] transition hover:border-[#4A9692]/40 hover:bg-[#EDF7F6] hover:text-[#347A77] disabled:cursor-not-allowed disabled:opacity-30 sm:h-11 sm:w-11"
           >
-            <ChevronLeft
-              size={21}
-            />
+            <ChevronLeft size={21} />
           </button>
 
           <div className="min-w-0 text-center">
 
-            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-green-400 sm:text-xs sm:tracking-[0.22em]">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#347A77] sm:text-xs">
               Calendrier
             </p>
 
-            <h2 className="mt-1 whitespace-nowrap text-xl font-black text-white sm:text-3xl">
+            <h2 className="mt-1 whitespace-nowrap text-xl font-black text-[#1D1B1C] sm:text-3xl">
               {monthNames[month]}{" "}
               {year}
             </h2>
@@ -750,18 +710,14 @@ export default function AvailabilityCalendar() {
             type="button"
             onClick={nextMonth}
             aria-label="Mois suivant"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition hover:border-green-500/40 hover:bg-green-500/10 sm:h-11 sm:w-11"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#E9E2DD] bg-[#FBFAF8] text-[#3F3A3C] transition hover:border-[#4A9692]/40 hover:bg-[#EDF7F6] hover:text-[#347A77] sm:h-11 sm:w-11"
           >
-            <ChevronRight
-              size={21}
-            />
+            <ChevronRight size={21} />
           </button>
 
         </div>
 
-        {/* =================================================
-            GRILLE CALENDRIER
-        ================================================= */}
+        {/* GRILLE CALENDRIER */}
 
         <div className="mt-7 grid grid-cols-7 gap-1 sm:mt-8 sm:gap-2">
 
@@ -769,7 +725,7 @@ export default function AvailabilityCalendar() {
             (day) => (
               <div
                 key={day}
-                className="py-2 text-center text-[9px] font-bold uppercase tracking-wide text-gray-500 sm:text-xs"
+                className="py-2 text-center text-[9px] font-bold uppercase tracking-wide text-[#9A9395] sm:text-xs"
               >
                 {day}
               </div>
@@ -832,44 +788,36 @@ export default function AvailabilityCalendar() {
                 dateKey;
 
               let statusClasses =
-                "border-white/10 bg-white/[0.03] text-gray-500";
+                "border-[#E9E2DD] bg-[#FBFAF8] text-[#9A9395]";
 
-              /*
-                DISPONIBLE
-              */
+              /* DISPONIBLE */
 
               if (
                 selectedInventory &&
                 available > 0
               ) {
                 statusClasses =
-                  "border-green-500/20 bg-green-500/10 text-green-200 hover:border-green-500/50 hover:bg-green-500/20";
+                  "border-[#4A9692]/25 bg-[#EDF7F6] text-[#347A77] hover:border-[#4A9692]/60 hover:bg-[#DDEFEF]";
               }
 
-              /*
-                COMPLET
-              */
+              /* COMPLET */
 
               if (
                 selectedInventory &&
                 available === 0
               ) {
                 statusClasses =
-                  "border-red-500/30 bg-red-500/10 text-red-200 hover:border-red-500/50";
+                  "border-red-200 bg-red-50 text-red-600 hover:border-red-300";
               }
 
-              /*
-                PASSÉ
-              */
+              /* PASSÉ */
 
               if (isPast) {
                 statusClasses =
-                  "cursor-not-allowed border-white/5 bg-white/[0.02] text-gray-700 opacity-40";
+                  "cursor-not-allowed border-[#EEE9E5] bg-[#F7F3EF] text-[#C4BDB9] opacity-60";
               }
 
-              /*
-                SÉLECTIONNÉ
-              */
+              /* SÉLECTIONNÉ */
 
               if (
                 selected &&
@@ -877,8 +825,8 @@ export default function AvailabilityCalendar() {
               ) {
                 statusClasses =
                   available > 0
-                    ? "border-green-300 bg-green-600 text-white shadow-[0_8px_30px_rgba(34,197,94,0.25)]"
-                    : "border-red-300 bg-red-600 text-white shadow-[0_8px_30px_rgba(239,68,68,0.20)]";
+                    ? "border-[#347A77] bg-[#4A9692] text-white shadow-[0_8px_24px_rgba(74,150,146,0.22)]"
+                    : "border-red-500 bg-red-500 text-white shadow-[0_8px_24px_rgba(239,68,68,0.18)]";
               }
 
               return (
@@ -914,21 +862,20 @@ export default function AvailabilityCalendar() {
                     !isPast && (
                       <span
                         className={`absolute bottom-1 left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full sm:bottom-2 ${
-                          available ===
-                          0
-                            ? "bg-red-400"
-                            : "bg-green-400"
+                          available === 0
+                            ? "bg-red-500"
+                            : selected
+                              ? "bg-white"
+                              : "bg-[#4A9692]"
                         }`}
                       />
                     )}
 
                   {selectedInventory &&
-                    reserved >
-                      0 &&
-                    available >
-                      0 &&
+                    reserved > 0 &&
+                    available > 0 &&
                     !isPast && (
-                      <span className="absolute right-1 top-1 hidden rounded-full bg-black/40 px-1.5 py-0.5 text-[8px] font-bold text-white sm:block">
+                      <span className="absolute right-1 top-1 hidden rounded-full bg-white px-1.5 py-0.5 text-[8px] font-bold text-[#347A77] shadow-sm sm:block">
                         {available}
                       </span>
                     )}
@@ -940,35 +887,29 @@ export default function AvailabilityCalendar() {
 
         </div>
 
-        {/* =================================================
-            LÉGENDE
-        ================================================= */}
+        {/* LÉGENDE */}
 
-        <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 border-t border-white/10 pt-6">
+        <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 border-t border-[#E9E2DD] pt-6">
 
-          <div className="flex items-center gap-2 text-xs text-gray-400 sm:text-sm">
-            <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
-
+          <div className="flex items-center gap-2 text-xs text-[#716A6C] sm:text-sm">
+            <span className="h-2.5 w-2.5 rounded-full bg-[#4A9692]" />
             Disponible
           </div>
 
-          <div className="flex items-center gap-2 text-xs text-gray-400 sm:text-sm">
-            <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
-
+          <div className="flex items-center gap-2 text-xs text-[#716A6C] sm:text-sm">
+            <span className="h-2.5 w-2.5 rounded-full bg-red-500" />
             Complet
           </div>
 
         </div>
 
-        {/* =================================================
-            MISE À JOUR
-        ================================================= */}
+        {/* MISE À JOUR */}
 
         {!loading &&
           !apiError && (
             <div className="mt-5 flex items-center justify-between gap-4">
 
-              <p className="text-xs text-gray-600">
+              <p className="text-xs text-[#9A9395]">
                 Données synchronisées avec
                 notre calendrier de réservation.
               </p>
@@ -979,11 +920,9 @@ export default function AvailabilityCalendar() {
                   loadAvailability
                 }
                 aria-label="Actualiser les disponibilités"
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/10 text-gray-500 transition hover:border-green-500/30 hover:text-green-400"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#E9E2DD] bg-white text-[#716A6C] transition hover:border-[#4A9692]/40 hover:bg-[#EDF7F6] hover:text-[#347A77]"
               >
-                <RefreshCw
-                  size={15}
-                />
+                <RefreshCw size={15} />
               </button>
 
             </div>
@@ -995,23 +934,17 @@ export default function AvailabilityCalendar() {
           PANNEAU DE DROITE
       ===================================================== */}
 
-      <aside className="h-fit rounded-[28px] border border-green-500/20 bg-green-500/10 p-5 backdrop-blur-xl sm:p-8 lg:sticky lg:top-28">
+      <aside className="h-fit rounded-[28px] border border-[#E9E2DD] bg-white p-5 shadow-[0_12px_35px_rgba(31,25,27,0.06)] sm:p-7 lg:sticky lg:top-28 lg:p-8">
 
-        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-green-500/15 text-green-400">
-
-          <CalendarDays
-            size={24}
-          />
-
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#EDF7F6] text-[#347A77]">
+          <CalendarDays size={24} />
         </div>
 
-        {/* =================================================
-            MATÉRIEL
-        ================================================= */}
+        {/* MATÉRIEL */}
 
         <div className="mt-6">
 
-          <label className="mb-2 block text-sm font-semibold text-gray-200">
+          <label className="mb-2 block text-sm font-semibold text-[#3F3A3C]">
             Matériel souhaité *
           </label>
 
@@ -1025,7 +958,7 @@ export default function AvailabilityCalendar() {
               )
             }
             disabled={loading}
-            className="w-full rounded-xl border border-white/10 bg-[#101010] p-4 text-white outline-none transition focus:border-green-500/60 disabled:opacity-50"
+            className="w-full rounded-xl border border-[#E9E2DD] bg-[#FBFAF8] p-4 text-[#1D1B1C] outline-none transition focus:border-[#4A9692] focus:ring-2 focus:ring-[#4A9692]/10 disabled:opacity-50"
           >
 
             <option value="">
@@ -1047,14 +980,12 @@ export default function AvailabilityCalendar() {
 
         </div>
 
-        {/* =================================================
-            QUANTITÉ
-        ================================================= */}
+        {/* QUANTITÉ */}
 
         {selectedInventory && (
           <div className="mt-6">
 
-            <label className="mb-2 block text-sm font-semibold text-gray-200">
+            <label className="mb-2 block text-sm font-semibold text-[#3F3A3C]">
               Quantité souhaitée
             </label>
 
@@ -1082,10 +1013,10 @@ export default function AvailabilityCalendar() {
                   )
                 )
               }
-              className="w-full rounded-xl border border-white/10 bg-[#101010] p-4 text-white outline-none transition focus:border-green-500/60"
+              className="w-full rounded-xl border border-[#E9E2DD] bg-[#FBFAF8] p-4 text-[#1D1B1C] outline-none transition focus:border-[#4A9692] focus:ring-2 focus:ring-[#4A9692]/10"
             />
 
-            <p className="mt-2 text-xs text-gray-500">
+            <p className="mt-2 text-xs text-[#9A9395]">
               Stock total :{" "}
               {selectedInventory.stock}
             </p>
@@ -1093,17 +1024,15 @@ export default function AvailabilityCalendar() {
           </div>
         )}
 
-        {/* =================================================
-            DATE
-        ================================================= */}
+        {/* DATE */}
 
-        <div className="mt-8">
+        <div className="mt-8 border-t border-[#E9E2DD] pt-6">
 
-          <p className="text-xs font-bold uppercase tracking-[0.25em] text-green-400">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#347A77]">
             Votre date
           </p>
 
-          <h3 className="mt-3 text-2xl font-black leading-tight text-white sm:text-3xl">
+          <h3 className="mt-3 text-2xl font-black leading-tight text-[#1D1B1C] sm:text-3xl">
 
             {selectedDate
               ? formatFrenchDate(
@@ -1115,33 +1044,33 @@ export default function AvailabilityCalendar() {
 
         </div>
 
-        {/* =================================================
-            DISPONIBILITÉ
-        ================================================= */}
+        {/* DISPONIBILITÉ */}
 
         {selectedAvailability &&
           selectedInventory && (
             <div className="mt-6">
 
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+              <div className="rounded-2xl border border-[#E9E2DD] bg-[#FBFAF8] p-5">
 
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#9A9395]">
                   Stock disponible
                 </p>
 
-                <p className="mt-2 text-3xl font-black text-white">
+                <p className="mt-2 text-3xl font-black text-[#1D1B1C]">
 
                   {
                     selectedAvailability.available
                   }{" "}
-                  /{" "}
-                  {
-                    selectedAvailability.total
-                  }
+                  <span className="text-lg text-[#9A9395]">
+                    /{" "}
+                    {
+                      selectedAvailability.total
+                    }
+                  </span>
 
                 </p>
 
-                <p className="mt-1 text-sm text-gray-400">
+                <p className="mt-1 text-sm text-[#716A6C]">
                   {
                     selectedInventory.name
                   }
@@ -1149,7 +1078,7 @@ export default function AvailabilityCalendar() {
 
                 {selectedAvailability.reserved >
                   0 && (
-                  <p className="mt-3 text-xs text-gray-500">
+                  <p className="mt-3 text-xs text-[#9A9395]">
 
                     {
                       selectedAvailability.reserved
@@ -1166,12 +1095,10 @@ export default function AvailabilityCalendar() {
 
               </div>
 
-              {/* =============================================
-                  DISPONIBLE
-              ============================================= */}
+              {/* DISPONIBLE */}
 
               {canRequest && (
-                <div className="mt-4 flex items-start gap-3 rounded-2xl border border-green-500/30 bg-green-500/10 p-4 text-green-300">
+                <div className="mt-4 flex items-start gap-3 rounded-2xl border border-[#4A9692]/25 bg-[#EDF7F6] p-4 text-[#347A77]">
 
                   <CheckCircle2
                     size={22}
@@ -1184,7 +1111,7 @@ export default function AvailabilityCalendar() {
                       Disponible
                     </p>
 
-                    <p className="mt-1 text-xs leading-5 text-green-200/70">
+                    <p className="mt-1 text-xs leading-5 text-[#3F6664]">
 
                       {requestedQuantity ===
                       1
@@ -1198,12 +1125,10 @@ export default function AvailabilityCalendar() {
                 </div>
               )}
 
-              {/* =============================================
-                  INDISPONIBLE
-              ============================================= */}
+              {/* INDISPONIBLE */}
 
               {!canRequest && (
-                <div className="mt-4 flex items-start gap-3 rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-red-300">
+                <div className="mt-4 flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-red-600">
 
                   <XCircle
                     size={22}
@@ -1216,7 +1141,7 @@ export default function AvailabilityCalendar() {
                       Quantité indisponible
                     </p>
 
-                    <p className="mt-1 text-xs leading-5 text-red-200/70">
+                    <p className="mt-1 text-xs leading-5 text-red-600">
 
                       {selectedAvailability.available ===
                       0
@@ -1233,15 +1158,13 @@ export default function AvailabilityCalendar() {
             </div>
           )}
 
-        {/* =================================================
-            CTA DEVIS
-        ================================================= */}
+        {/* CTA DEVIS */}
 
         {selectedAvailability &&
           canRequest && (
             <Link
               href={quoteUrl}
-              className="group mt-6 flex min-h-[56px] w-full items-center justify-center gap-2 rounded-xl bg-green-600 px-5 py-4 text-center font-bold text-white transition hover:bg-green-700"
+              className="group mt-6 flex min-h-[56px] w-full items-center justify-center gap-2 rounded-xl bg-[#EF5A4F] px-5 py-4 text-center font-bold text-white shadow-[0_8px_22px_rgba(239,90,79,0.18)] transition hover:bg-[#D94A41]"
             >
 
               Demander un devis
@@ -1254,13 +1177,11 @@ export default function AvailabilityCalendar() {
             </Link>
           )}
 
-        {/* =================================================
-            AIDE
-        ================================================= */}
+        {/* AIDE */}
 
         {!selectedInventory &&
           !loading && (
-            <p className="mt-6 text-sm leading-6 text-gray-400">
+            <p className="mt-6 text-sm leading-6 text-[#716A6C]">
 
               Commencez par sélectionner
               le matériel que vous souhaitez
@@ -1271,7 +1192,7 @@ export default function AvailabilityCalendar() {
 
         {selectedInventory &&
           !selectedDate && (
-            <p className="mt-6 text-sm leading-6 text-gray-400">
+            <p className="mt-6 text-sm leading-6 text-[#716A6C]">
 
               Sélectionnez ensuite une date
               dans le calendrier.
@@ -1279,7 +1200,7 @@ export default function AvailabilityCalendar() {
             </p>
           )}
 
-        <p className="mt-6 text-xs leading-5 text-gray-500">
+        <p className="mt-6 border-t border-[#E9E2DD] pt-5 text-xs leading-5 text-[#9A9395]">
 
           Les disponibilités affichées sont
           indicatives et seront définitivement

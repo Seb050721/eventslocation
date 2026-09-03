@@ -12,21 +12,21 @@ export default function OptionsGrid({
   }
 
   return (
-    <section className="rounded-[24px] border border-white/10 bg-white/[0.05] p-5 backdrop-blur-xl sm:rounded-3xl sm:p-6 lg:p-8">
+    <section className="rounded-[24px] border border-[#E9E2DD] bg-[#FBFAF8] p-5 shadow-[0_10px_30px_rgba(31,25,27,0.05)] sm:rounded-3xl sm:p-6 lg:p-8">
 
       {/* TITRE */}
 
       <div className="mb-6 sm:mb-8">
 
-        <span className="inline-flex rounded-full border border-green-500/30 bg-green-500/10 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-green-400 sm:px-4 sm:py-2 sm:text-xs sm:tracking-[0.3em]">
+        <span className="inline-flex rounded-full border border-[#C34F72]/20 bg-[#FAEEF2] px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#C34F72] sm:px-4 sm:py-2 sm:text-xs">
           Options
         </span>
 
-        <h2 className="mt-4 text-2xl font-black leading-tight text-white sm:text-3xl">
+        <h2 className="mt-4 text-2xl font-black leading-tight text-[#1D1B1C] sm:text-3xl">
           Options disponibles
         </h2>
 
-        <p className="mt-2 text-sm leading-6 text-gray-400 sm:text-base">
+        <p className="mt-2 text-sm leading-6 text-[#716A6C] sm:text-base">
           Complétez votre prestation selon vos besoins.
         </p>
 
@@ -36,22 +36,39 @@ export default function OptionsGrid({
 
       <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
 
-        {options.map((option) => (
+        {options.map((option, index) => (
           <div
             key={option.name}
-            className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 transition duration-300 sm:p-5 lg:p-6 lg:hover:border-green-500/30 lg:hover:bg-green-500/[0.05]"
+            className="group relative overflow-hidden rounded-2xl border border-[#E9E2DD] bg-white p-4 shadow-[0_6px_20px_rgba(31,25,27,0.03)] transition-all duration-300 sm:p-5 lg:p-6 lg:hover:-translate-y-0.5 lg:hover:border-[#C34F72]/25 lg:hover:shadow-[0_12px_28px_rgba(31,25,27,0.06)]"
           >
 
-            <div className="flex items-start justify-between gap-4">
+            {/* PETIT ACCENT COULEUR */}
+
+            <div
+              aria-hidden="true"
+              className={`absolute left-0 top-0 h-full w-1 ${
+                index % 5 === 0
+                  ? "bg-[#C34F72]"
+                  : index % 5 === 1
+                    ? "bg-[#4A9692]"
+                    : index % 5 === 2
+                      ? "bg-[#F3A044]"
+                      : index % 5 === 3
+                        ? "bg-[#87954E]"
+                        : "bg-[#EF5A4F]"
+              }`}
+            />
+
+            <div className="flex items-start justify-between gap-4 pl-2">
 
               <div className="min-w-0">
 
-                <h3 className="text-base font-bold leading-6 text-white sm:text-lg lg:text-xl">
+                <h3 className="text-base font-bold leading-6 text-[#1D1B1C] sm:text-lg lg:text-xl">
                   {option.name}
                 </h3>
 
                 {option.description && (
-                  <p className="mt-2 text-sm leading-6 text-gray-400">
+                  <p className="mt-2 text-sm leading-6 text-[#716A6C]">
                     {option.description}
                   </p>
                 )}
@@ -61,9 +78,9 @@ export default function OptionsGrid({
               <div className="shrink-0 text-right">
 
                 <p
-                  className={`font-black text-green-400 ${
+                  className={`font-black text-[#EF5A4F] ${
                     option.price == null
-                      ? "text-lg sm:text-xl"
+                      ? "text-base sm:text-lg"
                       : "text-xl sm:text-2xl"
                   }`}
                 >

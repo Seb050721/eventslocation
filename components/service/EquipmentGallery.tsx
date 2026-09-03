@@ -75,7 +75,8 @@ export default function EquipmentGallery({
             }
 
             return (
-              current + 1
+              current +
+              1
             ) % images.length;
           }
         );
@@ -142,7 +143,8 @@ export default function EquipmentGallery({
       }
 
       return (
-        current + 1
+        current +
+        1
       ) % images.length;
     });
   };
@@ -153,27 +155,27 @@ export default function EquipmentGallery({
           GALERIE
       ===================================================== */}
 
-      <section className="overflow-hidden rounded-[22px] border border-white/10 bg-white/[0.04] p-5 sm:rounded-[26px] sm:p-6 lg:p-8">
+      <section className="overflow-hidden rounded-[24px] border border-[#E9E2DD] bg-[#FBFAF8] p-5 shadow-[0_10px_30px_rgba(31,25,27,0.05)] sm:rounded-3xl sm:p-6 lg:p-8">
 
         {/* TITRE */}
 
         <div className="mb-6">
 
-          <span className="inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-green-400 sm:text-xs">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#C34F72]/20 bg-[#FAEEF2] px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#C34F72] sm:px-4 sm:py-2 sm:text-xs">
             <Images size={14} />
-
             Notre matériel
           </span>
 
-          <h2 className="mt-4 text-2xl font-black text-white sm:text-3xl">
-            Découvrez notre mobilier
+          <h2 className="mt-4 text-2xl font-black text-[#1D1B1C] sm:text-3xl">
+            Découvrez notre
+            <span className="text-[#EF5A4F]">
+              {" "}matériel
+            </span>
           </h2>
 
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-gray-400 sm:text-base">
-            Découvrez en images les
-            différents équipements disponibles
-            à la location pour votre mariage,
-            anniversaire ou réception.
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-[#716A6C] sm:text-base">
+            Découvrez en images les différents équipements disponibles
+            à la location pour votre mariage, anniversaire ou réception.
           </p>
 
         </div>
@@ -190,7 +192,7 @@ export default function EquipmentGallery({
                 onClick={() =>
                   setSelectedIndex(index)
                 }
-                className="group relative aspect-[4/3] overflow-hidden rounded-xl border border-white/10 bg-black text-left"
+                className="group relative aspect-[4/3] overflow-hidden rounded-2xl border border-[#E9E2DD] bg-white text-left shadow-[0_6px_20px_rgba(31,25,27,0.04)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#EF5A4F]/25 hover:shadow-[0_12px_28px_rgba(31,25,27,0.08)]"
               >
                 <Image
                   src={image.src}
@@ -200,11 +202,11 @@ export default function EquipmentGallery({
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/5 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/5 to-transparent" />
 
                 {/* ZOOM */}
 
-                <div className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white opacity-0 backdrop-blur-sm transition group-hover:opacity-100">
+                <div className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full border border-white/70 bg-white/90 text-[#EF5A4F] opacity-100 shadow-sm backdrop-blur-sm transition-all duration-200 sm:opacity-0 sm:group-hover:opacity-100">
                   <ZoomIn size={15} />
                 </div>
 
@@ -212,9 +214,13 @@ export default function EquipmentGallery({
 
                 {image.label && (
                   <div className="absolute bottom-0 left-0 right-0 p-3">
-                    <p className="text-xs font-bold text-white sm:text-sm">
-                      {image.label}
-                    </p>
+
+                    <div className="inline-flex rounded-full bg-white/90 px-3 py-1.5 shadow-sm backdrop-blur-md">
+                      <p className="text-[11px] font-bold text-[#3F3A3C] sm:text-xs">
+                        {image.label}
+                      </p>
+                    </div>
+
                   </div>
                 )}
 
@@ -232,7 +238,7 @@ export default function EquipmentGallery({
 
       {selectedImage && (
         <div
-          className="fixed inset-0 z-[300] flex items-center justify-center bg-black/95 p-3 backdrop-blur-md sm:p-6"
+          className="fixed inset-0 z-[300] flex items-center justify-center bg-[#1D1B1C]/95 p-3 backdrop-blur-md sm:p-6"
           onClick={() =>
             setSelectedIndex(null)
           }
@@ -246,9 +252,9 @@ export default function EquipmentGallery({
             onClick={() =>
               setSelectedIndex(null)
             }
-            className="absolute right-4 top-4 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-black/60 text-white backdrop-blur transition hover:bg-white/10"
+            className="absolute right-4 top-4 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur transition-all duration-200 hover:bg-[#EF5A4F]"
           >
-            <X size={24} />
+            <X size={23} />
           </button>
 
           {/* PRÉCÉDENTE */}
@@ -261,7 +267,7 @@ export default function EquipmentGallery({
                 event.stopPropagation();
                 previousImage();
               }}
-              className="absolute left-2 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur transition hover:bg-white/10 sm:left-5 sm:h-12 sm:w-12"
+              className="absolute left-2 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur transition-all duration-200 hover:bg-[#EF5A4F] sm:left-5 sm:h-12 sm:w-12"
             >
               <ChevronLeft size={26} />
             </button>
@@ -287,7 +293,7 @@ export default function EquipmentGallery({
             {/* LÉGENDE */}
 
             {selectedImage.label && (
-              <div className="absolute bottom-3 left-1/2 max-w-[85%] -translate-x-1/2 rounded-full bg-black/70 px-4 py-2 text-center text-sm font-semibold text-white backdrop-blur-md">
+              <div className="absolute bottom-3 left-1/2 max-w-[85%] -translate-x-1/2 rounded-full border border-white/20 bg-white/90 px-4 py-2 text-center text-sm font-semibold text-[#3F3A3C] shadow-lg backdrop-blur-md">
                 {selectedImage.label}
               </div>
             )}
@@ -303,7 +309,7 @@ export default function EquipmentGallery({
                 event.stopPropagation();
                 nextImage();
               }}
-              className="absolute right-2 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur transition hover:bg-white/10 sm:right-5 sm:h-12 sm:w-12"
+              className="absolute right-2 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur transition-all duration-200 hover:bg-[#EF5A4F] sm:right-5 sm:h-12 sm:w-12"
             >
               <ChevronRight size={26} />
             </button>

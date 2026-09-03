@@ -16,7 +16,7 @@ export const photobooth: Service = {
   startingPrice: 169,
 
   shortDescription:
-    "Location de Photo Booth pour mariages, anniversaires et événements à Auxerre, dans l'Yonne et la Nièvre.",
+    "Location de Photo Booth pour mariages, anniversaires et événements à Auxerre, Avallon, Nevers et dans les environs.",
 
   description:
     "Animez votre mariage, anniversaire ou événement avec notre Photo Booth professionnel. Disponible à la journée ou durant tout le week-end, il permet à vos invités de réaliser leurs photos librement et de conserver un souvenir personnalisé de votre événement.",
@@ -30,7 +30,7 @@ export const photobooth: Service = {
       "Location Photobooth Auxerre, Yonne & Nièvre dès 169 €",
 
     description:
-      "Location de photobooth à Auxerre, dans l'Yonne et la Nièvre dès 169 €. Mariage, anniversaire et événement avec installation, cadre personnalisé et galerie photo.",
+      "Location de Photo Booth dès 169 € à Auxerre, Avallon, Nevers et dans l'Yonne et la Nièvre. Cadre personnalisé, galerie photo et installation.",
   },
 
   /* ============================================================
@@ -39,20 +39,20 @@ export const photobooth: Service = {
 
   seoContent: {
     title:
-      "Location de Photobooth à Auxerre, dans l'Yonne et la Nièvre",
+      "Location de Photo Booth à Auxerre, dans l'Yonne et la Nièvre",
 
     paragraphs: [
-      "Vous recherchez un photobooth à Auxerre ou dans l'Yonne pour un mariage, un anniversaire ou un événement ? Event'S Location propose la location de Photo Booth à partir de 169 €, avec plusieurs formules numériques ou avec impressions photo.",
+      "Vous recherchez un Photo Booth pour un mariage, un anniversaire ou une réception ? Event'S Location propose plusieurs formules à partir de 169 €, en version numérique ou avec impressions photo.",
 
-      "Basés à Varzy, nous intervenons dans l'Yonne et la Nièvre, notamment à Auxerre, Clamecy, Nevers, Cosne-Cours-sur-Loire, La Charité-sur-Loire et dans les communes environnantes. La livraison est gratuite dans un rayon de 20 km autour de Varzy et reste possible au-delà sur devis.",
+      "Basés à Varzy, nous intervenons notamment à Auxerre, Avallon, Clamecy, Nevers, Cosne-Cours-sur-Loire et dans les communes environnantes. La livraison est offerte dans un rayon de 20 km autour de Varzy et reste possible au-delà sur devis.",
 
-      "Notre Photo Booth peut être installé pour un mariage, un anniversaire, un baptême, une soirée privée ou un événement professionnel. Le cadre photo est personnalisé selon votre événement afin que chaque impression corresponde à votre thème et à vos couleurs.",
+      "Notre Photo Booth convient aux mariages, anniversaires, baptêmes, soirées privées, événements associatifs et événements professionnels. Un cadre photo personnalisé est créé pour s'accorder avec le thème et les couleurs de votre événement.",
 
-      "Plusieurs formules sont disponibles : version numérique à 169 €, puis des forfaits comprenant 100, 150, 200, 300 ou 400 impressions photo. Vous pouvez ainsi choisir une formule adaptée au nombre d'invités et à votre budget.",
+      "Plusieurs formules sont proposées : version numérique à 169 €, puis des forfaits comprenant 100, 150, 200, 300 ou 400 impressions. Vous pouvez ainsi adapter votre formule au nombre d'invités et à votre budget.",
 
-      "Les photos réalisées pendant l'événement sont également accessibles dans une galerie en ligne. Le Photo Booth peut être mis à disposition à la journée ou pendant tout le week-end selon votre événement.",
+      "Les photos réalisées pendant l'événement sont également accessibles dans une galerie en ligne. Le Photo Booth peut être mis à disposition pour une journée ou pendant tout le week-end selon votre événement.",
 
-      "Pour votre événement à Auxerre, dans l'Yonne ou la Nièvre, Event'S Location propose également la location de sonorisation, mobilier, vidéoprojecteur, machines à effets et Smoke Puff.",
+      "Vous pouvez également compléter votre location avec du mobilier, de la sonorisation, un vidéoprojecteur, des machines à effets ou des Smoke Puff afin de regrouper plusieurs besoins auprès d'Event'S Location.",
     ],
   },
 
@@ -66,7 +66,7 @@ export const photobooth: Service = {
     "Galerie photo en ligne",
     "Personnalisation du cadre photo",
     "Assistance si besoin",
-    "Livraison gratuite dans un rayon de 20 km",
+    "Livraison offerte dans un rayon de 20 km",
   ],
 
   /* ============================================================
@@ -78,7 +78,7 @@ export const photobooth: Service = {
       label: "Numérique",
       price: 169,
       description:
-        "Photos numériques sans limite d'impression papier.",
+        "Photos numériques en illimité, sans impression papier.",
     },
 
     {
@@ -148,7 +148,7 @@ export const photobooth: Service = {
   faq: [
     {
       question:
-        "Combien coûte la location d'un photobooth à Auxerre ?",
+        "Combien coûte la location d'un Photo Booth ?",
 
       answer:
         "Nos formules Photo Booth débutent à 169 € en version numérique. Des formules comprenant de 100 à 400 impressions photo sont également disponibles.",
@@ -156,10 +156,18 @@ export const photobooth: Service = {
 
     {
       question:
-        "Proposez-vous la location de photobooth à Auxerre ?",
+        "Proposez-vous la location de Photo Booth à Auxerre ?",
 
       answer:
-        "Oui. Basés à Varzy, nous proposons la location de notre Photo Booth à Auxerre et plus largement dans l'Yonne, selon les disponibilités et les conditions de livraison.",
+        "Oui. Event'S Location propose la location de Photo Booth à Auxerre et plus largement dans l'Yonne, selon les disponibilités et les conditions de livraison.",
+    },
+
+    {
+      question:
+        "Proposez-vous également le Photo Booth à Avallon, Nevers et Cosne-Cours-sur-Loire ?",
+
+      answer:
+        "Oui. Nous pouvons intervenir à Avallon, Nevers, Cosne-Cours-sur-Loire et dans de nombreuses communes de l'Yonne et de la Nièvre. Le déplacement est précisé lors de la demande de devis.",
     },
 
     {
@@ -175,7 +183,7 @@ export const photobooth: Service = {
         "Le cadre des photos est-il personnalisé ?",
 
       answer:
-        "Oui. Un cadre photo personnalisé est créé pour votre événement afin de l'adapter à votre thème, vos couleurs et au type de réception.",
+        "Oui. Un cadre photo personnalisé est créé pour votre événement afin de l'adapter à votre thème, à vos couleurs et au style de votre réception.",
     },
 
     {
@@ -199,7 +207,7 @@ export const photobooth: Service = {
         "La livraison du Photo Booth est-elle comprise ?",
 
       answer:
-        "La livraison est gratuite dans un rayon de 20 km autour de Varzy. Pour Auxerre, Nevers et les autres communes situées au-delà de cette zone, le déplacement est calculé lors de la demande de devis.",
+        "La livraison est offerte dans un rayon de 20 km autour de Varzy. Pour les communes situées au-delà de cette zone, le déplacement est calculé lors de la demande de devis.",
     },
 
     {
@@ -207,7 +215,7 @@ export const photobooth: Service = {
         "Dans quelles villes proposez-vous la location de Photo Booth ?",
 
       answer:
-        "Nous intervenons principalement dans l'Yonne et la Nièvre, notamment à Auxerre, Varzy, Clamecy, Nevers, Cosne-Cours-sur-Loire, La Charité-sur-Loire et dans les communes environnantes.",
+        "Nous intervenons principalement dans la Nièvre et l'Yonne, notamment autour de Varzy, Clamecy, Auxerre, Avallon, Nevers et Cosne-Cours-sur-Loire, ainsi que dans les communes environnantes.",
     },
   ],
 };
