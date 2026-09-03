@@ -8,10 +8,47 @@ import { Resend } from "resend";
 export const dynamic = "force-dynamic";
 
 const LOGO_URL =
-  "https://www.eventslocation.fr/Logo/Logo1.png";
+  "https://www.eventslocation.fr/Logo/Logo.png";
 
 const WEBSITE_URL =
   "https://www.eventslocation.fr";
+
+const BUSINESS_EMAIL =
+  "events.location@outlook.com";
+
+const BUSINESS_PHONE =
+  "06 43 89 45 70";
+
+/* ============================================================
+   COULEURS EVENT'S LOCATION
+============================================================ */
+
+const COLORS = {
+  background: "#FBFAF8",
+  backgroundSoft: "#F7F3EF",
+
+  white: "#FFFFFF",
+
+  text: "#1D1B1C",
+  textSoft: "#716A6C",
+  textMuted: "#9A9395",
+
+  border: "#E9E2DD",
+
+  coral: "#EF5A4F",
+  coralDark: "#D94A41",
+  coralLight: "#FFF0ED",
+
+  teal: "#4A9692",
+  tealDark: "#347A77",
+  tealLight: "#EDF7F6",
+
+  orange: "#F3A044",
+  orangeLight: "#FFF5E9",
+
+  red: "#DC2626",
+  redLight: "#FEF2F2",
+};
 
 /* ============================================================
    SÉCURISATION HTML
@@ -31,19 +68,25 @@ function escapeHtml(value: unknown) {
 ============================================================ */
 
 function formatFrenchDate(value: unknown) {
-  const dateString = String(value ?? "");
+  const dateString =
+    String(value ?? "");
 
   if (!dateString) {
     return "Non renseignée";
   }
 
   try {
-    return new Intl.DateTimeFormat("fr-FR", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    }).format(
-      new Date(`${dateString}T12:00:00`)
+    return new Intl.DateTimeFormat(
+      "fr-FR",
+      {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }
+    ).format(
+      new Date(
+        `${dateString}T12:00:00`
+      )
     );
   } catch {
     return dateString;
@@ -303,75 +346,94 @@ export async function POST(
       );
 
     /* ========================================================
-       BLOCS HTML COMMUNS
+       LIENS DE CONTACT
+    ======================================================== */
+
+    const mailtoClient =
+      `mailto:${String(email)}`;
+
+    const telClient =
+      `tel:${String(phone)
+        .replace(/\s+/g, "")}`;
+
+    /* ========================================================
+       MATÉRIEL ADMIN
     ======================================================== */
 
     const materialAdminHtml =
       safeMaterial
         ? `
           <div style="
-            margin-top:20px;
-            padding:18px;
-            border:1px solid #e5e7eb;
+            margin-top:18px;
+            padding:18px 20px;
+            background:${COLORS.backgroundSoft};
+            border:1px solid ${COLORS.border};
             border-radius:14px;
-            background:#f9fafb;
           ">
+
             <p style="
-              margin:0 0 6px;
-              font-size:12px;
-              font-weight:bold;
+              margin:0 0 7px;
+              font-size:11px;
+              line-height:1.4;
+              font-weight:700;
               text-transform:uppercase;
-              letter-spacing:1px;
-              color:#6b7280;
+              letter-spacing:1.2px;
+              color:${COLORS.tealDark};
             ">
-              Matériel demandé
+              Matériel sélectionné
             </p>
 
             <p style="
               margin:0;
               font-size:17px;
-              font-weight:bold;
-              color:#111827;
+              line-height:1.5;
+              font-weight:700;
+              color:${COLORS.text};
             ">
               ${safeMaterial}
               × ${safeQuantity ?? 1}
             </p>
+
           </div>
         `
         : "";
+
+    /* ========================================================
+       DISPONIBILITÉ ADMIN
+    ======================================================== */
 
     const availabilityAdminHtml =
       isFromAvailability
         ? `
           <div style="
             margin-top:14px;
-            padding:16px;
-            border-radius:12px;
-            ${
+            padding:16px 18px;
+            border-radius:14px;
+            background:${
               isAvailabilityVerified
-                ? `
-                  background:#f0fdf4;
-                  border:1px solid #bbf7d0;
-                `
-                : `
-                  background:#fffbeb;
-                  border:1px solid #fde68a;
-                `
-            }
+                ? COLORS.tealLight
+                : COLORS.orangeLight
+            };
+            border:1px solid ${
+              isAvailabilityVerified
+                ? "#CFE6E4"
+                : "#F7DDB8"
+            };
           ">
 
             <p style="
               margin:0;
-              font-weight:bold;
+              font-size:14px;
+              font-weight:700;
               color:${
                 isAvailabilityVerified
-                  ? "#15803d"
-                  : "#a16207"
+                  ? COLORS.tealDark
+                  : "#A76519"
               };
             ">
               ${
                 isAvailabilityVerified
-                  ? "✓ Disponibilité vérifiée"
+                  ? "✓ Disponibilité vérifiée en ligne"
                   : "⚠ Disponibilité à confirmer"
               }
             </p>
@@ -381,10 +443,11 @@ export async function POST(
                 ? `
                   <p style="
                     margin:6px 0 0;
-                    font-size:13px;
-                    color:#4b5563;
+                    font-size:12px;
+                    line-height:1.5;
+                    color:${COLORS.textSoft};
                   ">
-                    Date vérifiée :
+                    Consultation effectuée pour le
                     ${safeCheckedDate}
                   </p>
                 `
@@ -395,25 +458,32 @@ export async function POST(
         `
         : "";
 
+    /* ========================================================
+       MATÉRIEL CLIENT
+    ======================================================== */
+
     const materialClientHtml =
       safeMaterial
         ? `
           <tr>
             <td style="
-              padding:10px 0;
-              color:#6b7280;
-              font-size:14px;
+              padding:11px 0;
+              border-bottom:1px solid ${COLORS.border};
+              color:${COLORS.textSoft};
+              font-size:13px;
               vertical-align:top;
             ">
               Matériel
             </td>
 
             <td style="
-              padding:10px 0;
-              color:#111827;
-              font-size:14px;
-              font-weight:bold;
+              padding:11px 0;
+              border-bottom:1px solid ${COLORS.border};
+              color:${COLORS.text};
+              font-size:13px;
+              font-weight:700;
               text-align:right;
+              vertical-align:top;
             ">
               ${safeMaterial}
               × ${safeQuantity ?? 1}
@@ -432,7 +502,7 @@ export async function POST(
           "Event'S Location <devis@eventslocation.fr>",
 
         to: [
-          "events.location@outlook.com",
+          BUSINESS_EMAIL,
         ],
 
         replyTo:
@@ -444,68 +514,96 @@ export async function POST(
         html: `
 <!doctype html>
 <html lang="fr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+</head>
+
 <body style="
   margin:0;
   padding:0;
-  background:#f3f4f6;
+  background:${COLORS.background};
   font-family:Arial, Helvetica, sans-serif;
-  color:#111827;
+  color:${COLORS.text};
 ">
 
   <div style="
     width:100%;
-    padding:24px 12px;
+    padding:28px 12px;
     box-sizing:border-box;
   ">
 
     <div style="
       max-width:680px;
       margin:0 auto;
-      background:#ffffff;
-      border-radius:20px;
+      background:${COLORS.white};
+      border:1px solid ${COLORS.border};
+      border-radius:22px;
       overflow:hidden;
-      border:1px solid #e5e7eb;
     ">
 
       <!-- HEADER -->
 
       <div style="
-        background:#0b0b0b;
-        padding:24px;
+        padding:28px 24px 24px;
+        background:${COLORS.white};
         text-align:center;
+        border-bottom:1px solid ${COLORS.border};
       ">
 
         <img
           src="${LOGO_URL}"
           alt="Event'S Location"
-          width="90"
+          width="180"
           style="
             display:block;
-            margin:0 auto 14px;
-            max-width:90px;
+            width:180px;
+            max-width:70%;
             height:auto;
+            margin:0 auto 20px;
           "
-        />
+        >
+
+        <div style="
+          width:52px;
+          height:4px;
+          margin:0 auto 18px;
+          border-radius:999px;
+          background:${COLORS.coral};
+        "></div>
 
         <p style="
           margin:0;
           font-size:11px;
-          font-weight:bold;
+          line-height:1.4;
+          font-weight:700;
           text-transform:uppercase;
-          letter-spacing:2px;
-          color:#22c55e;
+          letter-spacing:1.7px;
+          color:${COLORS.tealDark};
         ">
-          Event'S Location
+          Nouvelle demande
         </p>
 
         <h1 style="
-          margin:8px 0 0;
+          margin:7px 0 0;
           font-size:26px;
-          line-height:1.2;
-          color:#ffffff;
+          line-height:1.25;
+          font-weight:800;
+          color:${COLORS.text};
         ">
-          Nouvelle demande de devis
+          Demande de devis reçue
         </h1>
+
+        <p style="
+          margin:9px 0 0;
+          font-size:14px;
+          line-height:1.6;
+          color:${COLORS.textSoft};
+        ">
+          ${safeFirstname} ${safeLastname}
+          souhaite obtenir une proposition.
+        </p>
 
       </div>
 
@@ -515,30 +613,34 @@ export async function POST(
         padding:26px;
       ">
 
+        <!-- ESTIMATION -->
+
         <div style="
-          padding:18px;
-          background:#f0fdf4;
-          border:1px solid #bbf7d0;
-          border-radius:14px;
-          margin-bottom:24px;
+          padding:20px;
+          background:${COLORS.coralLight};
+          border:1px solid #F7CBC6;
+          border-radius:16px;
+          text-align:center;
         ">
 
           <p style="
             margin:0;
-            font-size:12px;
-            color:#166534;
+            font-size:11px;
+            line-height:1.4;
+            color:${COLORS.coralDark};
             text-transform:uppercase;
-            font-weight:bold;
-            letter-spacing:1px;
+            font-weight:700;
+            letter-spacing:1.2px;
           ">
             Estimation indicative
           </p>
 
           <p style="
             margin:6px 0 0;
-            font-size:30px;
-            font-weight:bold;
-            color:#15803d;
+            font-size:31px;
+            line-height:1.2;
+            font-weight:800;
+            color:${COLORS.coral};
           ">
             ${safeEstimationLabel}
           </p>
@@ -547,9 +649,10 @@ export async function POST(
             safeHasCustomPriceService
               ? `
                 <p style="
-                  margin:8px 0 0;
+                  margin:9px 0 0;
                   font-size:12px;
-                  color:#4b5563;
+                  line-height:1.6;
+                  color:${COLORS.textSoft};
                 ">
                   Une ou plusieurs prestations
                   nécessitent un chiffrage personnalisé.
@@ -563,38 +666,71 @@ export async function POST(
         <!-- CLIENT -->
 
         <h2 style="
-          margin:0 0 14px;
-          font-size:19px;
-          color:#111827;
+          margin:28px 0 12px;
+          font-size:18px;
+          line-height:1.4;
+          color:${COLORS.text};
         ">
           Coordonnées du client
         </h2>
 
         <div style="
-          padding:18px;
-          background:#f9fafb;
+          padding:18px 20px;
+          background:${COLORS.backgroundSoft};
+          border:1px solid ${COLORS.border};
           border-radius:14px;
-          border:1px solid #e5e7eb;
         ">
 
-          <p style="margin:0 0 8px;">
+          <p style="
+            margin:0 0 9px;
+            font-size:14px;
+            line-height:1.6;
+          ">
             <strong>Nom :</strong>
             ${safeLastname}
           </p>
 
-          <p style="margin:0 0 8px;">
+          <p style="
+            margin:0 0 9px;
+            font-size:14px;
+            line-height:1.6;
+          ">
             <strong>Prénom :</strong>
             ${safeFirstname}
           </p>
 
-          <p style="margin:0 0 8px;">
+          <p style="
+            margin:0 0 9px;
+            font-size:14px;
+            line-height:1.6;
+          ">
             <strong>E-mail :</strong>
-            ${safeEmail}
+            <a
+              href="${mailtoClient}"
+              style="
+                color:${COLORS.tealDark};
+                text-decoration:none;
+              "
+            >
+              ${safeEmail}
+            </a>
           </p>
 
-          <p style="margin:0;">
+          <p style="
+            margin:0;
+            font-size:14px;
+            line-height:1.6;
+          ">
             <strong>Téléphone :</strong>
-            ${safePhone}
+            <a
+              href="${telClient}"
+              style="
+                color:${COLORS.tealDark};
+                text-decoration:none;
+              "
+            >
+              ${safePhone}
+            </a>
           </p>
 
         </div>
@@ -602,35 +738,53 @@ export async function POST(
         <!-- EVENEMENT -->
 
         <h2 style="
-          margin:26px 0 14px;
-          font-size:19px;
+          margin:28px 0 12px;
+          font-size:18px;
+          line-height:1.4;
+          color:${COLORS.text};
         ">
           Événement
         </h2>
 
         <div style="
-          padding:18px;
-          background:#f9fafb;
+          padding:18px 20px;
+          background:${COLORS.backgroundSoft};
+          border:1px solid ${COLORS.border};
           border-radius:14px;
-          border:1px solid #e5e7eb;
         ">
 
-          <p style="margin:0 0 8px;">
+          <p style="
+            margin:0 0 9px;
+            font-size:14px;
+            line-height:1.6;
+          ">
             <strong>Type :</strong>
             ${safeEventType}
           </p>
 
-          <p style="margin:0 0 8px;">
+          <p style="
+            margin:0 0 9px;
+            font-size:14px;
+            line-height:1.6;
+          ">
             <strong>Date :</strong>
             ${safeDate}
           </p>
 
-          <p style="margin:0 0 8px;">
+          <p style="
+            margin:0 0 9px;
+            font-size:14px;
+            line-height:1.6;
+          ">
             <strong>Lieu :</strong>
             ${safeCity}
           </p>
 
-          <p style="margin:0;">
+          <p style="
+            margin:0;
+            font-size:14px;
+            line-height:1.6;
+          ">
             <strong>Invités :</strong>
             ${safeGuests}
           </p>
@@ -644,22 +798,27 @@ export async function POST(
         <!-- PRESTATIONS -->
 
         <h2 style="
-          margin:26px 0 14px;
-          font-size:19px;
+          margin:28px 0 12px;
+          font-size:18px;
+          line-height:1.4;
+          color:${COLORS.text};
         ">
           Prestations demandées
         </h2>
 
         <div style="
-          padding:18px;
-          background:#f9fafb;
+          padding:18px 20px;
+          background:${COLORS.tealLight};
+          border:1px solid #CFE6E4;
           border-radius:14px;
-          border:1px solid #e5e7eb;
         ">
 
           <p style="
             margin:0;
-            line-height:1.6;
+            font-size:14px;
+            line-height:1.7;
+            font-weight:700;
+            color:${COLORS.tealDark};
           ">
             ${safeServices}
           </p>
@@ -669,62 +828,106 @@ export async function POST(
         <!-- MESSAGE -->
 
         <h2 style="
-          margin:26px 0 14px;
-          font-size:19px;
+          margin:28px 0 12px;
+          font-size:18px;
+          line-height:1.4;
+          color:${COLORS.text};
         ">
           Message du client
         </h2>
 
         <div style="
-          padding:18px;
-          background:#f9fafb;
+          padding:18px 20px;
+          background:${COLORS.backgroundSoft};
+          border:1px solid ${COLORS.border};
           border-radius:14px;
-          border:1px solid #e5e7eb;
         ">
 
           <p style="
             margin:0;
             white-space:pre-line;
+            font-size:14px;
             line-height:1.7;
+            color:${COLORS.textSoft};
           ">
             ${safeMessage}
           </p>
 
         </div>
 
-        <!-- ACTION -->
+        <!-- ACTIONS -->
 
         <div style="
-          margin-top:26px;
-          padding:18px;
-          background:#111827;
-          border-radius:14px;
+          margin-top:28px;
+          padding:22px 18px;
+          background:${COLORS.text};
+          border-radius:16px;
           text-align:center;
         ">
 
           <p style="
-            margin:0 0 14px;
-            color:#ffffff;
+            margin:0 0 16px;
+            color:#FFFFFF;
             font-size:14px;
+            line-height:1.6;
           ">
-            Réponds directement à cet e-mail
-            pour contacter ${safeFirstname}.
+            Contactez directement
+            ${safeFirstname}.
           </p>
 
           <a
-            href="${WEBSITE_URL}"
+            href="${mailtoClient}"
             style="
               display:inline-block;
+              margin:3px;
               padding:12px 18px;
-              background:#22c55e;
-              color:#ffffff;
-              font-weight:bold;
+              background:${COLORS.coral};
+              color:#FFFFFF;
+              font-size:13px;
+              font-weight:700;
               text-decoration:none;
               border-radius:10px;
             "
           >
-            Voir le site
+            Répondre par e-mail
           </a>
+
+          <a
+            href="${telClient}"
+            style="
+              display:inline-block;
+              margin:3px;
+              padding:12px 18px;
+              background:${COLORS.teal};
+              color:#FFFFFF;
+              font-size:13px;
+              font-weight:700;
+              text-decoration:none;
+              border-radius:10px;
+            "
+          >
+            Appeler le client
+          </a>
+
+        </div>
+
+        <!-- FOOTER -->
+
+        <div style="
+          margin-top:28px;
+          padding-top:20px;
+          border-top:1px solid ${COLORS.border};
+          text-align:center;
+        ">
+
+          <p style="
+            margin:0;
+            font-size:12px;
+            color:${COLORS.textMuted};
+          ">
+            Demande envoyée depuis
+            eventslocation.fr
+          </p>
 
         </div>
 
@@ -774,7 +977,7 @@ export async function POST(
         ],
 
         replyTo:
-          "events.location@outlook.com",
+          BUSINESS_EMAIL,
 
         subject:
           "Votre demande de devis - Event'S Location",
@@ -782,68 +985,97 @@ export async function POST(
         html: `
 <!doctype html>
 <html lang="fr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+</head>
+
 <body style="
   margin:0;
   padding:0;
-  background:#f3f4f6;
+  background:${COLORS.background};
   font-family:Arial, Helvetica, sans-serif;
-  color:#111827;
+  color:${COLORS.text};
 ">
 
   <div style="
     width:100%;
-    padding:24px 12px;
+    padding:28px 12px;
     box-sizing:border-box;
   ">
 
     <div style="
       max-width:650px;
       margin:0 auto;
-      background:#ffffff;
-      border-radius:20px;
+      background:${COLORS.white};
+      border:1px solid ${COLORS.border};
+      border-radius:22px;
       overflow:hidden;
-      border:1px solid #e5e7eb;
     ">
 
       <!-- HEADER -->
 
       <div style="
-        background:#0b0b0b;
-        padding:26px;
+        padding:30px 24px 26px;
+        background:${COLORS.white};
         text-align:center;
+        border-bottom:1px solid ${COLORS.border};
       ">
 
         <img
           src="${LOGO_URL}"
           alt="Event'S Location"
-          width="92"
+          width="180"
           style="
             display:block;
-            margin:0 auto 14px;
-            max-width:92px;
+            width:180px;
+            max-width:70%;
             height:auto;
+            margin:0 auto 20px;
           "
-        />
+        >
+
+        <div style="
+          width:52px;
+          height:4px;
+          margin:0 auto 18px;
+          border-radius:999px;
+          background:${COLORS.coral};
+        "></div>
 
         <p style="
           margin:0;
           font-size:11px;
-          font-weight:bold;
+          line-height:1.4;
+          font-weight:700;
           text-transform:uppercase;
-          letter-spacing:2px;
-          color:#22c55e;
+          letter-spacing:1.6px;
+          color:${COLORS.tealDark};
         ">
-          Event'S Location
+          Demande bien reçue
         </p>
 
         <h1 style="
           margin:8px 0 0;
-          color:#ffffff;
-          font-size:26px;
-          line-height:1.2;
+          font-size:27px;
+          line-height:1.3;
+          font-weight:800;
+          color:${COLORS.text};
         ">
           Merci ${safeFirstname} !
         </h1>
+
+        <p style="
+          margin:10px auto 0;
+          max-width:480px;
+          font-size:14px;
+          line-height:1.7;
+          color:${COLORS.textSoft};
+        ">
+          Votre demande de devis a bien été
+          transmise à Event'S Location.
+        </p>
 
       </div>
 
@@ -851,43 +1083,57 @@ export async function POST(
 
       <div style="
         padding:26px;
-        line-height:1.7;
       ">
 
-        <p style="
-          margin:0 0 12px;
-          font-size:16px;
-        ">
-          Nous avons bien reçu votre demande de devis.
-        </p>
-
-        <p style="
-          margin:0 0 24px;
-          color:#4b5563;
-        ">
-          Notre équipe va l&apos;étudier et revenir vers vous rapidement
-          avec une proposition adaptée à votre événement.
-        </p>
-
-        <!-- RECAP -->
+        <!-- CONFIRMATION -->
 
         <div style="
-          padding:20px;
-          background:#f9fafb;
-          border:1px solid #e5e7eb;
+          padding:17px 18px;
+          background:${COLORS.tealLight};
+          border:1px solid #CFE6E4;
           border-radius:14px;
         ">
 
           <p style="
-            margin:0 0 14px;
-            font-size:12px;
-            font-weight:bold;
-            text-transform:uppercase;
-            letter-spacing:1px;
-            color:#22c55e;
+            margin:0;
+            font-size:14px;
+            line-height:1.6;
+            font-weight:700;
+            color:${COLORS.tealDark};
           ">
-            Récapitulatif
+            ✓ Votre demande est bien enregistrée
           </p>
+
+          <p style="
+            margin:6px 0 0;
+            font-size:13px;
+            line-height:1.6;
+            color:${COLORS.textSoft};
+          ">
+            Nous allons l'étudier et revenir
+            vers vous avec une proposition adaptée
+            à votre événement.
+          </p>
+
+        </div>
+
+        <!-- RÉCAP -->
+
+        <h2 style="
+          margin:28px 0 12px;
+          font-size:18px;
+          line-height:1.4;
+          color:${COLORS.text};
+        ">
+          Récapitulatif de votre demande
+        </h2>
+
+        <div style="
+          padding:20px;
+          background:${COLORS.backgroundSoft};
+          border:1px solid ${COLORS.border};
+          border-radius:14px;
+        ">
 
           <table
             width="100%"
@@ -900,63 +1146,75 @@ export async function POST(
           >
 
             <tr>
+
               <td style="
-                padding:10px 0;
-                color:#6b7280;
-                font-size:14px;
+                padding:11px 0;
+                border-bottom:1px solid ${COLORS.border};
+                color:${COLORS.textSoft};
+                font-size:13px;
               ">
                 Événement
               </td>
 
               <td style="
-                padding:10px 0;
-                color:#111827;
-                font-size:14px;
-                font-weight:bold;
+                padding:11px 0;
+                border-bottom:1px solid ${COLORS.border};
+                color:${COLORS.text};
+                font-size:13px;
+                font-weight:700;
                 text-align:right;
               ">
                 ${safeEventType}
               </td>
+
             </tr>
 
             <tr>
+
               <td style="
-                padding:10px 0;
-                color:#6b7280;
-                font-size:14px;
+                padding:11px 0;
+                border-bottom:1px solid ${COLORS.border};
+                color:${COLORS.textSoft};
+                font-size:13px;
               ">
                 Date
               </td>
 
               <td style="
-                padding:10px 0;
-                color:#111827;
-                font-size:14px;
-                font-weight:bold;
+                padding:11px 0;
+                border-bottom:1px solid ${COLORS.border};
+                color:${COLORS.text};
+                font-size:13px;
+                font-weight:700;
                 text-align:right;
               ">
                 ${safeDate}
               </td>
+
             </tr>
 
             <tr>
+
               <td style="
-                padding:10px 0;
-                color:#6b7280;
-                font-size:14px;
+                padding:11px 0;
+                border-bottom:1px solid ${COLORS.border};
+                color:${COLORS.textSoft};
+                font-size:13px;
               ">
                 Lieu
               </td>
 
               <td style="
-                padding:10px 0;
-                color:#111827;
-                font-size:14px;
-                font-weight:bold;
+                padding:11px 0;
+                border-bottom:1px solid ${COLORS.border};
+                color:${COLORS.text};
+                font-size:13px;
+                font-weight:700;
                 text-align:right;
               ">
                 ${safeCity}
               </td>
+
             </tr>
 
             ${materialClientHtml}
@@ -964,24 +1222,23 @@ export async function POST(
           </table>
 
           <div style="
-            margin-top:14px;
-            padding-top:14px;
-            border-top:1px solid #e5e7eb;
+            padding-top:16px;
           ">
 
             <p style="
-              margin:0 0 6px;
-              font-size:13px;
-              color:#6b7280;
+              margin:0 0 7px;
+              font-size:12px;
+              color:${COLORS.textMuted};
             ">
-              Prestations
+              Prestations demandées
             </p>
 
             <p style="
               margin:0;
               font-size:14px;
-              font-weight:bold;
-              color:#111827;
+              line-height:1.6;
+              font-weight:700;
+              color:${COLORS.text};
             ">
               ${safeServices}
             </p>
@@ -994,72 +1251,117 @@ export async function POST(
 
         <div style="
           margin-top:20px;
-          padding:20px;
+          padding:21px;
           text-align:center;
-          background:#f0fdf4;
-          border:1px solid #bbf7d0;
+          background:${COLORS.coralLight};
+          border:1px solid #F7CBC6;
           border-radius:14px;
         ">
 
           <p style="
             margin:0;
-            font-size:12px;
-            color:#166534;
+            font-size:11px;
+            line-height:1.4;
+            color:${COLORS.coralDark};
             text-transform:uppercase;
-            font-weight:bold;
-            letter-spacing:1px;
+            font-weight:700;
+            letter-spacing:1.2px;
           ">
             Estimation indicative
           </p>
 
           <p style="
             margin:6px 0 0;
-            font-size:30px;
-            font-weight:bold;
-            color:#15803d;
+            font-size:31px;
+            line-height:1.2;
+            font-weight:800;
+            color:${COLORS.coral};
           ">
             ${safeEstimationLabel}
           </p>
 
           <p style="
-            margin:8px 0 0;
+            margin:9px 0 0;
             font-size:12px;
-            color:#4b5563;
+            line-height:1.6;
+            color:${COLORS.textSoft};
           ">
-            Le tarif définitif sera confirmé dans votre devis.
+            Le tarif définitif sera confirmé
+            dans votre devis personnalisé.
           </p>
 
         </div>
+
+        <!-- DISPONIBILITÉ -->
 
         ${
           isAvailabilityVerified
             ? `
               <div style="
                 margin-top:20px;
-                padding:16px;
-                background:#f0fdf4;
-                border-left:4px solid #22c55e;
-                border-radius:10px;
+                padding:17px 18px;
+                background:${COLORS.tealLight};
+                border:1px solid #CFE6E4;
+                border-left:4px solid ${COLORS.teal};
+                border-radius:12px;
               ">
 
                 <p style="
                   margin:0;
-                  color:#166534;
+                  color:${COLORS.tealDark};
                   font-size:14px;
-                  font-weight:bold;
+                  line-height:1.5;
+                  font-weight:700;
                 ">
                   ✓ Disponibilité vérifiée
                 </p>
 
                 <p style="
                   margin:6px 0 0;
-                  color:#4b5563;
-                  font-size:13px;
+                  color:${COLORS.textSoft};
+                  font-size:12px;
+                  line-height:1.6;
                 ">
                   Le matériel sélectionné était disponible
-                  lors de votre consultation.
+                  au moment de votre consultation.
                   La réservation sera définitive après
-                  confirmation d&apos;Event&apos;S Location.
+                  confirmation par Event'S Location.
+                </p>
+
+              </div>
+            `
+            : ""
+        }
+
+        <!-- MESSAGE CLIENT -->
+
+        ${
+          safeMessage !== "Aucun message."
+            ? `
+              <h2 style="
+                margin:28px 0 12px;
+                font-size:18px;
+                line-height:1.4;
+                color:${COLORS.text};
+              ">
+                Votre message
+              </h2>
+
+              <div style="
+                padding:17px 18px;
+                background:${COLORS.backgroundSoft};
+                border:1px solid ${COLORS.border};
+                border-radius:14px;
+              ">
+
+                <p style="
+                  margin:0;
+                  white-space:pre-line;
+                  font-size:13px;
+                  line-height:1.7;
+                  color:${COLORS.textSoft};
+                ">
+                  ${safeMessage}
                 </p>
 
               </div>
@@ -1070,7 +1372,7 @@ export async function POST(
         <!-- CTA -->
 
         <div style="
-          margin-top:26px;
+          margin-top:28px;
           text-align:center;
         ">
 
@@ -1079,15 +1381,70 @@ export async function POST(
             style="
               display:inline-block;
               padding:13px 22px;
-              background:#16a34a;
-              color:#ffffff;
+              background:${COLORS.coral};
+              color:#FFFFFF;
               text-decoration:none;
-              font-weight:bold;
+              font-size:14px;
+              font-weight:700;
               border-radius:10px;
             "
           >
-            Visiter notre site
+            Visiter Event'S Location
           </a>
+
+        </div>
+
+        <!-- CONTACT -->
+
+        <div style="
+          margin-top:30px;
+          padding:20px;
+          background:${COLORS.tealLight};
+          border-radius:14px;
+          text-align:center;
+        ">
+
+          <p style="
+            margin:0;
+            font-size:14px;
+            font-weight:700;
+            color:${COLORS.text};
+          ">
+            Une question ?
+          </p>
+
+          <p style="
+            margin:7px 0 0;
+            font-size:13px;
+            line-height:1.8;
+            color:${COLORS.textSoft};
+          ">
+
+            <a
+              href="tel:+33643894570"
+              style="
+                color:${COLORS.tealDark};
+                text-decoration:none;
+                font-weight:700;
+              "
+            >
+              ${BUSINESS_PHONE}
+            </a>
+
+            <br>
+
+            <a
+              href="mailto:${BUSINESS_EMAIL}"
+              style="
+                color:${COLORS.tealDark};
+                text-decoration:none;
+                font-weight:700;
+              "
+            >
+              ${BUSINESS_EMAIL}
+            </a>
+
+          </p>
 
         </div>
 
@@ -1096,34 +1453,48 @@ export async function POST(
         <div style="
           margin-top:30px;
           padding-top:22px;
-          border-top:1px solid #e5e7eb;
+          border-top:1px solid ${COLORS.border};
           text-align:center;
         ">
 
+          <img
+            src="${LOGO_URL}"
+            alt="Event'S Location"
+            width="110"
+            style="
+              display:block;
+              width:110px;
+              max-width:45%;
+              height:auto;
+              margin:0 auto 12px;
+            "
+          >
+
           <p style="
             margin:0;
-            font-weight:bold;
-            color:#111827;
+            font-size:13px;
+            font-weight:700;
+            color:${COLORS.text};
           ">
             Event'S Location
           </p>
 
           <p style="
-            margin:6px 0 0;
-            font-size:13px;
-            color:#6b7280;
+            margin:5px 0 0;
+            font-size:12px;
+            color:${COLORS.textMuted};
           ">
-            Location de matériel événementiel
+            Donnez vie à vos événements.
           </p>
 
           <p style="
-            margin:10px 0 0;
-            font-size:13px;
-            color:#4b5563;
+            margin:12px 0 0;
+            font-size:11px;
+            line-height:1.6;
+            color:${COLORS.textMuted};
           ">
-            06 43 89 45 70
-            <br />
-            events.location@outlook.com
+            Location de matériel événementiel
+            en Nièvre, Yonne et Cher.
           </p>
 
         </div>
@@ -1157,7 +1528,6 @@ export async function POST(
     return NextResponse.json({
       success: true,
     });
-
   } catch (error) {
     console.error(
       "Erreur API devis :",
