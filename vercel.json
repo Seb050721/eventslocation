@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/avis-google",
+      "schedule": "0 8 * * *"
+    }
+  ]
+}
