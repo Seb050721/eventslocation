@@ -94,11 +94,6 @@ export const feux: Service = {
         "Selon les couleurs disponibles au moment de votre réservation.",
     },
 
-    {
-      name: "Synchronisation avec la musique",
-      description:
-        "Déclenchement coordonné avec un moment précis de votre événement, sur demande.",
-    },
   ],
 
   gallery: [],
