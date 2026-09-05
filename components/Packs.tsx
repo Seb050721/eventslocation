@@ -36,8 +36,9 @@ const packs = [
     },
     items: [
       "Photo Booth + flash",
-      "Smoke Puff x4",
-      "Décoration",
+      "Accessoires Fun",
+      "Diffusion",
+      "Smoke Puff x5",
       "Installation comprise",
     ],
   },
