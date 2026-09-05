@@ -1,36 +1,26 @@
 import type { MetadataRoute } from "next";
 import { services } from "@/data/services";
 
-/* ============================================================
-   CONFIGURATION
-============================================================ */
-
 const SITE_URL = "https://www.eventslocation.fr";
 
-/* ============================================================
-   SITEMAP
-============================================================ */
-
 export default function sitemap(): MetadataRoute.Sitemap {
-  /* ==========================================================
-     PAGES DES PRESTATIONS
-  ========================================================== */
+  const servicePages: MetadataRoute.Sitemap = services.map((service) => ({
+    url: `${SITE_URL}/prestations/${service.id}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
 
-  const servicePages: MetadataRoute.Sitemap =
-    services.map((service) => ({
-      url: `${SITE_URL}/prestations/${service.id}`,
+  const localPages: MetadataRoute.Sitemap = [
+    {
+      url: `${SITE_URL}/location-evenementiel-auxerre`,
       lastModified: new Date(),
       changeFrequency: "monthly",
-      priority: 0.8,
-    }));
-
-  /* ==========================================================
-     PAGES DU SITE
-  ========================================================== */
+      priority: 0.9,
+    },
+  ];
 
   return [
-    /* ACCUEIL */
-
     {
       url: SITE_URL,
       lastModified: new Date(),
@@ -38,11 +28,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
 
-    /* PRESTATIONS */
-
     ...servicePages,
 
-    /* MENTIONS LÉGALES */
+    ...localPages,
 
     {
       url: `${SITE_URL}/mentions-legales`,
@@ -50,8 +38,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "yearly",
       priority: 0.2,
     },
-
-    /* POLITIQUE DE CONFIDENTIALITÉ */
 
     {
       url: `${SITE_URL}/politique-de-confidentialite`,

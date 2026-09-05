@@ -156,7 +156,7 @@ export const feux: Service = {
         "Dans quelles zones proposez-vous la location de Smoke Puff ?",
 
       answer:
-        "Nous intervenons principalement en Nièvre, dans l'Yonne et dans le Cher, notamment autour de Varzy et Nevers. Les déplacements plus éloignés peuvent être étudiés sur devis.",
+        "Nous intervenons principalement en Nièvre, dans l'Yonne et dans le Cher, notamment autour de Varzy, Nevers, Auxerre, Clamecy, Avallon, Cosne-cours-sur-loire. Les déplacements plus éloignés peuvent être étudiés sur devis.",
     },
   ],
 };
