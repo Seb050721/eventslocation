@@ -69,7 +69,7 @@ export default function Hero() {
 
               Photo Booth, mobilier, sonorisation, projection,
               machines à effets et Smoke Puff pour créer des
-              moments inoubliables en Nièvre, Yonne et Cher.
+              moments inoubliables Nièvre, Yonne et Cher.
 
             </p>
 
