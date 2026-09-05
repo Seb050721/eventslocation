@@ -7,16 +7,14 @@ export const photobooth: Service = {
 
   category: "Animation",
 
-  heroImage:
-    "/images/services/photobooth-hero.webp",
+  heroImage: "/images/services/photobooth-hero.webp",
 
-  cardImage:
-    "/images/services/photobooth-hero.webp",
+  cardImage: "/images/services/photobooth-hero.webp",
 
   startingPrice: 169,
 
   shortDescription:
-    "Location de Photo Booth pour mariages, anniversaires et événements à Auxerre, Avallon, Nevers et dans les environs.",
+    "Location de Photo Booth pour mariages, anniversaires et événements à Auxerre, Avallon, Clamecy, Nevers, Cosne-Cours-sur-Loire et dans les environs.",
 
   description:
     "Animez votre mariage, anniversaire ou événement avec notre Photo Booth professionnel. Disponible à la journée ou durant tout le week-end, il permet à vos invités de réaliser leurs photos librement et de conserver un souvenir personnalisé de votre événement.",
@@ -27,10 +25,10 @@ export const photobooth: Service = {
 
   seo: {
     title:
-      "Location Photobooth Auxerre, Yonne & Nièvre dès 169 €",
+      "Location Photobooth Auxerre, Clamecy, Nevers & Yonne dès 169 €",
 
     description:
-      "Location de Photo Booth dès 169 € à Auxerre, Avallon, Nevers et dans l'Yonne et la Nièvre. Cadre personnalisé, galerie photo et installation.",
+      "Location de Photo Booth dès 169 € à Auxerre, Clamecy, Avallon, Nevers, Cosne-Cours-sur-Loire, dans l'Yonne et la Nièvre. Cadre personnalisé, galerie photo et installation.",
   },
 
   /* ============================================================
@@ -39,20 +37,22 @@ export const photobooth: Service = {
 
   seoContent: {
     title:
-      "Location de Photo Booth à Auxerre, dans l'Yonne et la Nièvre",
+      "Location de Photo Booth en Nièvre et dans l'Yonne dès 169 €",
 
     paragraphs: [
-      "Vous recherchez un Photo Booth pour un mariage, un anniversaire ou une réception ? Event'S Location propose plusieurs formules à partir de 169 €, en version numérique ou avec impressions photo.",
+      "Vous recherchez un Photo Booth pour un mariage, un anniversaire, une soirée ou une réception ? Event'S Location propose plusieurs formules à partir de 169 €, en version numérique ou avec impressions photo.",
 
-      "Basés à Varzy, nous intervenons notamment à Auxerre, Avallon, Clamecy, Nevers, Cosne-Cours-sur-Loire et dans les communes environnantes. La livraison est offerte dans un rayon de 20 km autour de Varzy et reste possible au-delà sur devis.",
+      "Basée à Varzy, Event'S Location intervient notamment à Clamecy, Auxerre, Avallon, Nevers, Cosne-Cours-sur-Loire et dans les communes environnantes. La livraison est offerte dans un rayon de 20 km autour de Varzy et reste possible au-delà sur devis.",
 
-      "Notre Photo Booth convient aux mariages, anniversaires, baptêmes, soirées privées, événements associatifs et événements professionnels. Un cadre photo personnalisé est créé pour s'accorder avec le thème et les couleurs de votre événement.",
+      "Notre Photo Booth convient aux mariages, anniversaires, baptêmes, soirées privées, événements associatifs et événements professionnels. Un cadre photo personnalisé est créé pour s'accorder avec le thème, les couleurs et le style de votre événement.",
 
-      "Plusieurs formules sont proposées : version numérique à 169 €, puis des forfaits comprenant 100, 150, 200, 300 ou 400 impressions. Vous pouvez ainsi adapter votre formule au nombre d'invités et à votre budget.",
+      "Plusieurs formules sont proposées : version numérique à 169 €, puis des forfaits comprenant 100, 150, 200, 300 ou 400 impressions. Vous pouvez ainsi choisir une formule adaptée au nombre d'invités et à votre budget.",
 
       "Les photos réalisées pendant l'événement sont également accessibles dans une galerie en ligne. Le Photo Booth peut être mis à disposition pour une journée ou pendant tout le week-end selon votre événement.",
 
-      "Vous pouvez également compléter votre location avec du mobilier, de la sonorisation, un vidéoprojecteur, des machines à effets ou des Smoke Puff afin de regrouper plusieurs besoins auprès d'Event'S Location.",
+      "Pour une réception plus complète, vous pouvez également associer le Photo Booth à du mobilier, de la sonorisation, un vidéoprojecteur, des machines à effets ou des Smoke Puff afin de regrouper plusieurs besoins auprès d'Event'S Location.",
+
+      "Vous cherchez plus précisément une location de photobooth à Auxerre, Clamecy, Avallon, Nevers ou Cosne-Cours-sur-Loire ? Des pages locales dédiées présentent nos prestations et nos zones d'intervention pour chacune de ces villes.",
     ],
   },
 
@@ -80,27 +80,22 @@ export const photobooth: Service = {
       description:
         "Photos numériques en illimité, sans impression papier.",
     },
-
     {
       label: "100 impressions",
       price: 199,
     },
-
     {
       label: "150 impressions",
       price: 219,
     },
-
     {
       label: "200 impressions",
       price: 239,
     },
-
     {
       label: "300 impressions",
       price: 279,
     },
-
     {
       label: "400 impressions",
       price: 309,
@@ -116,26 +111,21 @@ export const photobooth: Service = {
       name: "Flash additionnel",
       price: 10,
     },
-
     {
       name: "Toile de fond avec structure",
       price: 15,
     },
-
     {
       name: "Fil à photos",
       price: 5,
     },
-
     {
       name: "Clé USB",
       price: 15,
     },
-
     {
       name: "Décoration",
-      description:
-        "Sur devis",
+      description: "Sur devis",
     },
   ],
 
@@ -160,6 +150,14 @@ export const photobooth: Service = {
 
       answer:
         "Oui. Event'S Location propose la location de Photo Booth à Auxerre et plus largement dans l'Yonne, selon les disponibilités et les conditions de livraison.",
+    },
+
+    {
+      question:
+        "Proposez-vous la location de Photo Booth à Clamecy ?",
+
+      answer:
+        "Oui. Basée à Varzy, Event'S Location intervient dans le secteur de Clamecy pour les mariages, anniversaires, soirées et autres événements.",
     },
 
     {

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { services } from "@/data/services";
@@ -24,8 +25,39 @@ interface PageProps {
    CONFIGURATION
 ============================================================ */
 
-const SITE_URL =
-  "https://www.eventslocation.fr";
+const SITE_URL = "https://www.eventslocation.fr";
+
+/* ============================================================
+   PAGES LOCALES PHOTOBOOTH
+============================================================ */
+
+const photoboothLocations = [
+  {
+    city: "Auxerre",
+    department: "Yonne",
+    href: "/location-evenementiel-auxerre",
+  },
+  {
+    city: "Avallon",
+    department: "Yonne",
+    href: "/location-evenementiel-avallon",
+  },
+  {
+    city: "Clamecy",
+    department: "Nièvre",
+    href: "/location-evenementiel-clamecy",
+  },
+  {
+    city: "Nevers",
+    department: "Nièvre",
+    href: "/location-evenementiel-nevers",
+  },
+  {
+    city: "Cosne-Cours-sur-Loire",
+    department: "Nièvre",
+    href: "/location-evenementiel-cosne-cours-sur-loire",
+  },
+];
 
 /* ============================================================
    GÉNÉRATION DES PAGES STATIQUES
@@ -46,15 +78,11 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
 
-  const service = services.find(
-    (item) =>
-      item.id === slug
-  );
+  const service = services.find((item) => item.id === slug);
 
   if (!service) {
     return {
-      title:
-        "Prestation introuvable",
+      title: "Prestation introuvable",
 
       robots: {
         index: false,
@@ -63,8 +91,7 @@ export async function generateMetadata({
     };
   }
 
-  const canonicalUrl =
-    `${SITE_URL}/prestations/${service.id}`;
+  const canonicalUrl = `${SITE_URL}/prestations/${service.id}`;
 
   const title =
     service.seo?.title ??
@@ -74,8 +101,7 @@ export async function generateMetadata({
     service.seo?.description ??
     `${service.description} Location pour mariages, anniversaires et événements en Nièvre, Yonne et Cher.`;
 
-  const image =
-    service.heroImage;
+  const image = service.heroImage;
 
   return {
     title,
@@ -85,36 +111,29 @@ export async function generateMetadata({
     /* CANONICAL */
 
     alternates: {
-      canonical:
-        canonicalUrl,
+      canonical: canonicalUrl,
     },
 
     /* OPEN GRAPH */
 
     openGraph: {
-      type:
-        "website",
+      type: "website",
 
-      locale:
-        "fr_FR",
+      locale: "fr_FR",
 
-      url:
-        canonicalUrl,
+      url: canonicalUrl,
 
       title,
 
       description,
 
-      siteName:
-        "Event'S Location",
+      siteName: "Event'S Location",
 
       images: [
         {
-          url:
-            `${SITE_URL}${image}`,
+          url: `${SITE_URL}${image}`,
 
-          alt:
-            `${service.title} - Event'S Location`,
+          alt: `${service.title} - Event'S Location`,
         },
       ],
     },
@@ -122,16 +141,13 @@ export async function generateMetadata({
     /* TWITTER */
 
     twitter: {
-      card:
-        "summary_large_image",
+      card: "summary_large_image",
 
       title,
 
       description,
 
-      images: [
-        `${SITE_URL}${image}`,
-      ],
+      images: [`${SITE_URL}${image}`],
     },
 
     /* INDEXATION */
@@ -144,14 +160,11 @@ export async function generateMetadata({
         index: true,
         follow: true,
 
-        "max-image-preview":
-          "large",
+        "max-image-preview": "large",
 
-        "max-snippet":
-          -1,
+        "max-snippet": -1,
 
-        "max-video-preview":
-          -1,
+        "max-video-preview": -1,
       },
     },
   };
@@ -166,102 +179,77 @@ export default async function ServicePage({
 }: PageProps) {
   const { slug } = await params;
 
-  const service = services.find(
-    (item) =>
-      item.id === slug
-  );
+  const service = services.find((item) => item.id === slug);
 
   if (!service) {
     notFound();
   }
 
-  const canonicalUrl =
-    `${SITE_URL}/prestations/${service.id}`;
+  const canonicalUrl = `${SITE_URL}/prestations/${service.id}`;
 
   /* ==========================================================
      DONNÉES STRUCTURÉES : SERVICE
   ========================================================== */
 
   const serviceSchema = {
-    "@context":
-      "https://schema.org",
+    "@context": "https://schema.org",
 
-    "@type":
-      "Service",
+    "@type": "Service",
 
-    "@id":
-      `${canonicalUrl}#service`,
+    "@id": `${canonicalUrl}#service`,
 
-    name:
-      service.title,
+    name: service.title,
 
     description:
       service.seo?.description ??
       service.description,
 
-    url:
-      canonicalUrl,
+    url: canonicalUrl,
 
-    image:
-      `${SITE_URL}${service.heroImage}`,
+    image: `${SITE_URL}${service.heroImage}`,
 
     provider: {
-      "@type":
-        "LocalBusiness",
+      "@type": "LocalBusiness",
 
-      "@id":
-        `${SITE_URL}/#business`,
+      "@id": `${SITE_URL}/#business`,
 
-      name:
-        "Event'S Location",
+      name: "Event'S Location",
 
-      url:
-        SITE_URL,
+      url: SITE_URL,
 
-      telephone:
-        "+33643894570",
+      telephone: "+33643894570",
+
+      email: "events.location@outlook.com",
 
       address: {
-        "@type":
-          "PostalAddress",
+        "@type": "PostalAddress",
 
-        addressLocality:
-          "Varzy",
+        streetAddress: "17 boulevard Dupin",
 
-        postalCode:
-          "58210",
+        addressLocality: "Varzy",
 
-        addressRegion:
-          "Bourgogne-Franche-Comté",
+        postalCode: "58210",
 
-        addressCountry:
-          "FR",
+        addressRegion: "Bourgogne-Franche-Comté",
+
+        addressCountry: "FR",
       },
     },
 
     areaServed: [
       {
-        "@type":
-          "AdministrativeArea",
-
-        name:
-          "Nièvre",
+        "@type": "AdministrativeArea",
+        name: "Nièvre",
       },
 
       {
-        "@type":
-          "AdministrativeArea",
-
-        name:
-          "Yonne",
+        "@type": "AdministrativeArea",
+        name: "Yonne",
       },
 
       {
-        "@type":
-          "AdministrativeArea",
-
-        name:
-          "Cher",
+        "@type": "AdministrativeArea",
+        name: "Cher",
       },
     ],
   };
@@ -271,53 +259,39 @@ export default async function ServicePage({
   ========================================================== */
 
   const breadcrumbSchema = {
-    "@context":
-      "https://schema.org",
+    "@context": "https://schema.org",
 
-    "@type":
-      "BreadcrumbList",
+    "@type": "BreadcrumbList",
 
     itemListElement: [
       {
-        "@type":
-          "ListItem",
+        "@type": "ListItem",
 
-        position:
-          1,
+        position: 1,
 
-        name:
-          "Accueil",
+        name: "Accueil",
 
-        item:
-          SITE_URL,
+        item: SITE_URL,
       },
 
       {
-        "@type":
-          "ListItem",
+        "@type": "ListItem",
 
-        position:
-          2,
+        position: 2,
 
-        name:
-          "Prestations",
+        name: "Prestations",
 
-        item:
-          `${SITE_URL}/#services`,
+        item: `${SITE_URL}/#services`,
       },
 
       {
-        "@type":
-          "ListItem",
+        "@type": "ListItem",
 
-        position:
-          3,
+        position: 3,
 
-        name:
-          service.title,
+        name: service.title,
 
-        item:
-          canonicalUrl,
+        item: canonicalUrl,
       },
     ],
   };
@@ -329,36 +303,26 @@ export default async function ServicePage({
   const faqSchema =
     service.faq.length > 0
       ? {
-          "@context":
-            "https://schema.org",
+          "@context": "https://schema.org",
 
-          "@type":
-            "FAQPage",
+          "@type": "FAQPage",
 
-          mainEntity:
-            service.faq.map(
-              (item) => ({
-                "@type":
-                  "Question",
+          mainEntity: service.faq.map((item) => ({
+            "@type": "Question",
 
-                name:
-                  item.question,
+            name: item.question,
 
-                acceptedAnswer: {
-                  "@type":
-                    "Answer",
+            acceptedAnswer: {
+              "@type": "Answer",
 
-                  text:
-                    item.answer,
-                },
-              })
-            ),
+              text: item.answer,
+            },
+          })),
         }
       : null;
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#FBFAF8] pb-16 pt-24 sm:pb-20 sm:pt-28 lg:pb-24 lg:pt-32">
-
       {/* =====================================================
           DONNÉES STRUCTURÉES
       ===================================================== */}
@@ -366,20 +330,14 @@ export default async function ServicePage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html:
-            JSON.stringify(
-              serviceSchema
-            ),
+          __html: JSON.stringify(serviceSchema),
         }}
       />
 
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html:
-            JSON.stringify(
-              breadcrumbSchema
-            ),
+          __html: JSON.stringify(breadcrumbSchema),
         }}
       />
 
@@ -387,10 +345,7 @@ export default async function ServicePage({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html:
-              JSON.stringify(
-                faqSchema
-              ),
+            __html: JSON.stringify(faqSchema),
           }}
         />
       )}
@@ -419,44 +374,30 @@ export default async function ServicePage({
       ===================================================== */}
 
       <div className="relative mx-auto flex max-w-7xl flex-col gap-8 px-4 sm:gap-10 sm:px-6 lg:gap-12 lg:px-8">
-
         {/* HERO */}
 
-        <ServiceHero
-          service={service}
-        />
+        <ServiceHero service={service} />
 
         {/* AVANTAGES */}
 
-        <ServiceHighlights
-          items={
-            service.included
-          }
-        />
+        <ServiceHighlights items={service.included} />
 
         {/* TARIFS */}
 
         <PriceTable
           title="Nos tarifs"
-          items={
-            service.pricing
-          }
+          items={service.pricing}
         />
 
         {/* OPTIONS */}
 
-        <OptionsGrid
-          options={
-            service.options
-          }
-        />
+        <OptionsGrid options={service.options} />
 
         {/* ===================================================
             COMPARATIF FLASH PHOTOBOOTH
         =================================================== */}
 
-        {service.id ===
-          "photobooth" && (
+        {service.id === "photobooth" && (
           <FlashComparison />
         )}
 
@@ -465,21 +406,16 @@ export default async function ServicePage({
         =================================================== */}
 
         <EquipmentTable
-          equipments={
-            service.equipments
-          }
+          equipments={service.equipments}
         />
 
         {/* ===================================================
             GALERIE DU SERVICE
         =================================================== */}
 
-        {service.gallery.length >
-          0 && (
+        {service.gallery.length > 0 && (
           <EquipmentGallery
-            images={
-              service.gallery
-            }
+            images={service.gallery}
           />
         )}
 
@@ -489,39 +425,137 @@ export default async function ServicePage({
 
         {service.seoContent && (
           <SeoContent
-            title={
-              service.seoContent
-                .title
-            }
+            title={service.seoContent.title}
             paragraphs={
-              service.seoContent
-                .paragraphs
+              service.seoContent.paragraphs
             }
           />
         )}
 
-        {/* FAQ */}
+        {/* ===================================================
+            MAILLAGE LOCAL PHOTOBOOTH
+        =================================================== */}
 
-        <FAQAccordion
-          faq={
-            service.faq
-          }
-        />
+        {service.id === "photobooth" && (
+          <section className="relative overflow-hidden rounded-[24px] border border-[#E9E2DD] bg-white p-5 shadow-[0_12px_35px_rgba(31,25,27,0.05)] sm:rounded-[28px] sm:p-7 lg:p-9">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -right-20 -top-20 h-[200px] w-[200px] rounded-full bg-[#4A9692]/8 blur-[90px]"
+            />
 
-        {/* PRESTATIONS ASSOCIÉES */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -bottom-20 -left-10 h-[180px] w-[180px] rounded-full bg-[#EF5A4F]/8 blur-[90px]"
+            />
 
-        <RelatedServices
-          currentId={
-            service.id
-          }
-        />
+            <div className="relative">
+              <div className="max-w-3xl">
+                <span className="inline-flex rounded-full border border-[#4A9692]/20 bg-[#EDF7F6] px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#347A77] sm:px-4 sm:py-2 sm:text-xs">
+                  Nos secteurs
+                </span>
+
+                <h2 className="mt-4 text-2xl font-black leading-tight tracking-tight text-[#1D1B1C] sm:text-3xl lg:text-4xl">
+                  Location de photobooth{" "}
+                  <span className="text-[#EF5A4F]">
+                    près de chez vous
+                  </span>
+                </h2>
+
+                <p className="mt-4 text-sm leading-7 text-[#716A6C] sm:text-base">
+                  Event&apos;S Location propose la
+                  location de Photo Booth dans
+                  plusieurs secteurs de l&apos;Yonne
+                  et de la Nièvre. Découvrez les
+                  informations correspondant à
+                  votre ville.
+                </p>
+              </div>
+
+              <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {photoboothLocations.map(
+                  (location) => (
+                    <Link
+                      key={location.city}
+                      href={location.href}
+                      className="group rounded-2xl border border-[#E9E2DD] bg-[#FBFAF8] p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#EF5A4F]/35 hover:bg-white hover:shadow-[0_10px_30px_rgba(31,25,27,0.06)]"
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <p className="text-xs font-bold uppercase tracking-[0.15em] text-[#347A77]">
+                            {location.department}
+                          </p>
+
+                          <h3 className="mt-2 text-lg font-black text-[#1D1B1C]">
+                            Photobooth à{" "}
+                            {location.city}
+                          </h3>
+                        </div>
+
+                        <span
+                          aria-hidden="true"
+                          className="text-xl font-bold text-[#EF5A4F] transition-transform duration-200 group-hover:translate-x-1"
+                        >
+                          →
+                        </span>
+                      </div>
+
+                      <p className="mt-4 text-sm leading-6 text-[#716A6C]">
+                        Location de photobooth pour
+                        mariage, anniversaire,
+                        soirée et réception à{" "}
+                        {location.city}.
+                      </p>
+
+                      <p className="mt-5 text-sm font-bold text-[#EF5A4F]">
+                        Voir les informations
+                        locales
+                      </p>
+                    </Link>
+                  )
+                )}
+              </div>
+
+              <div className="mt-7 rounded-2xl border border-[#4A9692]/15 bg-[#EDF7F6] p-5 sm:p-6">
+                <p className="font-bold text-[#347A77]">
+                  Vous êtes dans une autre commune ?
+                </p>
+
+                <p className="mt-2 text-sm leading-6 text-[#716A6C]">
+                  Event&apos;S Location intervient
+                  également dans de nombreuses
+                  communes autour de Varzy, dans
+                  l&apos;Yonne, la Nièvre et selon
+                  les demandes dans le Cher.
+                </p>
+
+                <Link
+                  href="/#contact"
+                  className="mt-4 inline-flex font-bold text-[#EF5A4F] transition hover:text-[#D94A41]"
+                >
+                  Demander un devis pour ma commune →
+                </Link>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ===================================================
+            FAQ
+        =================================================== */}
+
+        <FAQAccordion faq={service.faq} />
+
+        {/* ===================================================
+            PRESTATIONS ASSOCIÉES
+        =================================================== */}
+
+        <RelatedServices currentId={service.id} />
 
         {/* ===================================================
             CTA FINAL
         =================================================== */}
 
         <section className="relative overflow-hidden rounded-[24px] border border-[#EF5A4F]/20 bg-[#FFF0ED] p-5 shadow-[0_14px_40px_rgba(31,25,27,0.06)] sm:rounded-[28px] sm:p-7 lg:p-10">
-
           {/* HALOS CTA */}
 
           <div
@@ -535,9 +569,7 @@ export default async function ServicePage({
           />
 
           <div className="relative flex flex-col gap-7 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
-
             <div className="max-w-2xl">
-
               <span className="inline-flex rounded-full border border-[#EF5A4F]/20 bg-white px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#D94A41] sm:px-4 sm:py-2 sm:text-xs">
                 Demande de devis
               </span>
@@ -551,9 +583,10 @@ export default async function ServicePage({
               </h2>
 
               <p className="mt-4 text-sm leading-6 text-[#716A6C] sm:text-base sm:leading-7">
-                Vérifiez la disponibilité de votre date et obtenez un
-                devis personnalisé pour votre événement en Nièvre,
-                Yonne ou Cher.
+                Vérifiez la disponibilité de votre
+                date et obtenez un devis personnalisé
+                pour votre événement en Nièvre, Yonne
+                ou Cher.
               </p>
 
               <div
@@ -566,17 +599,15 @@ export default async function ServicePage({
                 <span className="h-2 w-2 rounded-full bg-[#C34F72]" />
                 <span className="h-2 w-2 rounded-full bg-[#F3A044]" />
               </div>
-
             </div>
 
             <div className="grid w-full gap-3 sm:grid-cols-2 lg:w-auto lg:min-w-[300px] lg:grid-cols-1">
-
-              <a
+              <Link
                 href="/#contact"
                 className="inline-flex min-h-[52px] items-center justify-center rounded-xl bg-[#EF5A4F] px-5 py-3.5 text-center text-sm font-bold text-white shadow-[0_10px_25px_rgba(239,90,79,0.22)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#D94A41] sm:text-base"
               >
                 Demander un devis
-              </a>
+              </Link>
 
               <a
                 href="tel:+33643894570"
@@ -584,15 +615,10 @@ export default async function ServicePage({
               >
                 06 43 89 45 70
               </a>
-
             </div>
-
           </div>
-
         </section>
-
       </div>
-
     </main>
   );
 }
