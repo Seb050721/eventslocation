@@ -85,6 +85,13 @@ const localPages = [
     description:
     "Photobooth, sonorisation, tables, chaises, barnum et matériel événementiel pour vos événements à Clamecy.",
   },
+  {
+    city: "Cosne-Cours-sur-Loire",
+    department: "Nièvre",
+    href: "/location-evenementiel-cosne-cours-sur-loire",
+    description:
+    "Photobooth, sonorisation, mobilier, projection et matériel événementiel pour vos événements à Cosne-Cours-sur-Loire.",
+  },
 ];
 
 export default function LocalSEO() {
@@ -122,7 +129,7 @@ export default function LocalSEO() {
               />
 
               <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#347A77] sm:text-xs">
-                Varzy • Nièvre • Yonne • Cher
+                Varzy • Clamecy • Auxerre • Nevers • Avallon • Nièvre • Yonne • Cher
               </span>
             </div>
 
