@@ -78,6 +78,13 @@ const localPages = [
     description:
       "Photobooth, sonorisation, tables, chaises, projection et matériel événementiel pour vos événements à Nevers.",
   },
+  {
+    city: "Clamecy",
+    department: "Nièvre",
+    href: "/location-evenementiel-clamecy",
+    description:
+    "Photobooth, sonorisation, tables, chaises, barnum et matériel événementiel pour vos événements à Clamecy.",
+  },
 ];
 
 export default function LocalSEO() {
@@ -336,9 +343,7 @@ export default function LocalSEO() {
                 Cosne-Cours-sur-Loire
               </strong>
               ,{" "}
-              <strong className="font-semibold text-[#3F3A3C]">
-                Clamecy
-              </strong>{" "}
+              
               et plus largement dans la Nièvre, l&apos;Yonne et le Cher,
               selon le matériel et le lieu de l&apos;événement.
             </p>
