@@ -71,6 +71,13 @@ const localPages = [
     description:
       "Location de matériel pour mariages, anniversaires et réceptions à Avallon et aux alentours.",
   },
+  {
+    city: "Nevers",
+    department: "Nièvre",
+    href: "/location-evenementiel-nevers",
+    description:
+      "Photobooth, sonorisation, tables, chaises, projection et matériel événementiel pour vos événements à Nevers.",
+  },
 ];
 
 export default function LocalSEO() {
@@ -325,10 +332,6 @@ export default function LocalSEO() {
             <p className="text-sm leading-7 text-[#716A6C]">
               Event&apos;S Location intervient également dans les
               secteurs de{" "}
-              <strong className="font-semibold text-[#3F3A3C]">
-                Nevers
-              </strong>
-              ,{" "}
               <strong className="font-semibold text-[#3F3A3C]">
                 Cosne-Cours-sur-Loire
               </strong>
