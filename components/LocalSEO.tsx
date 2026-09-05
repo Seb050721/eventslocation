@@ -83,14 +83,21 @@ const localPages = [
     department: "Nièvre",
     href: "/location-evenementiel-clamecy",
     description:
-    "Photobooth, sonorisation, tables, chaises, barnum et matériel événementiel pour vos événements à Clamecy.",
+      "Photobooth, sonorisation, tables, chaises, barnum et matériel événementiel pour vos événements à Clamecy.",
   },
   {
     city: "Cosne-Cours-sur-Loire",
     department: "Nièvre",
     href: "/location-evenementiel-cosne-cours-sur-loire",
     description:
-    "Photobooth, sonorisation, mobilier, projection et matériel événementiel pour vos événements à Cosne-Cours-sur-Loire.",
+      "Photobooth, sonorisation, mobilier, projection et matériel événementiel pour vos événements à Cosne-Cours-sur-Loire.",
+  },
+  {
+    city: "La Charité-sur-Loire",
+    department: "Nièvre",
+    href: "/location-evenementiel-la-charite-sur-loire",
+    description:
+      "Photobooth, sonorisation, mobilier, projection et matériel événementiel pour vos événements à La Charité-sur-Loire.",
   },
 ];
 
@@ -123,13 +130,11 @@ export default function LocalSEO() {
 
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-[#4A9692]/20 bg-[#EDF7F6] px-4 py-2">
-              <MapPin
-                size={15}
-                className="text-[#4A9692]"
-              />
+              <MapPin size={15} className="text-[#4A9692]" />
 
               <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#347A77] sm:text-xs">
-                Varzy • Clamecy • Auxerre • Nevers • Avallon • Nièvre • Yonne • Cher
+                Varzy • Clamecy • Auxerre • Nevers • Avallon • Cosne • La
+                Charité-sur-Loire • Nièvre • Yonne • Cher
               </span>
             </div>
 
@@ -166,19 +171,23 @@ export default function LocalSEO() {
               ,{" "}
               <strong className="font-semibold text-[#3F3A3C]">
                 Nevers
+              </strong>
+              ,{" "}
+              <strong className="font-semibold text-[#3F3A3C]">
+                Cosne-Cours-sur-Loire
               </strong>{" "}
               et{" "}
               <strong className="font-semibold text-[#3F3A3C]">
-                Cosne-Cours-sur-Loire
+                La Charité-sur-Loire
               </strong>
               .
             </p>
 
             <p className="mt-4 max-w-2xl text-sm leading-7 text-[#716A6C] sm:text-base">
-              Photobooth, sonorisation, mobilier, vidéoprojecteur,
-              écrans, machines à effets ou Smoke Puff : vous pouvez
-              louer un seul équipement ou regrouper plusieurs besoins
-              dans une même demande.
+              Photobooth, sonorisation, mobilier, vidéoprojecteur, écrans,
+              machines à effets ou Smoke Puff : vous pouvez louer un seul
+              équipement ou regrouper plusieurs besoins dans une même
+              demande.
             </p>
 
             {/* =================================================
@@ -344,15 +353,20 @@ export default function LocalSEO() {
 
           <div className="mt-6 rounded-2xl border border-[#E4DCD7] bg-[#FBFAF8] px-5 py-4">
             <p className="text-sm leading-7 text-[#716A6C]">
-              Event&apos;S Location intervient également dans les
-              secteurs de{" "}
+              Event&apos;S Location intervient également dans d&apos;autres
+              communes autour de Varzy et plus largement dans la{" "}
               <strong className="font-semibold text-[#3F3A3C]">
-                Cosne-Cours-sur-Loire
+                Nièvre
               </strong>
-              ,{" "}
-              
-              et plus largement dans la Nièvre, l&apos;Yonne et le Cher,
-              selon le matériel et le lieu de l&apos;événement.
+              , l&apos;
+              <strong className="font-semibold text-[#3F3A3C]">
+                Yonne
+              </strong>{" "}
+              et le{" "}
+              <strong className="font-semibold text-[#3F3A3C]">
+                Cher
+              </strong>
+              , selon le matériel et le lieu de l&apos;événement.
             </p>
           </div>
         </div>

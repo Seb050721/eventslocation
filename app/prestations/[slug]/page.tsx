@@ -57,6 +57,11 @@ const photoboothLocations = [
     department: "Nièvre",
     href: "/location-evenementiel-cosne-cours-sur-loire",
   },
+  {
+    city: "La Charité-sur-Loire",
+    department: "Nièvre",
+    href: "/location-evenementiel-la-charite-sur-loire",
+  },
 ];
 
 /* ============================================================
@@ -103,6 +108,14 @@ const mobilierLocations = [
     title: "Tables et chaises à Cosne",
     description:
       "Location de tables, chaises et mobilier événementiel à Cosne-Cours-sur-Loire et aux alentours.",
+  },
+  {
+    city: "La Charité-sur-Loire",
+    department: "Nièvre",
+    href: "/location-evenementiel-la-charite-sur-loire",
+    title: "Tables et chaises à La Charité-sur-Loire",
+    description:
+      "Location de tables, chaises, mange-debout et mobilier événementiel à La Charité-sur-Loire et aux alentours.",
   },
 ];
 
@@ -189,7 +202,6 @@ export async function generateMetadata({
       googleBot: {
         index: true,
         follow: true,
-
         "max-image-preview": "large",
         "max-snippet": -1,
         "max-video-preview": -1,
@@ -221,11 +233,8 @@ export default async function ServicePage({
 
   const serviceSchema = {
     "@context": "https://schema.org",
-
     "@type": "Service",
-
     "@id": `${canonicalUrl}#service`,
-
     name: service.title,
 
     description:
@@ -238,28 +247,18 @@ export default async function ServicePage({
 
     provider: {
       "@type": "LocalBusiness",
-
       "@id": `${SITE_URL}/#business`,
-
       name: "Event'S Location",
-
       url: SITE_URL,
-
       telephone: "+33643894570",
-
       email: "events.location@outlook.com",
 
       address: {
         "@type": "PostalAddress",
-
         streetAddress: "17 boulevard Dupin",
-
         addressLocality: "Varzy",
-
         postalCode: "58210",
-
         addressRegion: "Bourgogne-Franche-Comté",
-
         addressCountry: "FR",
       },
     },
@@ -286,7 +285,6 @@ export default async function ServicePage({
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
-
     "@type": "BreadcrumbList",
 
     itemListElement: [
@@ -319,17 +317,14 @@ export default async function ServicePage({
     service.faq.length > 0
       ? {
           "@context": "https://schema.org",
-
           "@type": "FAQPage",
 
           mainEntity: service.faq.map((item) => ({
             "@type": "Question",
-
             name: item.question,
 
             acceptedAnswer: {
               "@type": "Answer",
-
               text: item.answer,
             },
           })),
@@ -338,9 +333,7 @@ export default async function ServicePage({
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#FBFAF8] pb-16 pt-24 sm:pb-20 sm:pt-28 lg:pb-24 lg:pt-32">
-      {/* =====================================================
-          DONNÉES STRUCTURÉES
-      ===================================================== */}
+      {/* DONNÉES STRUCTURÉES */}
 
       <script
         type="application/ld+json"
@@ -365,9 +358,7 @@ export default async function ServicePage({
         />
       )}
 
-      {/* =====================================================
-          HALOS
-      ===================================================== */}
+      {/* HALOS */}
 
       <div
         aria-hidden="true"
@@ -384,49 +375,33 @@ export default async function ServicePage({
         className="pointer-events-none absolute left-1/2 top-[1200px] h-[260px] w-[260px] -translate-x-1/2 rounded-full bg-[#F3A044]/6 blur-[130px]"
       />
 
-      {/* =====================================================
-          CONTENU
-      ===================================================== */}
+      {/* CONTENU */}
 
       <div className="relative mx-auto flex max-w-7xl flex-col gap-8 px-4 sm:gap-10 sm:px-6 lg:gap-12 lg:px-8">
-        {/* HERO */}
-
         <ServiceHero service={service} />
 
-        {/* AVANTAGES */}
-
         <ServiceHighlights items={service.included} />
-
-        {/* TARIFS */}
 
         <PriceTable
           title="Nos tarifs"
           items={service.pricing}
         />
 
-        {/* OPTIONS */}
-
         <OptionsGrid options={service.options} />
 
-        {/* ===================================================
-            COMPARATIF FLASH PHOTOBOOTH
-        =================================================== */}
+        {/* COMPARATIF FLASH PHOTOBOOTH */}
 
         {service.id === "photobooth" && (
           <FlashComparison />
         )}
 
-        {/* ===================================================
-            MATÉRIEL À L'UNITÉ
-        =================================================== */}
+        {/* MATÉRIEL À L'UNITÉ */}
 
         <EquipmentTable
           equipments={service.equipments}
         />
 
-        {/* ===================================================
-            GALERIE DU SERVICE
-        =================================================== */}
+        {/* GALERIE */}
 
         {service.gallery.length > 0 && (
           <EquipmentGallery
@@ -434,9 +409,7 @@ export default async function ServicePage({
           />
         )}
 
-        {/* ===================================================
-            CONTENU SEO LOCAL
-        =================================================== */}
+        {/* CONTENU SEO */}
 
         {service.seoContent && (
           <SeoContent
@@ -663,21 +636,15 @@ export default async function ServicePage({
           </section>
         )}
 
-        {/* ===================================================
-            FAQ
-        =================================================== */}
+        {/* FAQ */}
 
         <FAQAccordion faq={service.faq} />
 
-        {/* ===================================================
-            PRESTATIONS ASSOCIÉES
-        =================================================== */}
+        {/* PRESTATIONS ASSOCIÉES */}
 
         <RelatedServices currentId={service.id} />
 
-        {/* ===================================================
-            CTA FINAL
-        =================================================== */}
+        {/* CTA FINAL */}
 
         <section className="relative overflow-hidden rounded-[24px] border border-[#EF5A4F]/20 bg-[#FFF0ED] p-5 shadow-[0_14px_40px_rgba(31,25,27,0.06)] sm:rounded-[28px] sm:p-7 lg:p-10">
           <div

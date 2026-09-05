@@ -4,12 +4,22 @@ import { services } from "@/data/services";
 const SITE_URL = "https://www.eventslocation.fr";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const servicePages: MetadataRoute.Sitemap = services.map((service) => ({
-    url: `${SITE_URL}/prestations/${service.id}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly",
-    priority: 0.8,
-  }));
+  /* ============================================================
+     PAGES PRESTATIONS
+  ============================================================ */
+
+  const servicePages: MetadataRoute.Sitemap = services.map(
+    (service) => ({
+      url: `${SITE_URL}/prestations/${service.id}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    })
+  );
+
+  /* ============================================================
+     PAGES LOCALES
+  ============================================================ */
 
   const localPages: MetadataRoute.Sitemap = [
     {
@@ -36,7 +46,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.9,
     },
+    {
+      url: `${SITE_URL}/location-evenementiel-nevers`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
+      url: `${SITE_URL}/location-evenementiel-la-charite-sur-loire`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
   ];
+
+  /* ============================================================
+     SITEMAP COMPLET
+  ============================================================ */
 
   return [
     {
