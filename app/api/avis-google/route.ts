@@ -60,29 +60,6 @@ function escapeHtml(value: unknown) {
     .replaceAll("'", "&#039;");
 }
 
-function extractField(description: string, fieldName: string) {
-  const regex = new RegExp(`^${fieldName}\\s*:\\s*(.+)$`, "im");
-  const match = description.match(regex);
-
-  return match?.[1]?.trim() ?? "";
-}
-
-function extractEmail(description: string) {
-  return extractField(description, "Email");
-}
-
-function extractClientName(description: string) {
-  return extractField(description, "Client");
-}
-
-function isValidEmail(value: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-}
-
-function hasReviewAlreadyBeenSent(description: string) {
-  return /Avis Google envoye\s*:/i.test(description);
-}
-
 function normalizeText(value: string) {
   return value
     .normalize("NFD")
@@ -94,38 +71,191 @@ function normalizeText(value: string) {
 }
 
 /* ============================================================
+   EXTRACTION DES CHAMPS
+============================================================ */
+
+function extractField(
+  description: string,
+  fieldName: string
+) {
+  const lines = description.split(/\r?\n/);
+
+  const normalizedFieldName =
+    normalizeText(fieldName);
+
+  for (const line of lines) {
+    const separatorIndex =
+      line.indexOf(":");
+
+    if (separatorIndex === -1) {
+      continue;
+    }
+
+    const key = line
+      .slice(0, separatorIndex)
+      .trim();
+
+    const value = line
+      .slice(separatorIndex + 1)
+      .trim();
+
+    if (
+      normalizeText(key) ===
+      normalizedFieldName
+    ) {
+      return value;
+    }
+  }
+
+  return "";
+}
+
+function extractEmail(
+  description: string
+) {
+  /*
+    1. On cherche d'abord la ligne Email:
+  */
+
+  const fieldEmail =
+    extractField(
+      description,
+      "Email"
+    );
+
+  if (fieldEmail) {
+    const cleaned =
+      fieldEmail
+        .replace(/\s+/g, "")
+        .replace(/^mailto:/i, "")
+        .trim();
+
+    const match =
+      cleaned.match(
+        /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i
+      );
+
+    if (match?.[0]) {
+      return match[0];
+    }
+  }
+
+  /*
+    2. Fallback :
+       recherche de n'importe quelle adresse
+       e-mail dans toute la description.
+  */
+
+  const fallback =
+    description.match(
+      /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i
+    );
+
+  return fallback?.[0]?.trim() ?? "";
+}
+
+function extractClientName(
+  description: string
+) {
+  return extractField(
+    description,
+    "Client"
+  );
+}
+
+function isValidEmail(
+  value: string
+) {
+  const cleaned =
+    value
+      .replace(/\s+/g, "")
+      .trim();
+
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+    cleaned
+  );
+}
+
+function hasReviewAlreadyBeenSent(
+  description: string
+) {
+  return /Avis Google envoye\s*:/i.test(
+    description
+  );
+}
+
+/* ============================================================
    DÉTECTION DU MATÉRIEL
 ============================================================ */
 
-function hasRecognizedEquipment(description: string) {
-  const normalizedDescription = normalizeText(description);
+function hasRecognizedEquipment(
+  description: string
+) {
+  const normalizedDescription =
+    normalizeText(description);
 
-  return INVENTORY_NAMES.some((name) => {
-    const normalizedName = normalizeText(name);
+  return INVENTORY_NAMES.some(
+    (name) => {
+      const normalizedName =
+        normalizeText(name);
 
-    return normalizedDescription.includes(normalizedName);
-  });
+      return normalizedDescription.includes(
+        normalizedName
+      );
+    }
+  );
 }
 
 /* ============================================================
    OUTILS DATE / FUSEAU FRANCE
 ============================================================ */
 
-function getParisDateString(date: Date) {
-  const formatter = new Intl.DateTimeFormat("en-CA", {
-    timeZone: PARIS_TIME_ZONE,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  });
+function getParisDateString(
+  date: Date
+) {
+  const formatter =
+    new Intl.DateTimeFormat(
+      "en-CA",
+      {
+        timeZone:
+          PARIS_TIME_ZONE,
+        year:
+          "numeric",
+        month:
+          "2-digit",
+        day:
+          "2-digit",
+      }
+    );
 
-  const parts = formatter.formatToParts(date);
+  const parts =
+    formatter.formatToParts(
+      date
+    );
 
-  const year = parts.find((part) => part.type === "year")?.value;
-  const month = parts.find((part) => part.type === "month")?.value;
-  const day = parts.find((part) => part.type === "day")?.value;
+  const year =
+    parts.find(
+      (part) =>
+        part.type === "year"
+    )?.value;
 
-  if (!year || !month || !day) {
+  const month =
+    parts.find(
+      (part) =>
+        part.type === "month"
+    )?.value;
+
+  const day =
+    parts.find(
+      (part) =>
+        part.type === "day"
+    )?.value;
+
+  if (
+    !year ||
+    !month ||
+    !day
+  ) {
     throw new Error(
       "Impossible de déterminer la date Europe/Paris."
     );
@@ -134,52 +264,70 @@ function getParisDateString(date: Date) {
   return `${year}-${month}-${day}`;
 }
 
-function shiftDate(dateString: string, days: number) {
-  const [year, month, day] = dateString
-    .split("-")
-    .map(Number);
+function shiftDate(
+  dateString: string,
+  days: number
+) {
+  const [
+    year,
+    month,
+    day,
+  ] =
+    dateString
+      .split("-")
+      .map(Number);
 
-  const date = new Date(
-    Date.UTC(
-      year,
-      month - 1,
-      day + days,
-      12,
-      0,
-      0
-    )
-  );
+  const date =
+    new Date(
+      Date.UTC(
+        year,
+        month - 1,
+        day + days,
+        12,
+        0,
+        0
+      )
+    );
 
-  return date.toISOString().slice(0, 10);
+  return date
+    .toISOString()
+    .slice(0, 10);
 }
 
 function getTargetDate() {
   const todayParis =
-    getParisDateString(new Date());
+    getParisDateString(
+      new Date()
+    );
 
-  return shiftDate(todayParis, -2);
+  return shiftDate(
+    todayParis,
+    -2
+  );
 }
 
 /* ============================================================
    DATE RÉELLE DE FIN D'UN ÉVÉNEMENT
 ============================================================ */
 
-function getEventActualEndDate(event: {
-  end?: {
-    date?: string | null;
-    dateTime?: string | null;
-  } | null;
-}) {
+function getEventActualEndDate(
+  event: {
+    end?: {
+      date?: string | null;
+      dateTime?: string | null;
+    } | null;
+  }
+) {
   /*
-    ÉVÉNEMENT JOURNÉE ENTIÈRE
+    Événement journée entière.
 
-    Google Calendar utilise une date de fin exclusive.
+    Google utilise une fin exclusive.
 
     Exemple :
-    événement affiché du 4 au 6 septembre
+    affiché du 4 au 6 septembre
     end.date = 2026-09-07
 
-    Le dernier jour réel est donc le 6.
+    Date réelle de fin = 6 septembre.
   */
 
   if (event.end?.date) {
@@ -190,12 +338,16 @@ function getEventActualEndDate(event: {
   }
 
   /*
-    ÉVÉNEMENT AVEC HEURE
+    Événement avec heure.
   */
 
-  if (event.end?.dateTime) {
+  if (
+    event.end?.dateTime
+  ) {
     const endDate =
-      new Date(event.end.dateTime);
+      new Date(
+        event.end.dateTime
+      );
 
     if (
       Number.isNaN(
@@ -206,9 +358,8 @@ function getEventActualEndDate(event: {
     }
 
     /*
-      On retire 1 milliseconde pour gérer
-      correctement une réservation terminant
-      exactement à minuit.
+      Retrait d'1 ms pour gérer
+      les fins exactement à minuit.
     */
 
     const inclusiveEnd =
@@ -227,34 +378,36 @@ function getEventActualEndDate(event: {
 function formatFrenchDate(
   dateString: string
 ) {
-  const [year, month, day] =
+  const [
+    year,
+    month,
+    day,
+  ] =
     dateString
       .split("-")
       .map(Number);
 
-  const date = new Date(
-    Date.UTC(
-      year,
-      month - 1,
-      day,
-      12,
-      0,
-      0
-    )
-  );
+  const date =
+    new Date(
+      Date.UTC(
+        year,
+        month - 1,
+        day,
+        12,
+        0,
+        0
+      )
+    );
 
   return new Intl.DateTimeFormat(
     "fr-FR",
     {
       timeZone:
         PARIS_TIME_ZONE,
-
       day:
         "numeric",
-
       month:
         "long",
-
       year:
         "numeric",
     }
@@ -283,15 +436,12 @@ export async function GET(
 
       return NextResponse.json(
         {
-          success:
-            false,
-
+          success: false,
           error:
             "Configuration CRON_SECRET absente.",
         },
         {
-          status:
-            500,
+          status: 500,
         }
       );
     }
@@ -307,15 +457,12 @@ export async function GET(
     ) {
       return NextResponse.json(
         {
-          success:
-            false,
-
+          success: false,
           error:
             "Accès non autorisé.",
         },
         {
-          status:
-            401,
+          status: 401,
         }
       );
     }
@@ -325,7 +472,8 @@ export async function GET(
     ======================================================== */
 
     const calendarId =
-      process.env.GOOGLE_CALENDAR_ID;
+      process.env
+        .GOOGLE_CALENDAR_ID;
 
     const serviceAccountEmail =
       process.env
@@ -340,10 +488,12 @@ export async function GET(
         );
 
     const resendApiKey =
-      process.env.RESEND_API_KEY;
+      process.env
+        .RESEND_API_KEY;
 
     const reviewUrl =
-      process.env.GOOGLE_REVIEW_URL;
+      process.env
+        .GOOGLE_REVIEW_URL;
 
     if (
       !calendarId ||
@@ -352,15 +502,12 @@ export async function GET(
     ) {
       return NextResponse.json(
         {
-          success:
-            false,
-
+          success: false,
           error:
             "Configuration Google Calendar incomplète.",
         },
         {
-          status:
-            500,
+          status: 500,
         }
       );
     }
@@ -368,15 +515,12 @@ export async function GET(
     if (!resendApiKey) {
       return NextResponse.json(
         {
-          success:
-            false,
-
+          success: false,
           error:
             "Configuration Resend incomplète.",
         },
         {
-          status:
-            500,
+          status: 500,
         }
       );
     }
@@ -384,15 +528,12 @@ export async function GET(
     if (!reviewUrl) {
       return NextResponse.json(
         {
-          success:
-            false,
-
+          success: false,
           error:
             "GOOGLE_REVIEW_URL absente.",
         },
         {
-          status:
-            500,
+          status: 500,
         }
       );
     }
@@ -423,16 +564,11 @@ export async function GET(
       });
 
     /* ========================================================
-       DATE CIBLE
+       DATE CIBLE = J-2
     ======================================================== */
 
     const targetDate =
       getTargetDate();
-
-    /*
-      On récupère une plage plus large afin
-      d'inclure les réservations sur plusieurs jours.
-    */
 
     const searchStart =
       shiftDate(
@@ -489,7 +625,7 @@ export async function GET(
       response.data.items ?? [];
 
     /* ========================================================
-       FILTRE PAR DATE RÉELLE DE FIN
+       FILTRE SUR LA DATE RÉELLE DE FIN
     ======================================================== */
 
     const events =
@@ -533,7 +669,7 @@ export async function GET(
     }> = [];
 
     /* ========================================================
-       TRAITEMENT
+       TRAITEMENT DES ÉVÉNEMENTS
     ======================================================== */
 
     for (
@@ -556,7 +692,7 @@ export async function GET(
       );
 
       /* ======================================================
-         ANNULÉ
+         ÉVÉNEMENT ANNULÉ
       ====================================================== */
 
       if (
@@ -609,7 +745,7 @@ export async function GET(
         event.description ?? "";
 
       /* ======================================================
-         MATÉRIEL
+         MATÉRIEL RECONNU
       ====================================================== */
 
       if (
@@ -625,12 +761,9 @@ export async function GET(
 
         results.push({
           eventId,
-
           title,
-
           endDate:
             actualEndDate,
-
           status:
             "Aucun matériel reconnu",
         });
@@ -659,12 +792,9 @@ export async function GET(
 
         results.push({
           eventId,
-
           title,
-
           endDate:
             actualEndDate,
-
           status:
             "Déjà envoyé",
         });
@@ -681,6 +811,14 @@ export async function GET(
           description
         );
 
+      console.log(
+        `[Avis Google] Email détecté pour ${title} : ${
+          clientEmail
+            ? clientEmail
+            : "aucun"
+        }`
+      );
+
       if (
         !clientEmail ||
         !isValidEmail(
@@ -695,12 +833,9 @@ export async function GET(
 
         results.push({
           eventId,
-
           title,
-
           endDate:
             actualEndDate,
-
           status:
             "Aucun e-mail valide",
         });
@@ -778,8 +913,6 @@ export async function GET(
       overflow:hidden;
     ">
 
-      <!-- HEADER -->
-
       <div style="
         padding:30px 24px 25px;
         text-align:center;
@@ -829,8 +962,6 @@ export async function GET(
 
       </div>
 
-      <!-- CONTENU -->
-
       <div style="
         padding:28px 26px;
         text-align:center;
@@ -874,8 +1005,6 @@ export async function GET(
           Event'S Location et permet aux futurs clients
           de découvrir votre expérience.
         </p>
-
-        <!-- AVIS GOOGLE -->
 
         <div style="
           padding:22px 18px;
@@ -929,8 +1058,6 @@ export async function GET(
           à Event'S Location pour votre événement.
         </p>
 
-        <!-- CONTACT -->
-
         <div style="
           margin-top:28px;
           padding:19px;
@@ -974,8 +1101,6 @@ export async function GET(
           </p>
 
         </div>
-
-        <!-- FOOTER -->
 
         <div style="
           margin-top:28px;
@@ -1051,15 +1176,11 @@ export async function GET(
 
         results.push({
           eventId,
-
           title,
-
           email:
             clientEmail,
-
           endDate:
             actualEndDate,
-
           status:
             "Erreur d'envoi",
         });
@@ -1086,7 +1207,6 @@ export async function GET(
 
       await calendar.events.patch({
         calendarId,
-
         eventId,
 
         requestBody: {
@@ -1103,15 +1223,11 @@ export async function GET(
 
       results.push({
         eventId,
-
         title,
-
         email:
           clientEmail,
-
         endDate:
           actualEndDate,
-
         status:
           "Envoyé",
       });
@@ -1122,8 +1238,7 @@ export async function GET(
     ======================================================== */
 
     return NextResponse.json({
-      success:
-        true,
+      success: true,
 
       timezone:
         PARIS_TIME_ZONE,
@@ -1158,8 +1273,7 @@ export async function GET(
 
     return NextResponse.json(
       {
-        success:
-          false,
+        success: false,
 
         error:
           error instanceof Error
@@ -1167,8 +1281,7 @@ export async function GET(
             : "Erreur inconnue.",
       },
       {
-        status:
-          500,
+        status: 500,
       }
     );
   }
