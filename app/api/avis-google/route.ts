@@ -5,31 +5,50 @@ import { Resend } from "resend";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
+/* ============================================================
+   CONFIGURATION
+============================================================ */
+
 const WEBSITE_URL = "https://www.eventslocation.fr";
 const LOGO_URL = "https://www.eventslocation.fr/Logo/Logo.png";
 
 const BUSINESS_EMAIL = "events.location@outlook.com";
 const BUSINESS_PHONE = "06 43 89 45 70";
 
+const PARIS_TIME_ZONE = "Europe/Paris";
+
+/* ============================================================
+   MATÉRIEL RECONNU
+============================================================ */
+
 const INVENTORY_NAMES = [
   "Photo Booth",
+  "Photobooth",
   "Kit Sonorisation",
+  "Sonorisation",
   "Micro HF",
   "Videoprojecteur",
+  "Vidéoprojecteur",
   "Ecran",
+  "Écran",
   "Smoke Puff",
   "Machine a fumee",
+  "Machine à fumée",
   "Machine a bulles",
+  "Machine à bulles",
   "Tente 4x8",
+  "Tente 4 x 8",
   "Table ronde 152",
+  "Table ronde Ø152",
   "Table rectangulaire",
   "Mange debout",
+  "Mange-debout",
   "Chaise",
   "Tabouret",
 ];
 
 /* ============================================================
-   OUTILS
+   OUTILS TEXTE
 ============================================================ */
 
 function escapeHtml(value: unknown) {
@@ -97,54 +116,129 @@ function hasRecognizedEquipment(description: string) {
   });
 }
 
-function formatFrenchDate(value: Date) {
+/* ============================================================
+   OUTILS DATE / FUSEAU FRANCE
+============================================================ */
+
+/**
+ * Retourne une date sous forme YYYY-MM-DD
+ * dans le fuseau Europe/Paris.
+ */
+function getParisDateString(date: Date) {
+  const formatter = new Intl.DateTimeFormat("en-CA", {
+    timeZone: PARIS_TIME_ZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+
+  const parts = formatter.formatToParts(date);
+
+  const year = parts.find((part) => part.type === "year")?.value;
+  const month = parts.find((part) => part.type === "month")?.value;
+  const day = parts.find((part) => part.type === "day")?.value;
+
+  if (!year || !month || !day) {
+    throw new Error("Impossible de déterminer la date Europe/Paris.");
+  }
+
+  return `${year}-${month}-${day}`;
+}
+
+/**
+ * Ajoute ou retire des jours à une date YYYY-MM-DD.
+ */
+function shiftDate(dateString: string, days: number) {
+  const [year, month, day] = dateString
+    .split("-")
+    .map(Number);
+
+  const date = new Date(
+    Date.UTC(year, month - 1, day + days, 12, 0, 0)
+  );
+
+  return date.toISOString().slice(0, 10);
+}
+
+/**
+ * Date cible = aujourd'hui en France - 2 jours.
+ */
+function getTargetDate() {
+  const todayParis = getParisDateString(new Date());
+
+  return shiftDate(todayParis, -2);
+}
+
+/**
+ * Détermine le dernier jour réel de l'événement.
+ *
+ * Pour un événement "journée entière", Google Calendar utilise
+ * une date de fin EXCLUSIVE.
+ *
+ * Exemple :
+ * affiché du 4 au 6 septembre
+ * start.date = 2026-09-04
+ * end.date   = 2026-09-07
+ *
+ * Le dernier jour réel est donc le 6 septembre.
+ */
+function getEventActualEndDate(
+  event: {
+    end?: {
+      date?: string | null;
+      dateTime?: string | null;
+    } | null;
+  }
+) {
+  /* ÉVÉNEMENT JOURNÉE ENTIÈRE */
+
+  if (event.end?.date) {
+    return shiftDate(event.end.date, -1);
+  }
+
+  /* ÉVÉNEMENT AVEC HEURE */
+
+  if (event.end?.dateTime) {
+    const endDate = new Date(event.end.dateTime);
+
+    if (Number.isNaN(endDate.getTime())) {
+      return null;
+    }
+
+    /*
+      On retire 1 ms pour gérer correctement un événement
+      qui se termine exactement à minuit.
+
+      Exemple :
+      fin = 07/09 à 00:00
+      dernier jour réel = 06/09
+    */
+
+    const inclusiveEnd = new Date(
+      endDate.getTime() - 1
+    );
+
+    return getParisDateString(inclusiveEnd);
+  }
+
+  return null;
+}
+
+function formatFrenchDate(dateString: string) {
+  const [year, month, day] = dateString
+    .split("-")
+    .map(Number);
+
+  const date = new Date(
+    Date.UTC(year, month - 1, day, 12, 0, 0)
+  );
+
   return new Intl.DateTimeFormat("fr-FR", {
+    timeZone: PARIS_TIME_ZONE,
     day: "numeric",
     month: "long",
     year: "numeric",
-  }).format(value);
-}
-
-/* ============================================================
-   DATE J-2
-============================================================ */
-
-function getTargetDayRange() {
-  const now = new Date();
-
-  const target = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate()
-  );
-
-  target.setDate(target.getDate() - 2);
-
-  const start = new Date(
-    target.getFullYear(),
-    target.getMonth(),
-    target.getDate(),
-    0,
-    0,
-    0,
-    0
-  );
-
-  const end = new Date(
-    target.getFullYear(),
-    target.getMonth(),
-    target.getDate(),
-    23,
-    59,
-    59,
-    999
-  );
-
-  return {
-    target,
-    start,
-    end,
-  };
+  }).format(date);
 }
 
 /* ============================================================
@@ -173,7 +267,8 @@ export async function GET(request: Request) {
       );
     }
 
-    const authorization = request.headers.get("authorization");
+    const authorization =
+      request.headers.get("authorization");
 
     if (authorization !== `Bearer ${cronSecret}`) {
       return NextResponse.json(
@@ -191,24 +286,34 @@ export async function GET(request: Request) {
        VARIABLES D'ENVIRONNEMENT
     ======================================================== */
 
-    const calendarId = process.env.GOOGLE_CALENDAR_ID;
+    const calendarId =
+      process.env.GOOGLE_CALENDAR_ID;
 
     const serviceAccountEmail =
       process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
 
-    const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(
-      /\\n/g,
-      "\n"
-    );
+    const privateKey =
+      process.env.GOOGLE_PRIVATE_KEY?.replace(
+        /\\n/g,
+        "\n"
+      );
 
-    const resendApiKey = process.env.RESEND_API_KEY;
-    const reviewUrl = process.env.GOOGLE_REVIEW_URL;
+    const resendApiKey =
+      process.env.RESEND_API_KEY;
 
-    if (!calendarId || !serviceAccountEmail || !privateKey) {
+    const reviewUrl =
+      process.env.GOOGLE_REVIEW_URL;
+
+    if (
+      !calendarId ||
+      !serviceAccountEmail ||
+      !privateKey
+    ) {
       return NextResponse.json(
         {
           success: false,
-          error: "Configuration Google Calendar incomplète.",
+          error:
+            "Configuration Google Calendar incomplète.",
         },
         {
           status: 500,
@@ -247,6 +352,7 @@ export async function GET(request: Request) {
     const auth = new google.auth.JWT({
       email: serviceAccountEmail,
       key: privateKey,
+
       scopes: [
         "https://www.googleapis.com/auth/calendar",
       ],
@@ -258,28 +364,81 @@ export async function GET(request: Request) {
     });
 
     /* ========================================================
-       DATE J-2
+       DATE CIBLE
     ======================================================== */
 
-    const { target, start, end } = getTargetDayRange();
+    const targetDate = getTargetDate();
+
+    /*
+      On récupère une plage volontairement un peu plus large,
+      puis on filtre nous-mêmes avec la vraie date de fin.
+
+      Cela permet de gérer correctement les événements
+      sur plusieurs jours.
+    */
+
+    const searchStart =
+      shiftDate(targetDate, -7);
+
+    const searchEnd =
+      shiftDate(targetDate, 2);
+
+    console.log(
+      `[Avis Google] Date cible : ${targetDate}`
+    );
+
+    console.log(
+      `[Avis Google] Recherche calendrier : ${searchStart} → ${searchEnd}`
+    );
 
     /* ========================================================
        RÉCUPÉRATION DES ÉVÉNEMENTS
     ======================================================== */
 
-    const response = await calendar.events.list({
-      calendarId,
-      timeMin: start.toISOString(),
-      timeMax: end.toISOString(),
-      singleEvents: true,
-      orderBy: "startTime",
-      showDeleted: false,
-      maxResults: 250,
-    });
+    const response =
+      await calendar.events.list({
+        calendarId,
 
-    const events = response.data.items ?? [];
+        timeMin: new Date(
+          `${searchStart}T00:00:00Z`
+        ).toISOString(),
 
-    const resend = new Resend(resendApiKey);
+        timeMax: new Date(
+          `${searchEnd}T23:59:59Z`
+        ).toISOString(),
+
+        singleEvents: true,
+        orderBy: "startTime",
+        showDeleted: false,
+        maxResults: 250,
+      });
+
+    const calendarEvents =
+      response.data.items ?? [];
+
+    /* ========================================================
+       FILTRE SUR LA DATE DE FIN RÉELLE
+    ======================================================== */
+
+    const events = calendarEvents.filter(
+      (event) => {
+        const actualEndDate =
+          getEventActualEndDate(event);
+
+        return actualEndDate === targetDate;
+      }
+    );
+
+    console.log(
+      `[Avis Google] ${calendarEvents.length} événement(s) analysé(s)`
+    );
+
+    console.log(
+      `[Avis Google] ${events.length} événement(s) terminé(s) le ${targetDate}`
+    );
+
+    const resend =
+      new Resend(resendApiKey);
 
     let sentCount = 0;
     let ignoredCount = 0;
@@ -289,39 +448,75 @@ export async function GET(request: Request) {
       eventId: string;
       title: string;
       email?: string;
+      endDate?: string | null;
       status: string;
     }> = [];
 
     /* ========================================================
-       TRAITEMENT
+       TRAITEMENT DES ÉVÉNEMENTS
     ======================================================== */
 
     for (const event of events) {
+      const eventId = event.id;
+
+      const title =
+        event.summary ?? "Sans titre";
+
+      const actualEndDate =
+        getEventActualEndDate(event);
+
+      console.log(
+        `[Avis Google] Traitement : ${title} | fin : ${actualEndDate}`
+      );
+
+      /* ======================================================
+         ANNULÉ
+      ====================================================== */
+
       if (event.status === "cancelled") {
         ignoredCount++;
+
+        results.push({
+          eventId: eventId ?? "inconnu",
+          title,
+          endDate: actualEndDate,
+          status: "Événement annulé",
+        });
+
         continue;
       }
-
-      const eventId = event.id;
 
       if (!eventId) {
         ignoredCount++;
+
+        results.push({
+          eventId: "inconnu",
+          title,
+          endDate: actualEndDate,
+          status: "ID événement absent",
+        });
+
         continue;
       }
 
-      const description = event.description ?? "";
-      const title = event.summary ?? "Sans titre";
+      const description =
+        event.description ?? "";
 
       /* ======================================================
-         SÉCURITÉ : AU MOINS UN MATÉRIEL RECONNU
+         MATÉRIEL RECONNU
       ====================================================== */
 
       if (!hasRecognizedEquipment(description)) {
         ignoredCount++;
 
+        console.log(
+          `[Avis Google] Ignoré : aucun matériel reconnu → ${title}`
+        );
+
         results.push({
           eventId,
           title,
+          endDate: actualEndDate,
           status: "Aucun matériel reconnu",
         });
 
@@ -332,12 +527,19 @@ export async function GET(request: Request) {
          ANTI-DOUBLON
       ====================================================== */
 
-      if (hasReviewAlreadyBeenSent(description)) {
+      if (
+        hasReviewAlreadyBeenSent(description)
+      ) {
         ignoredCount++;
+
+        console.log(
+          `[Avis Google] Ignoré : déjà envoyé → ${title}`
+        );
 
         results.push({
           eventId,
           title,
+          endDate: actualEndDate,
           status: "Déjà envoyé",
         });
 
@@ -348,36 +550,59 @@ export async function GET(request: Request) {
          EMAIL CLIENT
       ====================================================== */
 
-      const clientEmail = extractEmail(description);
+      const clientEmail =
+        extractEmail(description);
 
-      if (!clientEmail || !isValidEmail(clientEmail)) {
+      if (
+        !clientEmail ||
+        !isValidEmail(clientEmail)
+      ) {
         ignoredCount++;
+
+        console.log(
+          `[Avis Google] Ignoré : email invalide → ${title}`
+        );
 
         results.push({
           eventId,
           title,
+          endDate: actualEndDate,
           status: "Aucun e-mail valide",
         });
 
         continue;
       }
 
-      const clientName = extractClientName(description);
+      const clientName =
+        extractClientName(description);
 
-      const safeClientName = escapeHtml(clientName);
-      const safeEventTitle = escapeHtml(title);
+      const safeClientName =
+        escapeHtml(clientName);
+
+      const safeEventTitle =
+        escapeHtml(title);
 
       /* ======================================================
          ENVOI DU MAIL
       ====================================================== */
 
-      const mail = await resend.emails.send({
-        from: "Event'S Location <devis@eventslocation.fr>",
-        to: [clientEmail],
-        replyTo: BUSINESS_EMAIL,
-        subject: "Votre avis compte pour Event'S Location",
+      console.log(
+        `[Avis Google] Envoi vers ${clientEmail} → ${title}`
+      );
 
-        html: `
+      const mail =
+        await resend.emails.send({
+          from:
+            "Event'S Location <devis@eventslocation.fr>",
+
+          to: [clientEmail],
+
+          replyTo: BUSINESS_EMAIL,
+
+          subject:
+            "Votre avis compte pour Event'S Location",
+
+          html: `
 <!doctype html>
 <html lang="fr">
 
@@ -665,8 +890,8 @@ export async function GET(request: Request) {
 
 </body>
 </html>
-        `,
-      });
+          `,
+        });
 
       /* ======================================================
          ERREUR RESEND
@@ -674,7 +899,7 @@ export async function GET(request: Request) {
 
       if (mail.error) {
         console.error(
-          "Erreur mail avis Google :",
+          `[Avis Google] Erreur Resend pour ${clientEmail}`,
           mail.error
         );
 
@@ -684,6 +909,7 @@ export async function GET(request: Request) {
           eventId,
           title,
           email: clientEmail,
+          endDate: actualEndDate,
           status: "Erreur d'envoi",
         });
 
@@ -694,16 +920,16 @@ export async function GET(request: Request) {
          MARQUAGE GOOGLE CALENDAR
       ====================================================== */
 
-      const sentDate = new Date();
+      const sentDate =
+        getParisDateString(new Date());
 
       const marker =
-        `Avis Google envoye: ${sentDate
-          .toISOString()
-          .slice(0, 10)}`;
+        `Avis Google envoye: ${sentDate}`;
 
-      const updatedDescription = description.trim()
-        ? `${description.trim()}\n\n${marker}`
-        : marker;
+      const updatedDescription =
+        description.trim()
+          ? `${description.trim()}\n\n${marker}`
+          : marker;
 
       await calendar.events.patch({
         calendarId,
@@ -716,10 +942,15 @@ export async function GET(request: Request) {
 
       sentCount++;
 
+      console.log(
+        `[Avis Google] Envoyé avec succès → ${clientEmail}`
+      );
+
       results.push({
         eventId,
         title,
         email: clientEmail,
+        endDate: actualEndDate,
         status: "Envoyé",
       });
     }
@@ -731,12 +962,21 @@ export async function GET(request: Request) {
     return NextResponse.json({
       success: true,
 
-      targetDate: formatFrenchDate(target),
+      timezone: PARIS_TIME_ZONE,
 
-      totalEvents: events.length,
+      targetDate:
+        formatFrenchDate(targetDate),
+
+      calendarEventsScanned:
+        calendarEvents.length,
+
+      targetEvents:
+        events.length,
 
       sent: sentCount,
+
       ignored: ignoredCount,
+
       errors: errorCount,
 
       results,
