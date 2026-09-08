@@ -98,36 +98,12 @@ function normalizeText(value: string) {
 ============================================================ */
 
 function hasRecognizedEquipment(description: string) {
-  const lines = description.split(/\r?\n/);
+  const normalizedDescription = normalizeText(description);
 
-  return lines.some((line) => {
-    const separatorIndex = line.indexOf(":");
+  return INVENTORY_NAMES.some((name) => {
+    const normalizedName = normalizeText(name);
 
-    if (separatorIndex === -1) {
-      return false;
-    }
-
-    const equipmentName = line
-      .slice(0, separatorIndex)
-      .trim();
-
-    const quantityText = line
-      .slice(separatorIndex + 1)
-      .trim();
-
-    const quantity = Number(quantityText);
-
-    if (!Number.isFinite(quantity) || quantity <= 0) {
-      return false;
-    }
-
-    const normalizedEquipment =
-      normalizeText(equipmentName);
-
-    return INVENTORY_NAMES.some(
-      (name) =>
-        normalizeText(name) === normalizedEquipment
-    );
+    return normalizedDescription.includes(normalizedName);
   });
 }
 
@@ -145,14 +121,9 @@ function getParisDateString(date: Date) {
 
   const parts = formatter.formatToParts(date);
 
-  const year =
-    parts.find((part) => part.type === "year")?.value;
-
-  const month =
-    parts.find((part) => part.type === "month")?.value;
-
-  const day =
-    parts.find((part) => part.type === "day")?.value;
+  const year = parts.find((part) => part.type === "year")?.value;
+  const month = parts.find((part) => part.type === "month")?.value;
+  const day = parts.find((part) => part.type === "day")?.value;
 
   if (!year || !month || !day) {
     throw new Error(
@@ -163,12 +134,10 @@ function getParisDateString(date: Date) {
   return `${year}-${month}-${day}`;
 }
 
-function shiftDate(
-  dateString: string,
-  days: number
-) {
-  const [year, month, day] =
-    dateString.split("-").map(Number);
+function shiftDate(dateString: string, days: number) {
+  const [year, month, day] = dateString
+    .split("-")
+    .map(Number);
 
   const date = new Date(
     Date.UTC(
@@ -202,10 +171,9 @@ function getEventActualEndDate(event: {
   } | null;
 }) {
   /*
-    Événement journée entière.
+    ÉVÉNEMENT JOURNÉE ENTIÈRE
 
-    Google Calendar stocke la date de fin
-    comme une date exclusive.
+    Google Calendar utilise une date de fin exclusive.
 
     Exemple :
     événement affiché du 4 au 6 septembre
@@ -215,11 +183,14 @@ function getEventActualEndDate(event: {
   */
 
   if (event.end?.date) {
-    return shiftDate(event.end.date, -1);
+    return shiftDate(
+      event.end.date,
+      -1
+    );
   }
 
   /*
-    Événement avec heure.
+    ÉVÉNEMENT AVEC HEURE
   */
 
   if (event.end?.dateTime) {
@@ -227,18 +198,23 @@ function getEventActualEndDate(event: {
       new Date(event.end.dateTime);
 
     if (
-      Number.isNaN(endDate.getTime())
+      Number.isNaN(
+        endDate.getTime()
+      )
     ) {
       return null;
     }
 
     /*
-      On retire 1 milliseconde afin de gérer
-      correctement une fin exactement à minuit.
+      On retire 1 milliseconde pour gérer
+      correctement une réservation terminant
+      exactement à minuit.
     */
 
     const inclusiveEnd =
-      new Date(endDate.getTime() - 1);
+      new Date(
+        endDate.getTime() - 1
+      );
 
     return getParisDateString(
       inclusiveEnd
@@ -252,7 +228,9 @@ function formatFrenchDate(
   dateString: string
 ) {
   const [year, month, day] =
-    dateString.split("-").map(Number);
+    dateString
+      .split("-")
+      .map(Number);
 
   const date = new Date(
     Date.UTC(
@@ -268,10 +246,17 @@ function formatFrenchDate(
   return new Intl.DateTimeFormat(
     "fr-FR",
     {
-      timeZone: PARIS_TIME_ZONE,
-      day: "numeric",
-      month: "long",
-      year: "numeric",
+      timeZone:
+        PARIS_TIME_ZONE,
+
+      day:
+        "numeric",
+
+      month:
+        "long",
+
+      year:
+        "numeric",
     }
   ).format(date);
 }
@@ -298,12 +283,15 @@ export async function GET(
 
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
+
           error:
             "Configuration CRON_SECRET absente.",
         },
         {
-          status: 500,
+          status:
+            500,
         }
       );
     }
@@ -319,12 +307,15 @@ export async function GET(
     ) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
+
           error:
             "Accès non autorisé.",
         },
         {
-          status: 401,
+          status:
+            401,
         }
       );
     }
@@ -341,10 +332,12 @@ export async function GET(
         .GOOGLE_SERVICE_ACCOUNT_EMAIL;
 
     const privateKey =
-      process.env.GOOGLE_PRIVATE_KEY?.replace(
-        /\\n/g,
-        "\n"
-      );
+      process.env
+        .GOOGLE_PRIVATE_KEY
+        ?.replace(
+          /\\n/g,
+          "\n"
+        );
 
     const resendApiKey =
       process.env.RESEND_API_KEY;
@@ -359,12 +352,15 @@ export async function GET(
     ) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
+
           error:
             "Configuration Google Calendar incomplète.",
         },
         {
-          status: 500,
+          status:
+            500,
         }
       );
     }
@@ -372,12 +368,15 @@ export async function GET(
     if (!resendApiKey) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
+
           error:
             "Configuration Resend incomplète.",
         },
         {
-          status: 500,
+          status:
+            500,
         }
       );
     }
@@ -385,12 +384,15 @@ export async function GET(
     if (!reviewUrl) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
+
           error:
             "GOOGLE_REVIEW_URL absente.",
         },
         {
-          status: 500,
+          status:
+            500,
         }
       );
     }
@@ -414,28 +416,35 @@ export async function GET(
 
     const calendar =
       google.calendar({
-        version: "v3",
+        version:
+          "v3",
+
         auth,
       });
 
     /* ========================================================
-       DATE CIBLE = J-2
+       DATE CIBLE
     ======================================================== */
 
     const targetDate =
       getTargetDate();
 
     /*
-      On récupère une plage suffisamment large
-      pour inclure les réservations de plusieurs jours,
-      puis on filtre sur leur vraie date de fin.
+      On récupère une plage plus large afin
+      d'inclure les réservations sur plusieurs jours.
     */
 
     const searchStart =
-      shiftDate(targetDate, -7);
+      shiftDate(
+        targetDate,
+        -7
+      );
 
     const searchEnd =
-      shiftDate(targetDate, 2);
+      shiftDate(
+        targetDate,
+        2
+      );
 
     console.log(
       `[Avis Google] Date cible : ${targetDate}`
@@ -446,7 +455,7 @@ export async function GET(
     );
 
     /* ========================================================
-       GOOGLE CALENDAR
+       RÉCUPÉRATION GOOGLE CALENDAR
     ======================================================== */
 
     const response =
@@ -463,24 +472,33 @@ export async function GET(
             `${searchEnd}T23:59:59Z`
           ).toISOString(),
 
-        singleEvents: true,
-        orderBy: "startTime",
-        showDeleted: false,
-        maxResults: 250,
+        singleEvents:
+          true,
+
+        orderBy:
+          "startTime",
+
+        showDeleted:
+          false,
+
+        maxResults:
+          250,
       });
 
     const calendarEvents =
       response.data.items ?? [];
 
     /* ========================================================
-       ÉVÉNEMENTS TERMINÉS EXACTEMENT J-2
+       FILTRE PAR DATE RÉELLE DE FIN
     ======================================================== */
 
     const events =
       calendarEvents.filter(
         (event) => {
           const actualEndDate =
-            getEventActualEndDate(event);
+            getEventActualEndDate(
+              event
+            );
 
           return (
             actualEndDate ===
@@ -498,7 +516,9 @@ export async function GET(
     );
 
     const resend =
-      new Resend(resendApiKey);
+      new Resend(
+        resendApiKey
+      );
 
     let sentCount = 0;
     let ignoredCount = 0;
@@ -513,10 +533,12 @@ export async function GET(
     }> = [];
 
     /* ========================================================
-       TRAITEMENT DE CHAQUE ÉVÉNEMENT
+       TRAITEMENT
     ======================================================== */
 
-    for (const event of events) {
+    for (
+      const event of events
+    ) {
       const eventId =
         event.id;
 
@@ -534,7 +556,7 @@ export async function GET(
       );
 
       /* ======================================================
-         ÉVÉNEMENT ANNULÉ
+         ANNULÉ
       ====================================================== */
 
       if (
@@ -587,7 +609,7 @@ export async function GET(
         event.description ?? "";
 
       /* ======================================================
-         MATÉRIEL RECONNU
+         MATÉRIEL
       ====================================================== */
 
       if (
@@ -603,9 +625,12 @@ export async function GET(
 
         results.push({
           eventId,
+
           title,
+
           endDate:
             actualEndDate,
+
           status:
             "Aucun matériel reconnu",
         });
@@ -634,9 +659,12 @@ export async function GET(
 
         results.push({
           eventId,
+
           title,
+
           endDate:
             actualEndDate,
+
           status:
             "Déjà envoyé",
         });
@@ -667,9 +695,12 @@ export async function GET(
 
         results.push({
           eventId,
+
           title,
+
           endDate:
             actualEndDate,
+
           status:
             "Aucun e-mail valide",
         });
@@ -1020,11 +1051,15 @@ export async function GET(
 
         results.push({
           eventId,
+
           title,
+
           email:
             clientEmail,
+
           endDate:
             actualEndDate,
+
           status:
             "Erreur d'envoi",
         });
@@ -1051,6 +1086,7 @@ export async function GET(
 
       await calendar.events.patch({
         calendarId,
+
         eventId,
 
         requestBody: {
@@ -1067,11 +1103,15 @@ export async function GET(
 
       results.push({
         eventId,
+
         title,
+
         email:
           clientEmail,
+
         endDate:
           actualEndDate,
+
         status:
           "Envoyé",
       });
@@ -1082,7 +1122,8 @@ export async function GET(
     ======================================================== */
 
     return NextResponse.json({
-      success: true,
+      success:
+        true,
 
       timezone:
         PARIS_TIME_ZONE,
@@ -1117,7 +1158,8 @@ export async function GET(
 
     return NextResponse.json(
       {
-        success: false,
+        success:
+          false,
 
         error:
           error instanceof Error
@@ -1125,7 +1167,8 @@ export async function GET(
             : "Erreur inconnue.",
       },
       {
-        status: 500,
+        status:
+          500,
       }
     );
   }
