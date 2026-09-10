@@ -149,7 +149,7 @@ export default function FlashComparison() {
           </p>
 
           <div className="mt-4 inline-flex rounded-full bg-white px-3.5 py-1.5 text-sm font-black text-[#EF5A4F] shadow-sm">
-            Option +10 €
+            Option +15 €
           </div>
 
         </div>

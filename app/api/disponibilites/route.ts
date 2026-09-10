@@ -11,8 +11,8 @@ const inventory: Record<string, number> = {
   "Photo Booth": 1,
   "Kit Sonorisation": 2,
   "Micro HF": 2,
-  Videoprojecteur: 1,
-  Ecran: 1,
+  "Videoprojecteur": 1,
+  "Ecran": 1,
   "Smoke Puff": 1,
   "Machine a fumee": 2,
   "Machine a bulles": 1,
@@ -20,8 +20,8 @@ const inventory: Record<string, number> = {
   "Table ronde 152": 20,
   "Table rectangulaire": 10,
   "Mange debout": 12,
-  Chaise: 50,
-  Tabouret: 20,
+  "Chaise": 50,
+  "Tabouret": 20,
 };
 
 /* ============================================================

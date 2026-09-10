@@ -109,7 +109,7 @@ export const photobooth: Service = {
   options: [
     {
       name: "Flash additionnel",
-      price: 10,
+      price: 15,
     },
     {
       name: "Toile de fond avec structure",
@@ -121,7 +121,7 @@ export const photobooth: Service = {
     },
     {
       name: "Clé USB",
-      price: 15,
+      price: 10,
     },
     {
       name: "Décoration",
