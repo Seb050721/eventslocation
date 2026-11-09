@@ -76,7 +76,7 @@ export default function NouveauteBubble() {
 
             <div className="relative h-52 w-full bg-[#FFF0ED] sm:h-64">
               <Image
-                src="/nouveautes/livre-or-audio.jpg"
+                src="/nouveautes/livre-or-audio.png"
                 alt="Téléphone livre d'or audio"
                 fill
                 sizes="(max-width: 640px) 100vw, 448px"
