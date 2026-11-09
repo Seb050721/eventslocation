@@ -23,7 +23,7 @@ const EMAIL_FROM =
   "Event'S Emotions <devis@eventsemotions.fr>";
 
 /* ============================================================
-   COULEURS EVENT'S LOCATION
+   COULEURS EVENT'S Emotions
 ============================================================ */
 
 const COLORS = {
@@ -557,7 +557,7 @@ export async function POST(
 
         <img
           src="${LOGO_URL}"
-          alt="Event'S Location"
+          alt="Event'S Emotions"
           width="180"
           style="
             display:block;
@@ -951,7 +951,7 @@ export async function POST(
 
     if (adminMail.error) {
       console.error(
-        "Erreur mail Event'S Location :",
+        "Erreur mail Event'S Emotions :",
         adminMail.error
       );
 
@@ -983,7 +983,7 @@ export async function POST(
           BUSINESS_EMAIL,
 
         subject:
-          "Votre demande de devis - Event'S Location",
+          "Votre demande de devis - Event'S Emotions",
 
         html: `
 <!doctype html>
@@ -1028,7 +1028,7 @@ export async function POST(
 
         <img
           src="${LOGO_URL}"
-          alt="Event'S Location"
+          alt="Event'S Emotions"
           width="180"
           style="
             display:block;
@@ -1077,7 +1077,7 @@ export async function POST(
           color:${COLORS.textSoft};
         ">
           Votre demande de devis a bien été
-          transmise à Event'S Location.
+          transmise à Event'S Emotions.
         </p>
 
       </div>
@@ -1328,7 +1328,7 @@ export async function POST(
                   Le matériel sélectionné était disponible
                   au moment de votre consultation.
                   La réservation sera définitive après
-                  confirmation par Event'S Location.
+                  confirmation par Event'S Emotions.
                 </p>
 
               </div>
@@ -1392,7 +1392,7 @@ export async function POST(
               border-radius:10px;
             "
           >
-            Visiter Event'S Location
+            Visiter Event'S Emotions
           </a>
 
         </div>
@@ -1462,7 +1462,7 @@ export async function POST(
 
           <img
             src="${LOGO_URL}"
-            alt="Event'S Location"
+            alt="Event'S Emotions"
             width="110"
             style="
               display:block;
@@ -1479,7 +1479,7 @@ export async function POST(
             font-weight:700;
             color:${COLORS.text};
           ">
-            Event'S Location
+            Event'S Emotions
           </p>
 
           <p style="
