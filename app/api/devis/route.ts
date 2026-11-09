@@ -8,16 +8,19 @@ import { Resend } from "resend";
 export const dynamic = "force-dynamic";
 
 const LOGO_URL =
-  "https://www.eventslocation.fr/Logo/Logo.png";
+  "https://www.eventsemotions.fr/Logo/Logo.png";
 
 const WEBSITE_URL =
-  "https://www.eventslocation.fr";
+  "https://www.eventsemotions.fr";
 
 const BUSINESS_EMAIL =
-  "events.location@outlook.com";
+  "sebastien.hamon@eventsemotions.fr";
 
 const BUSINESS_PHONE =
   "06 43 89 45 70";
+
+const EMAIL_FROM =
+  "Event'S Emotions <devis@eventsemotions.fr>";
 
 /* ============================================================
    COULEURS EVENT'S LOCATION
@@ -499,7 +502,7 @@ export async function POST(
     const adminMail =
       await resend.emails.send({
         from:
-          "Event'S Location <devis@eventslocation.fr>",
+          EMAIL_FROM,
 
         to: [
           BUSINESS_EMAIL,
@@ -970,7 +973,7 @@ export async function POST(
     const clientMail =
       await resend.emails.send({
         from:
-          "Event'S Location <devis@eventslocation.fr>",
+          EMAIL_FROM,
 
         to: [
           String(email),
