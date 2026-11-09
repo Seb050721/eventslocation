@@ -1,8 +1,13 @@
+
 import type { MetadataRoute } from "next";
 
-export default function robots(): MetadataRoute.Robots {
-  const baseUrl = "https://www.eventslocation.fr";
+/* ============================================================
+   CONFIGURATION ROBOTS.TXT - EVENT'S EMOTIONS
+============================================================ */
 
+const SITE_URL = "https://www.eventsemotions.fr";
+
+export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
@@ -10,8 +15,8 @@ export default function robots(): MetadataRoute.Robots {
       disallow: ["/api/"],
     },
 
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: `${SITE_URL}/sitemap.xml`,
 
-    host: baseUrl,
+    host: SITE_URL,
   };
 }
