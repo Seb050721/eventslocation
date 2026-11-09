@@ -929,7 +929,7 @@ export async function POST(
             color:${COLORS.textMuted};
           ">
             Demande envoyée depuis
-            eventslocation.fr
+            eventsemotions.fr
           </p>
 
         </div>
@@ -1487,7 +1487,7 @@ export async function POST(
             font-size:12px;
             color:${COLORS.textMuted};
           ">
-            Donnez vie à vos événements.
+            Votre créateur d'émotions.
           </p>
 
           <p style="
