@@ -1,3 +1,4 @@
+
 import Image from "next/image";
 import Link from "next/link";
 
@@ -17,6 +18,24 @@ import {
   Sparkles,
   Speaker,
 } from "lucide-react";
+
+/* ============================================================
+   INFORMATIONS ENTREPRISE
+============================================================ */
+
+const BUSINESS_NAME = "Event'S Emotions";
+const BUSINESS_EMAIL = "sebastien.hamon@eventsemotions.fr";
+const BUSINESS_PHONE = "06 43 89 45 70";
+
+const INSTAGRAM_URL =
+  "https://www.instagram.com/events_emotions__/";
+
+const FACEBOOK_URL =
+  "https://www.facebook.com/share/1H7nS1AuH4/";
+
+/* ============================================================
+   PRESTATIONS
+============================================================ */
 
 const services = [
   {
@@ -51,6 +70,10 @@ const services = [
   },
 ];
 
+/* ============================================================
+   FOOTER
+============================================================ */
+
 export default function Footer() {
   const year = new Date().getFullYear();
 
@@ -76,7 +99,6 @@ export default function Footer() {
       ===================================================== */}
 
       <div className="relative border-b border-white/10">
-
         <div className="mx-auto max-w-7xl px-5 py-8 sm:px-6 sm:py-10 lg:px-8">
 
           <div className="flex flex-col items-start justify-between gap-5 rounded-[22px] border border-white/10 bg-white/[0.05] p-5 sm:p-6 lg:flex-row lg:items-center lg:px-7 lg:py-6">
@@ -111,9 +133,7 @@ export default function Footer() {
             </Link>
 
           </div>
-
         </div>
-
       </div>
 
       {/* =====================================================
@@ -133,12 +153,12 @@ export default function Footer() {
             <Link
               href="/"
               className="inline-flex items-center"
-              aria-label="Event'S Location - Accueil"
+              aria-label={`${BUSINESS_NAME} - Accueil`}
             >
               <div className="relative h-[74px] w-[150px]">
                 <Image
                   src="/Logo/LogoRond.png"
-                  alt="Logo Event'S Location"
+                  alt={`Logo ${BUSINESS_NAME}`}
                   fill
                   sizes="150px"
                   className="object-contain object-left"
@@ -146,11 +166,21 @@ export default function Footer() {
               </div>
             </Link>
 
-            <p className="mt-4 max-w-sm text-sm leading-6 text-[#BDB6B8]">
+            {/* SLOGAN */}
+
+            <p className="mt-3 text-sm font-bold text-[#EF5A4F]">
+              Votre créateur d&apos;émotions
+            </p>
+
+            {/* DESCRIPTION */}
+
+            <p className="mt-3 max-w-sm text-sm leading-6 text-[#BDB6B8]">
               Location de matériel événementiel pour mariages,
               anniversaires, événements privés, professionnels
               et associatifs.
             </p>
+
+            {/* LOCALISATION */}
 
             <div className="mt-4 flex items-start gap-2.5 text-sm leading-6 text-[#BDB6B8]">
 
@@ -304,7 +334,7 @@ export default function Footer() {
                   </p>
 
                   <p className="text-sm font-semibold text-[#DDD7D9] transition-colors group-hover:text-white">
-                    06 43 89 45 70
+                    {BUSINESS_PHONE}
                   </p>
 
                 </div>
@@ -314,7 +344,7 @@ export default function Footer() {
               {/* EMAIL */}
 
               <a
-                href="mailto:events.location@outlook.com"
+                href={`mailto:${BUSINESS_EMAIL}`}
                 className="group flex items-center gap-3"
               >
 
@@ -334,7 +364,7 @@ export default function Footer() {
                   </p>
 
                   <p className="break-all text-sm font-semibold text-[#DDD7D9] transition-colors group-hover:text-white">
-                    events.location@outlook.com
+                    {BUSINESS_EMAIL}
                   </p>
 
                 </div>
@@ -356,11 +386,11 @@ export default function Footer() {
                   {/* INSTAGRAM */}
 
                   <a
-                    href="https://www.instagram.com/events_location__/"
+                    href={INSTAGRAM_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="Instagram Event'S Location"
-                    title="Instagram Event'S Location"
+                    aria-label={`Instagram ${BUSINESS_NAME}`}
+                    title={`Instagram ${BUSINESS_NAME}`}
                     className="group flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.05] text-[#C34F72] transition-all duration-200 hover:-translate-y-0.5 hover:border-[#C34F72]/40 hover:bg-[#C34F72]/10"
                   >
                     <FaInstagram
@@ -372,11 +402,11 @@ export default function Footer() {
                   {/* FACEBOOK */}
 
                   <a
-                    href="https://www.facebook.com/share/1H7nS1AuH4/"
+                    href={FACEBOOK_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="Facebook Event'S Location"
-                    title="Facebook Event'S Location"
+                    aria-label={`Facebook ${BUSINESS_NAME}`}
+                    title={`Facebook ${BUSINESS_NAME}`}
                     className="group flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.05] text-[#4A9692] transition-all duration-200 hover:-translate-y-0.5 hover:border-[#4A9692]/40 hover:bg-[#4A9692]/10"
                   >
                     <FaFacebookF
@@ -406,7 +436,7 @@ export default function Footer() {
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-5 py-5 text-center text-xs text-[#8F878A] sm:px-6 md:flex-row md:items-center md:justify-between md:text-left lg:px-8">
 
           <p>
-            © {year} Event&apos;S Location. Tous droits réservés.
+            © {year} Event&apos;S Emotions. Tous droits réservés.
           </p>
 
           <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 md:justify-end">
