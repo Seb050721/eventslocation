@@ -25,7 +25,7 @@ interface PageProps {
    CONFIGURATION
 ============================================================ */
 
-const SITE_URL = "https://www.eventslocation.fr";
+const SITE_URL = "https://www.eventsemotions.fr";
 
 /* ============================================================
    PAGES LOCALES PHOTOBOOTH
@@ -178,12 +178,12 @@ export async function generateMetadata({
       url: canonicalUrl,
       title,
       description,
-      siteName: "Event'S Location",
+      siteName: "Event'S Emotions",
 
       images: [
         {
           url: `${SITE_URL}${image}`,
-          alt: `${service.title} - Event'S Location`,
+          alt: `${service.title} - Event'S Emotions`,
         },
       ],
     },
@@ -248,10 +248,10 @@ export default async function ServicePage({
     provider: {
       "@type": "LocalBusiness",
       "@id": `${SITE_URL}/#business`,
-      name: "Event'S Location",
+      name: "Event'S Emotions",
       url: SITE_URL,
       telephone: "+33643894570",
-      email: "events.location@outlook.com",
+      email: "sebastien.hamon@eventsemotions.fr",
 
       address: {
         "@type": "PostalAddress",
@@ -448,7 +448,7 @@ export default async function ServicePage({
                 </h2>
 
                 <p className="mt-4 text-sm leading-7 text-[#716A6C] sm:text-base">
-                  Event&apos;S Location propose la location de
+                  Event&apos;S Emotions propose la location de
                   Photo Booth dans plusieurs secteurs de
                   l&apos;Yonne et de la Nièvre. Retrouvez les
                   informations correspondant à votre secteur.
@@ -500,7 +500,7 @@ export default async function ServicePage({
                 </p>
 
                 <p className="mt-2 text-sm leading-6 text-[#716A6C]">
-                  Event&apos;S Location intervient également
+                  Event&apos;S Emotions intervient également
                   dans de nombreuses communes autour de Varzy,
                   dans l&apos;Yonne, la Nièvre et selon les
                   demandes dans le Cher.
@@ -618,7 +618,7 @@ export default async function ServicePage({
                   </p>
 
                   <p className="mt-2 text-sm leading-6 text-[#716A6C]">
-                    Event&apos;S Location intervient également
+                    Event&apos;S Emotions intervient également
                     dans de nombreuses communes autour de Varzy
                     et peut étudier les demandes plus éloignées
                     selon le matériel nécessaire.
